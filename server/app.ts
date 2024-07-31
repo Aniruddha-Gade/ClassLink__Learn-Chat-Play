@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { ErrorMiddleware } from "./middleware/error";
 require("dotenv").config();
 
 export const app = express();
@@ -43,3 +44,7 @@ app.all('*', (req: Request, res: Response, next: NextFunction) => {
     next(error)
 
 })
+
+
+// handle Error by using OOPS
+app.use(ErrorMiddleware) 
