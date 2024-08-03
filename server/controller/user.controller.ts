@@ -191,4 +191,25 @@ export const loginUser = catchAsyncError(async (req: Request, res: Response, nex
     } catch (error) {
         return next(new ErrorHandler(error.message, 400));
     }
-}) 
+})
+
+
+
+
+// =========================== LOGOUT USER ===========================
+export const logoutUser = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        // set cookies empty
+        res.cookie("access_token", '', { maxAge: 1 });
+        res.cookie("refresh_token", '', { maxAge: 1 });
+
+        res.status(200).json({
+            success: true,
+            message: "User logout successfully"
+        });
+
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+})
