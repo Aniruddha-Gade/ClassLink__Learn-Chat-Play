@@ -83,12 +83,16 @@ userSchema.methods.comparePassword = async function (enteredPassword: string): P
 
 // sign Access Token
 userSchema.methods.signAccessToken = function () {
-    return jwt.sign({ _id: this._id, accountType: this.accountType }, process.env.ACCESS_TOKEN || '')
+    return jwt.sign({ _id: this._id, accountType: this.accountType }, process.env.ACCESS_TOKEN_SECRET || '', {
+        expiresIn: '5m'
+    })
 }
 
 // sign Refresh Token
 userSchema.methods.signRefreshToken = function () {
-    return jwt.sign({ _id: this._id }, process.env.REFRESH_TOKEN || '')
+    return jwt.sign({ _id: this._id, accountType: this.accountType }, process.env.REFRESH_TOKEN_SECRET || '', {
+        expiresIn: '3d'
+    })
 }
 
 
