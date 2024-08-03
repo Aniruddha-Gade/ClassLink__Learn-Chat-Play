@@ -8,6 +8,7 @@ import path from 'path';
 import sendMail from '../utils/sendMail';
 import { accessTokenOptions, refreshTokenOptions, sendToken } from '../utils/jwt';
 import { redis } from '../utils/redis';
+import { getUserById } from '../services/user.service';
 require('dotenv').config()
 
 
@@ -269,6 +270,19 @@ export const updateAccessToken = catchAsyncError(async (req: Request, res: Respo
             success: true,
             accessToken,
         });
+
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+})
+
+
+
+// =========================== GET USER INFO ===========================
+export const getUserInfo = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.user._id as string;
+        getUserById(userId, res)
 
     } catch (error) {
         return next(new ErrorHandler(error.message, 400));
