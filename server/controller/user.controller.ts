@@ -298,18 +298,21 @@ interface ISocialAuth {
     email: string,
     name: string,
     avatar: string,
+    accountType: string,
 }
 
 export const socialAuth = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { email, name, avatar } = req.body as ISocialAuth
-        if (!email) {
-            return next(new ErrorHandler('Email is required for social auth', 400));
+        const { email, name, avatar, accountType } = req.body as ISocialAuth
+        if (!email || !name || !avatar || !accountType) {
+            return next(new ErrorHandler('Email, name, avatar, accountType is required for social auth', 400));
         }
 
+        // if user exist then send token ,
+        // if not, then create user and send token
         const user = await userModel.findOne({ email })
         if (!user) {
-            const newUser = await userModel.create({ email, name, avatar })
+            const newUser = await userModel.create({ email, name, avatar, accountType })
             sendToken(newUser, 200, res)
         }
         else {

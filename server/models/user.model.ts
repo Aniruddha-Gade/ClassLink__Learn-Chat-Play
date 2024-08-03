@@ -17,13 +17,14 @@ export interface IUser extends Document {
         public_id: string;
         url: string;
     };
-    accountType: string;
+    accountType: 'Admin' | 'Instructor' | 'Student';
     isVerified: boolean;
     courses: Array<{ courseId: string }>;
     comparePassword: (password: string) => Promise<boolean>;
     signAccessToken: () => string;
     signRefreshToken: () => string;
 }
+
 
 const userSchema: Schema<IUser> = new mongoose.Schema({
     name: {
@@ -69,8 +70,10 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
 
 // Hash Password before saving
 userSchema.pre<IUser>('save', async function (next) {
-    this.password = await bcrypt.hash(this.password, 10);
-    next();
+    if(this.password){
+        this.password = await bcrypt.hash(this.password, 10);
+        next();
+    }
 });
 
 

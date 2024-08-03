@@ -10,7 +10,7 @@ userRouter.post('/login', loginUser)
 userRouter.get('/logout', isAuthenticated, logoutUser)
 userRouter.get('/refresh-token', updateAccessToken)
 userRouter.get('/userinfo', isAuthenticated, getUserInfo)
-userRouter.get('/social-auth', socialAuth)
+userRouter.post('/social-auth', socialAuth)
 
 
 export default userRouter
