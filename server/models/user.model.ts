@@ -9,6 +9,7 @@ const emailRegexPattern: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
 export interface IUser extends Document {
+    _id: string;
     name: string;
     email: string;
     password: string;
@@ -82,12 +83,12 @@ userSchema.methods.comparePassword = async function (enteredPassword: string): P
 
 // sign Access Token
 userSchema.methods.signAccessToken = function () {
-    return jwt.sign({ id: this._id }, process.env.ACCESS_TOKEN || '')
+    return jwt.sign({ _id: this._id, accountType: this.accountType }, process.env.ACCESS_TOKEN || '')
 }
 
 // sign Refresh Token
 userSchema.methods.signRefreshToken = function () {
-    return jwt.sign({ id: this._id }, process.env.REFRESH_TOKEN || '')
+    return jwt.sign({ _id: this._id }, process.env.REFRESH_TOKEN || '')
 }
 
 

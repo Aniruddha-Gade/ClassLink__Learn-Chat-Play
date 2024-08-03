@@ -7,6 +7,7 @@ import ejs from 'ejs'
 import path from 'path';
 import sendMail from '../utils/sendMail';
 import { sendToken } from '../utils/jwt';
+import { redis } from '../utils/redis';
 require('dotenv').config()
 
 
@@ -199,6 +200,10 @@ export const loginUser = catchAsyncError(async (req: Request, res: Response, nex
 // =========================== LOGOUT USER ===========================
 export const logoutUser = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const userId = req.user?._id || ""
+
+        // remove id from redis
+        redis.del(userId)
 
         // set cookies empty
         res.cookie("access_token", '', { maxAge: 1 });
