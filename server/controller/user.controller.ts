@@ -278,12 +278,43 @@ export const updateAccessToken = catchAsyncError(async (req: Request, res: Respo
 
 
 
+
 // =========================== GET USER INFO ===========================
 export const getUserInfo = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = req.user._id as string;
         getUserById(userId, res)
 
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+})
+
+
+
+
+// =========================== SOCIAL AUTH ===========================
+interface ISocialAuth {
+    email: string,
+    name: string,
+    avatar: string,
+}
+
+export const socialAuth = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { email, name, avatar } = req.body as ISocialAuth
+        if (!email) {
+            return next(new ErrorHandler('Email is required for social auth', 400));
+        }
+
+        const user = await userModel.findOne({ email })
+        if (!user) {
+            const newUser = await userModel.create({ email, name, avatar })
+            sendToken(newUser, 200, res)
+        }
+        else {
+            sendToken(user, 200, res)
+        }
     } catch (error) {
         return next(new ErrorHandler(error.message, 400));
     }

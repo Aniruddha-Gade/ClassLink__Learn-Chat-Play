@@ -43,7 +43,6 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, "Please enter your password"],
         minlength: [6, "Password must be at least 6 characters"],
         select: false // whenever we fetch user data from DB , by default password will be excluded
     },
