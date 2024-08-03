@@ -1,5 +1,7 @@
 import mongoose, { Model, Schema } from 'mongoose'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+require('dotenv').config()
 
 
 
@@ -18,6 +20,8 @@ export interface IUser extends Document {
     isVerified: boolean;
     courses: Array<{ courseId: string }>;
     comparePassword: (password: string) => Promise<boolean>;
+    signAccessToken: () => string;
+    signRefreshToken: () => string;
 }
 
 const userSchema: Schema<IUser> = new mongoose.Schema({
@@ -40,7 +44,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
         type: String,
         required: [true, "Please enter your password"],
         minlength: [6, "Password must be at least 6 characters"],
-        select: false
+        select: false // whenever we fetch user data from DB , by default password will be excluded
     },
     avatar: {
         public_id: String,
@@ -70,10 +74,26 @@ userSchema.pre<IUser>('save', async function (next) {
 });
 
 
-// compare password
+// compare user entered password , with hashed password store in DB
 userSchema.methods.comparePassword = async function (enteredPassword: string): Promise<boolean> {
     return await bcrypt.compare(enteredPassword, this.password)
 }
+
+
+// sign Access Token
+userSchema.methods.signAccessToken = function () {
+    return jwt.sign({ id: this._id }, process.env.ACCESS_TOKEN || '')
+}
+
+// sign Refresh Token
+userSchema.methods.signRefreshToken = function () {
+    return jwt.sign({ id: this._id }, process.env.REFRESH_TOKEN || '')
+}
+
+
+
+
+
 
 
 const userModel: Model<IUser> = mongoose.model("User", userSchema)
