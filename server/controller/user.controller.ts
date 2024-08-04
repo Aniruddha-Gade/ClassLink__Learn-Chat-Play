@@ -28,13 +28,13 @@ export const registerUser = catchAsyncError(async (req: Request, res: Response, 
 
         // validate data
         if (!name || !email || !password || !avatar || !accountType) {
-            return next(new ErrorHandler('All fields are required', 400))
+            return next(new ErrorHandler('All fields are required', 400, "Error while registering user"))
         }
 
         // check user already exist or not
         const isUserAlreadyExist = await userModel.findOne({ email })
         if (isUserAlreadyExist) {
-            return next(new ErrorHandler('User already exist', 400))
+            return next(new ErrorHandler('User already exist', 400, "Error while registering user"))
         }
 
         // create user data
@@ -71,11 +71,11 @@ export const registerUser = catchAsyncError(async (req: Request, res: Response, 
             })
         } catch (error) {
             console.log(`Error while sending email to user with email : ${email} => `, error)
-            return next(new ErrorHandler(error.message, 400))
+            return next(new ErrorHandler(error.message, 400, "Error while registering user"))
         }
 
     } catch (error: any) {
-        return next(new ErrorHandler(error.message, 400))
+        return next(new ErrorHandler(error.message, 400, "Error while registering user"))
     }
 
 
@@ -119,7 +119,7 @@ export const activateUser = catchAsyncError(async (req: Request, res: Response, 
         const { activation_token, activation_code } = req.body as IActivationRequest;
 
         if (!activation_token || !activation_code) {
-            return next(new ErrorHandler('activation_token and activation_code are required', 400));
+            return next(new ErrorHandler('activation_token and activation_code are required', 400, "Error while activating user"));
         }
 
         const newUser: { user: IUser; activationCode: string } = jwt.verify(
@@ -129,7 +129,7 @@ export const activateUser = catchAsyncError(async (req: Request, res: Response, 
 
 
         if (newUser.activationCode !== activation_code) {
-            return next(new ErrorHandler("Invalid activation code", 400));
+            return next(new ErrorHandler("Invalid activation code", 400, "Error while activating user"));
         }
 
         const { name, email, password, accountType } = newUser.user;
@@ -146,7 +146,7 @@ export const activateUser = catchAsyncError(async (req: Request, res: Response, 
         });
     } catch (error: any) {
         console.log(error);
-        return next(new ErrorHandler(error.message, 400));
+        return next(new ErrorHandler(error.message, 400, "Error while activating user"));
     }
 }
 );
@@ -166,13 +166,13 @@ export const loginUser = catchAsyncError(async (req: Request, res: Response, nex
 
         // validate data
         if (!email || !password) {
-            return next(new ErrorHandler('Please enter your email and password', 400));
+            return next(new ErrorHandler('Please enter your email and password', 400, "Error while loging user"));
         }
 
         // check user has register or not
         const user = await userModel.findOne({ email }).select('+password')
         if (!user) {
-            return next(new ErrorHandler('Invalid email', 400));
+            return next(new ErrorHandler('Invalid email', 400, "Error while loging user"));
         }
         // console.log({ user })
 
@@ -180,7 +180,7 @@ export const loginUser = catchAsyncError(async (req: Request, res: Response, nex
         // compare user entered password , with hashed password store in DB
         const isPasswordMatch = await user.comparePassword(password)
         if (!isPasswordMatch) {
-            return next(new ErrorHandler('Invalid password', 400));
+            return next(new ErrorHandler('Invalid password', 400, "Error while loging user"));
         }
         // set the password field to an empty string in the user object ,
         user.password = ''
@@ -191,7 +191,7 @@ export const loginUser = catchAsyncError(async (req: Request, res: Response, nex
 
 
     } catch (error) {
-        return next(new ErrorHandler(error.message, 400));
+        return next(new ErrorHandler(error.message, 400, "Error while loging user"));
     }
 })
 
@@ -216,7 +216,7 @@ export const logoutUser = catchAsyncError(async (req: Request, res: Response, ne
         });
 
     } catch (error) {
-        return next(new ErrorHandler(error.message, 400));
+        return next(new ErrorHandler(error.message, 400, "Error while logout user"));
     }
 })
 
@@ -235,14 +235,14 @@ export const updateAccessToken = catchAsyncError(async (req: Request, res: Respo
 
 
         if (!decodedToken) {
-            return next(new ErrorHandler('Could not refresh token, refresh_token is invalid', 400));
+            return next(new ErrorHandler('Could not refresh token, refresh_token is invalid', 400, "Error while updating access token"));
         }
 
         const session = await redis.get(decodedToken._id as string);
 
 
         if (!session) {
-            return next(new ErrorHandler('Could not refresh token, could not get data from redis', 400));
+            return next(new ErrorHandler('Could not refresh token, could not get data from redis', 400, "Error while updating access token"));
         }
 
         // get data from redis
@@ -272,7 +272,7 @@ export const updateAccessToken = catchAsyncError(async (req: Request, res: Respo
         });
 
     } catch (error) {
-        return next(new ErrorHandler(error.message, 400));
+        return next(new ErrorHandler(error.message, 400, "Error while updating access token"));
     }
 })
 
@@ -286,7 +286,7 @@ export const getUserInfo = catchAsyncError(async (req: Request, res: Response, n
         getUserById(userId, res)
 
     } catch (error) {
-        return next(new ErrorHandler(error.message, 400));
+        return next(new ErrorHandler(error.message, 400, "Error while fetching userInfo"));
     }
 })
 
@@ -305,7 +305,7 @@ export const socialAuth = catchAsyncError(async (req: Request, res: Response, ne
     try {
         const { email, name, avatar, accountType } = req.body as ISocialAuth
         if (!email || !name || !avatar || !accountType) {
-            return next(new ErrorHandler('Email, name, avatar, accountType is required for social auth', 400));
+            return next(new ErrorHandler('Email, name, avatar, accountType is required for social auth', 400, "Error while social auth"));
         }
 
         // if user exist then send token ,
@@ -319,7 +319,7 @@ export const socialAuth = catchAsyncError(async (req: Request, res: Response, ne
             sendToken(user, 200, res)
         }
     } catch (error) {
-        return next(new ErrorHandler(error.message, 400));
+        return next(new ErrorHandler(error.message, 400, "Error while social auth"));
     }
 })
 
@@ -338,11 +338,11 @@ export const updateUserInfo = catchAsyncError(async (req: Request, res: Response
 
 
         const userId = req.user?._id as string
-        console.log({ userId })
+        console.log({ userId})
         // find and update user info
         const user = await userModel.findById(userId)
         if (!user) {
-            return next(new ErrorHandler('User not found to update user-info', 400));
+            return next(new ErrorHandler('User not found to update user-info', 400, "Error while updating userinfo"));
         }
 
         // Update fields if provided
@@ -368,6 +368,6 @@ export const updateUserInfo = catchAsyncError(async (req: Request, res: Response
 
 
     } catch (error) {
-        return next(new ErrorHandler(error.message, 400));
+        return next(new ErrorHandler(error.message, 400, "Error while updating userinfo"));
     }
 })
