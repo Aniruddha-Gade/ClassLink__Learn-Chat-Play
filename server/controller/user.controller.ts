@@ -341,7 +341,7 @@ export const updateUserInfo = catchAsyncError(async (req: Request, res: Response
 
 
         const userId = req.user?._id as string
-        console.log({ userId})
+        console.log({ userId })
         // find and update user info
         const user = await userModel.findById(userId)
         if (!user) {
@@ -372,5 +372,59 @@ export const updateUserInfo = catchAsyncError(async (req: Request, res: Response
 
     } catch (error) {
         return next(new ErrorHandler(error.message, 400, "Error while updating userinfo"));
+    }
+})
+
+
+
+
+// =========================== UPDATE USER INFO ===========================
+interface IUpdatePassword {
+    oldPassword: string,
+    newPassword: string,
+}
+
+export const updatePassword = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { oldPassword, newPassword } = req.body as IUpdatePassword
+
+        // validate data
+        if (!oldPassword || !newPassword) {
+            return next(new ErrorHandler('Old and new password required', 404, "Error while updating password"));
+        }
+
+        const user = await userModel.findById(req.user?._id).select('password')
+        if (!user) {
+            return next(new ErrorHandler('User not found', 404, "Error while updating password"));
+        }
+
+        // if user logged using social auth then return 
+        if (!user.password) {
+            return next(new ErrorHandler('Invalid User or user logged using Social auth', 404, "Error while updating password"));
+        }
+
+        // compare given pass with hashed stored password 
+        const isPasswordMatch = await user.comparePassword(oldPassword)
+        if (!isPasswordMatch) {
+            return next(new ErrorHandler('Old Password not match', 404, "Error while updating password"));
+        }
+
+        user.password = newPassword
+        // Save the updated user
+        await user.save();
+        
+        // remove password from object
+        user.password = ""
+
+
+        res.status(201).json({
+            succes: true,
+            user,
+            message: "User password updated successully"
+        })
+
+
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400, "Error while updating password"));
     }
 })
