@@ -1,5 +1,6 @@
 import { Response, Request, NextFunction } from 'express';
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken'
+import cloudinary from "cloudinary";
 import userModel, { IUser } from '../models/user.model';
 import { catchAsyncError } from './../utils/catchAsyncError';
 import ErrorHandler from './../utils/ErrorHandler';
@@ -332,17 +333,15 @@ export const socialAuth = catchAsyncError(async (req: Request, res: Response, ne
 // =========================== UPDATE USER INFO ===========================
 interface IUpdateUserInfo {
     name: string,
-    avatar: string,
 }
 
 export const updateUserInfo = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name, avatar } = req.body as IUpdateUserInfo
-
+        const { name } = req.body as IUpdateUserInfo
 
         const userId = req.user?._id as string
-        console.log({ userId })
-        // find and update user info
+
+        // find user 
         const user = await userModel.findById(userId)
         if (!user) {
             return next(new ErrorHandler('User not found to update user-info', 400, "Error while updating userinfo"));
@@ -353,9 +352,6 @@ export const updateUserInfo = catchAsyncError(async (req: Request, res: Response
             user.name = name;
         }
 
-        if (avatar) {
-            user.avatar.url = avatar;
-        }
 
         // Save the updated user
         await user.save();
@@ -412,7 +408,7 @@ export const updatePassword = catchAsyncError(async (req: Request, res: Response
         user.password = newPassword
         // Save the updated user
         await user.save();
-        
+
         // remove password from object
         user.password = ""
 
@@ -426,5 +422,62 @@ export const updatePassword = catchAsyncError(async (req: Request, res: Response
 
     } catch (error) {
         return next(new ErrorHandler(error.message, 400, "Error while updating password"));
+    }
+})
+
+
+
+// =========================== UPDATE USER AVATAR ===========================
+interface IUpdateAvatar {
+    avatar: string,
+}
+
+export const updateAvatar = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { avatar } = req.body as IUpdateAvatar
+
+        // validate data
+        if (!avatar) {
+            return next(new ErrorHandler('Avatar required', 404, "Error while updating avatar"));
+        }
+
+        // find user
+        const userId = req.user?._id
+        const user = await userModel.findById(userId)
+        if (!user) {
+            return next(new ErrorHandler('User not found', 404, "Error while updating avatar"));
+        }
+
+        // if avatar already exits, then delete from cloudinary
+        if (user?.avatar?.public_id) {
+            await cloudinary.v2.uploader.destroy(user.avatar.public_id)
+        }
+
+        // upload to cloudinary
+        const uploadedUrl = await cloudinary.v2.uploader.upload(avatar, {
+            folder: "ClassLink/avatars",
+            // width: 150
+        })
+
+        // store urls in user
+        user.avatar = {
+            public_id: uploadedUrl.public_id,
+            url: uploadedUrl.secure_url,
+        }
+        // console.log('user.avatar = ', user)
+
+        // Save the updated user in DB and redis
+        await user.save();
+        await redis.set(userId, JSON.stringify(user))
+
+
+        res.status(201).json({
+            succes: true,
+            user,
+            message: "User avatar updated successully"
+        })
+
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400, "Error while updating avatar"));
     }
 })
