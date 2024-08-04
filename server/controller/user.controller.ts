@@ -251,13 +251,13 @@ export const updateAccessToken = catchAsyncError(async (req: Request, res: Respo
 
         // create tokens
         const accessToken = jwt.sign(
-            { id: user._id, accountType: user.accountType },
+            { _id: user._id, accountType: user.accountType },
             process.env.ACCESS_TOKEN_SECRET as string,
             { expiresIn: "5m" }
         );
 
         const refreshToken = jwt.sign(
-            { id: user._id, accountType: user.accountType },
+            { _id: user._id, accountType: user.accountType },
             process.env.REFRESH_TOKEN_SECRET as string,
             { expiresIn: "3d" }
         );

@@ -13,13 +13,13 @@ export const isAuthenticated = catchAsyncError(async (req: Request, res: Respons
         const access_token = req.cookies.access_token as string
 
         if (!access_token) {
-            return next(new ErrorHandler('Please login to access this resource', 400));
+            return next(new ErrorHandler('Please login to access this resource', 400, "Error while authenticating"));
         }
 
         // decode token
         const decodeToken = jwt.verify(access_token, process.env.ACCESS_TOKEN_SECRET as string) as JwtPayload
         if (!decodeToken) {
-            return next(new ErrorHandler('Access token is invalid', 400));
+            return next(new ErrorHandler('Access token is invalid', 400, "Error while authenticating"));
         }
         // console.log({ decodeToken })
         // example - 
@@ -37,7 +37,7 @@ export const isAuthenticated = catchAsyncError(async (req: Request, res: Respons
         next()
 
     } catch (error) {
-        return next(new ErrorHandler(error.message, 400));
+        return next(new ErrorHandler(error.message, 400, "Error while authenticating"));
     }
 })
 
@@ -49,14 +49,14 @@ export const isStudent = catchAsyncError(async (req: Request, res: Response, nex
     try {
         // console.log('User data -> ', req.user)
         if (req.user?.accountType !== 'Student') {
-            return next(new ErrorHandler(`Role : ${req.user?.accountType} is not allowed to access this resource`, 403));
+            return next(new ErrorHandler(`Role : ${req.user?.accountType} is not allowed to access this resource`, 403, "Error while authenticating student"));
         }
 
         // go to next middleware
         next();
 
     } catch (error) {
-        return next(new ErrorHandler(error.message, 400));
+        return next(new ErrorHandler(error.message, 400, "Error while authenticating student"));
     }
 })
 
@@ -67,14 +67,14 @@ export const isStudent = catchAsyncError(async (req: Request, res: Response, nex
 export const isInstructor = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (req.user?.accountType !== 'Instructor') {
-            return next(new ErrorHandler(`Role : ${req.user?.accountType} is not allowed to access this resource`, 403));
+            return next(new ErrorHandler(`Role : ${req.user?.accountType} is not allowed to access this resource`, 403, "Error while authenticating Instructor"));
         }
 
         // go to next middleware
         next();
 
     } catch (error) {
-        return next(new ErrorHandler(error.message, 400));
+        return next(new ErrorHandler(error.message, 400, "Error while authenticating Instructor"));
     }
 })
 
@@ -85,13 +85,13 @@ export const isInstructor = catchAsyncError(async (req: Request, res: Response, 
 export const isAdmin = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (req.user?.accountType !== 'Admin') {
-            return next(new ErrorHandler(`Role : ${req.user?.accountType} is not allowed to access this resource`, 403));
+            return next(new ErrorHandler(`Role : ${req.user?.accountType} is not allowed to access this resource`, 403, "Error while authenticating Admin"));
         }
 
         // go to next middleware
         next();
 
     } catch (error) {
-        return next(new ErrorHandler(error.message, 400));
+        return next(new ErrorHandler(error.message, 400, "Error while authenticating Admin"));
     }
 })
