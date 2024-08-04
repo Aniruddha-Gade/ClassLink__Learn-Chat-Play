@@ -262,6 +262,9 @@ export const updateAccessToken = catchAsyncError(async (req: Request, res: Respo
             { expiresIn: "3d" }
         );
 
+        // store in request
+        req.user = user
+
         // set cookies
         res.cookie("access_token", accessToken, accessTokenOptions);
         res.cookie("refresh_token", refreshToken, refreshTokenOptions);
