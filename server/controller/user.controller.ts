@@ -282,7 +282,7 @@ export const updateAccessToken = catchAsyncError(async (req: Request, res: Respo
 // =========================== GET USER INFO ===========================
 export const getUserInfo = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userId = req.user._id as string;
+        const userId = req.user?._id as string;
         getUserById(userId, res)
 
     } catch (error) {
@@ -318,6 +318,55 @@ export const socialAuth = catchAsyncError(async (req: Request, res: Response, ne
         else {
             sendToken(user, 200, res)
         }
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+})
+
+
+
+
+// =========================== UPDATE USER INFO ===========================
+interface IUpdateUserInfo {
+    name: string,
+    avatar: string,
+}
+
+export const updateUserInfo = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { name, avatar } = req.body as IUpdateUserInfo
+
+
+        const userId = req.user?._id as string
+        console.log({ userId })
+        // find and update user info
+        const user = await userModel.findById(userId)
+        if (!user) {
+            return next(new ErrorHandler('User not found to update user-info', 400));
+        }
+
+        // Update fields if provided
+        if (name) {
+            user.name = name;
+        }
+
+        if (avatar) {
+            user.avatar.url = avatar;
+        }
+
+        // Save the updated user
+        await user.save();
+
+        // update data in redis
+        redis.set(userId, JSON.stringify(user))
+
+        res.status(201).json({
+            succes: true,
+            user,
+            message: "User info updated successully"
+        })
+
+
     } catch (error) {
         return next(new ErrorHandler(error.message, 400));
     }
