@@ -92,3 +92,33 @@ export const editCourse = catchAsyncError(async (req: Request, res: Response, ne
         return next(new ErrorHandler(error.message, 400, "Error while creating course"));
     }
 })
+
+
+
+
+// =========================== GET SINGLE COURSE ( WITHOUT PURCHASING ) ===========================
+export const getSingleCourse = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        // user ID
+        // const createdBy = req.user._id
+
+        // get course ID
+        const course = await CourseModel.findById(req.params.id)
+            .select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links")
+
+        if (!course) {
+            return next(new ErrorHandler("Course could not be found course", 400, "Error while creating course"));
+        }
+
+        // return response
+        res.status(201).json({
+            success: true,
+            course,
+            message: "Course updated successfully"
+        })
+
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400, "Error while creating course"));
+    }
+})
