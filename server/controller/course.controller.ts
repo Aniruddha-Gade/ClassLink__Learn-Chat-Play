@@ -12,6 +12,7 @@ export const uploadCourse = catchAsyncError(async (req: Request, res: Response, 
     try {
 
         // extract data 
+        const createdBy = req.user._id
         const data = req.body;
         const thumbnail = data.thumbnail
 
@@ -27,6 +28,7 @@ export const uploadCourse = catchAsyncError(async (req: Request, res: Response, 
             }
         }
 
+        data.createdBy = createdBy;
         // create course in DB
         createCourse(data, res, next)
 
@@ -46,6 +48,11 @@ export const editCourse = catchAsyncError(async (req: Request, res: Response, ne
         const data = req.body;
         const thumbnail = data.thumbnail
 
+        // user ID
+        const createdBy = req.user._id
+        // get course ID
+        const courseId = req.params.id
+
 
         // delete previous thumbnail and upload new one
         if (thumbnail) {
@@ -62,8 +69,8 @@ export const editCourse = catchAsyncError(async (req: Request, res: Response, ne
         }
 
         // update course in DB
-        const courseId = req.params.id
-        const updatedCourse = await CourseModel.findByIdAndUpdate(courseId,
+        const updatedCourse = await CourseModel.findOneAndUpdate(
+            { _id: courseId, createdBy: createdBy },
             {
                 $set: data,
             },
@@ -71,7 +78,7 @@ export const editCourse = catchAsyncError(async (req: Request, res: Response, ne
         )
 
         if (!updatedCourse) {
-            return next(new ErrorHandler("Course could not found to edit", 400, "Error while creating course"));
+            return next(new ErrorHandler("Course could not be found or you are not authorized to edit this course", 400, "Error while creating course"));
         }
 
         // return response

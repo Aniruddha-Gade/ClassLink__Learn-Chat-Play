@@ -37,6 +37,7 @@ interface ICourseData extends Document {
 
 
 interface ICourse extends Document {
+    createdBy: mongoose.Schema.Types.ObjectId,
     title: string,
     description: string,
     price: Number,
@@ -94,6 +95,11 @@ const courseDataSchema = new Schema<ICourseData>({
 
 // Course Schema ======= Main ======= 
 const courseSchema = new Schema<ICourse>({
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     title: {
         type: String,
         required: true
@@ -112,11 +118,11 @@ const courseSchema = new Schema<ICourse>({
     thumbnail: {
         public_id: {
             type: String,
-            required: true
+            // required: true
         },
         url: {
             type: String,
-            required: true
+            // required: true
         }
     },
     tags: {
