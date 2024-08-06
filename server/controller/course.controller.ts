@@ -6,6 +6,7 @@ import ErrorHandler from '../utils/ErrorHandler';
 import { createCourse } from '../services/course.service';
 import CourseModel from '../models/course.model';
 import { redis } from './../utils/redis';
+import mongoose from 'mongoose';
 
 
 // =========================== UPLOAD COURSE ===========================
@@ -218,5 +219,62 @@ export const getCourseContentByUser = catchAsyncError(async (req: Request, res: 
 
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching course content"));
+    }
+})
+
+
+
+
+
+// =========================== ADD QUESTION IN COURSE ===========================
+interface IAddQuestionInCourseData {
+    question: string,
+    courseId: string,
+    contentId: string,
+}
+
+export const addQuestionInCourse = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        const { question, courseId, contentId } = req.body as IAddQuestionInCourseData
+
+
+        // check content ID valid or not
+        if (!mongoose.Types.ObjectId.isValid(contentId)) {
+            return next(new ErrorHandler("ID of content is Invalid", 400, "Error while adding question in course`"));
+        }
+
+        // find course
+        const course = await CourseModel.findById(courseId)
+        if (!course) {
+            return next(new ErrorHandler("Course not found", 400, "Error while adding question in course`"));
+        }
+
+
+        // find contnet from course
+        const courseContent = course?.courseData.find((item: any) => item?._id.equals(contentId))
+        if (!courseContent) {
+            return next(new ErrorHandler("content not found or Invalid", 400, "Error while adding question in course`"));
+        }
+
+        // push question
+        const newQuestion: any = {
+            user: req.user,
+            question,
+            questionReplies: [],
+        }
+        courseContent.questions.push(newQuestion)
+
+        // save updated course
+        await course.save()
+
+        res.status(201).json({
+            success: true,
+            course,
+            message: "Question added successfully"
+        })
+
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400, "Error while adding question in course`"));
     }
 })
