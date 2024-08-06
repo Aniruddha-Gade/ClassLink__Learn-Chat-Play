@@ -21,12 +21,15 @@ export const isAuthenticated = catchAsyncError(async (req: Request, res: Respons
         if (!decodeToken) {
             return next(new ErrorHandler('Access token is invalid', 400, "Error while authenticating"));
         }
-        // console.log({ decodeToken })
+        console.log({ decodeToken })
         // example - 
         // {
         //     id: '66aba2df71540941066d1847',
         //     accountType: 'Instructor',
-        //     iat: 1722676678
+        //     email: 'radhamasale889@gmail.com',
+        //     name: 'Aniruddha gade'
+        //     iat: 1722676678,
+        //     exp: 1722947183
         // }
 
         // store in request

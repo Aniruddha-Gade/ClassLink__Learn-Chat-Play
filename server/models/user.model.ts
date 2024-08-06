@@ -70,7 +70,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
 
 // Hash Password before saving
 userSchema.pre<IUser>('save', async function (next) {
-    if(this.password){
+    if (this.password) {
         this.password = await bcrypt.hash(this.password, 10);
         next();
     }
@@ -85,14 +85,14 @@ userSchema.methods.comparePassword = async function (enteredPassword: string): P
 
 // sign Access Token
 userSchema.methods.signAccessToken = function () {
-    return jwt.sign({ _id: this._id, accountType: this.accountType }, process.env.ACCESS_TOKEN_SECRET || '', {
+    return jwt.sign({ _id: this._id, accountType: this.accountType, email: this.email, name: this.name }, process.env.ACCESS_TOKEN_SECRET || '', {
         expiresIn: '5m'
     })
 }
 
 // sign Refresh Token
 userSchema.methods.signRefreshToken = function () {
-    return jwt.sign({ _id: this._id, accountType: this.accountType }, process.env.REFRESH_TOKEN_SECRET || '', {
+    return jwt.sign({ _id: this._id, accountType: this.accountType, email: this.email, name: this.name }, process.env.REFRESH_TOKEN_SECRET || '', {
         expiresIn: '3d'
     })
 }
