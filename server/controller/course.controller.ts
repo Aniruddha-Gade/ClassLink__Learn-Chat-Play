@@ -5,6 +5,7 @@ import { NextFunction, Request, Response } from 'express';
 import ErrorHandler from '../utils/ErrorHandler';
 import { createCourse } from '../services/course.service';
 import CourseModel from '../models/course.model';
+import { redis } from './../utils/redis';
 
 
 // =========================== UPLOAD COURSE ===========================
@@ -100,20 +101,41 @@ export const editCourse = catchAsyncError(async (req: Request, res: Response, ne
 export const getSingleCourse = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        // get course ID
-        const course = await CourseModel.findById(req.params.id)
-            .select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links")
+        const courseId = req.params.id
 
-        if (!course) {
-            return next(new ErrorHandler("Course could not be found course", 400, "Error while fetching course"));
+        const isCacheExist = await redis.get(courseId)   // check Is data available in redis 
+        if (isCacheExist) {
+            const course = JSON.parse(isCacheExist)
+
+            // console.log("Hitting Redis")
+            // return response
+            res.status(201).json({
+                success: true,
+                course,
+                message: "Course found successfully"
+            })
         }
 
-        // return response
-        res.status(201).json({
-            success: true,
-            course,
-            message: "Course found successfully"
-        })
+        else {
+            // get course ID
+            const course = await CourseModel.findById(courseId)
+                .select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links")
+
+            if (!course) {
+                return next(new ErrorHandler("Course could not be found course", 400, "Error while fetching course"));
+            }
+
+            // store in redis
+            await redis.set(courseId, JSON.stringify(course))
+
+            // console.log("Hitting MongoDB")
+            // return response
+            res.status(201).json({
+                success: true,
+                course,
+                message: "Course found successfully"
+            })
+        }
 
     } catch (error) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching course"));
@@ -127,19 +149,40 @@ export const getSingleCourse = catchAsyncError(async (req: Request, res: Respons
 export const getAllCourse = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        const courses = await CourseModel.find()
-            .select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links")
+        // check Is all courses data available in redis 
+        const isCacheExist = await redis.get("allCourses")
 
-        if (!courses) {
-            return next(new ErrorHandler("Course could not be found courses", 400, "Error while fetching courses"));
+        if (isCacheExist) {
+            const courses = JSON.parse(isCacheExist);
+
+            // console.log("Hitting Redis")
+            // return response
+            res.status(201).json({
+                success: true,
+                courses,
+                message: "All Courses data found successfully"
+            })
         }
 
-        // return response
-        res.status(201).json({
-            success: true,
-            courses,
-            message: "Courses found successfully"
-        })
+        else {
+            const courses = await CourseModel.find()
+                .select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links")
+
+            if (!courses) {
+                return next(new ErrorHandler("Course could not be found all courses", 400, "Error while fetching courses"));
+            }
+
+            // store in redis
+            await redis.set("allCourses", JSON.stringify(courses));
+
+            // console.log("Hitting MongoDB")
+            // return response
+            res.status(201).json({
+                success: true,
+                courses,
+                message: "All Courses found successfully"
+            })
+        }
 
     } catch (error) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching courses"));
