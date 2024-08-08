@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { isAuthenticated, isInstructor } from "../middleware/auth"
-import { addAnswerToQuestionInCourse, addQuestionInCourse, editCourse, getAllCourse, getCourseContentByUser, getSingleCourse, uploadCourse } from "../controller/course.controller"
+import { addAnswerToQuestionInCourse, addQuestionInCourse, addReviewInCourse, editCourse, getAllCourse, getCourseContentByUser, getSingleCourse, uploadCourse } from "../controller/course.controller"
 
 const courseRouter = Router()
 
@@ -12,6 +12,7 @@ courseRouter.get("/get-all-courses", getAllCourse)
 courseRouter.get("/get-course-content/:id", isAuthenticated, getCourseContentByUser)
 courseRouter.put("/add-question", isAuthenticated, addQuestionInCourse)
 courseRouter.put("/add-answer", isAuthenticated, addAnswerToQuestionInCourse)
+courseRouter.put("/add-review/:id", isAuthenticated, addReviewInCourse)
 
 
 export default courseRouter

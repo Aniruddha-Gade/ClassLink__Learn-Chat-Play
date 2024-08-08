@@ -12,10 +12,10 @@ interface IComment extends Document {
 }
 
 interface IReview extends Document {
-    user: Object,
+    user: IUser,
     rating: Number,
     comment: string,
-    commentReplies: IComment[]
+    commentReplies?: IComment[]
 }
 
 interface ILink extends Document {

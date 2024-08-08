@@ -10,6 +10,7 @@ import mongoose from 'mongoose';
 import ejs from 'ejs';
 import path from 'path';
 import sendMail from './../utils/sendMail';
+import userModel from '../models/user.model';
 
 
 
@@ -348,7 +349,7 @@ export const addAnswerToQuestionInCourse = catchAsyncError(async (req: Request, 
                 title: courseContent.title
             }
             const html = await ejs.renderFile(path.join(__dirname, "../mails/question-reply.ejs"), emailData)
-            
+
             try {
                 await sendMail({
                     email: question.user.email,
@@ -370,5 +371,86 @@ export const addAnswerToQuestionInCourse = catchAsyncError(async (req: Request, 
 
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while adding question in course`"));
+    }
+})
+
+
+
+
+
+// =========================== ADD REVIEW IN COURSE ===========================
+interface IAddReviewData {
+    review: string,
+    rating: Number,
+}
+
+export const addReviewInCourse = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        // get data
+        const { review, rating } = req.body as IAddReviewData
+        const courseId = req.params.id
+
+        // validate data
+        if (!review || !rating || !courseId) {
+            return next(new ErrorHandler("Review, rating, courseID are required", 400, "Error while adding review in course"));
+        }
+
+
+        // find course
+        const course = await CourseModel.findById(courseId)
+        if (!course) {
+            return next(new ErrorHandler("Course not found", 404, "Error while adding review in course"));
+        }
+
+        // find user
+        const user = await userModel.findById(req.user._id)
+        if (!user) {
+            return next(new ErrorHandler("User not found", 404, "Error while adding review in course"));
+        }
+
+        // get all courses of user 
+        const userCoursesList = user.courses
+
+        // check user is in course or not (purchased or not)
+        const isCourseExits = userCoursesList?.some((course: any) => course?._id.toString() === courseId.toString())
+        if (!isCourseExits) {
+            return next(new ErrorHandler("You are not eligible to access this course", 400, "Error while adding review in course"));
+        }
+        console.log("isCourseExits = ", isCourseExits)
+
+
+        // push Review
+        const newReview: any = {
+            user: req.user,
+            rating,
+            comment: review
+        }
+        course.reviews?.push(newReview)
+
+        // avarage rating
+        let avg = 0
+        course.reviews.forEach((rev: any) => {
+            avg += rev.rating
+        })
+
+        course.ratings = avg / course.reviews?.length // we have two ratings , one is 4 ad another is 5 , avg = 9 / 2 = 4.5
+
+        // save updated course
+        await course.save()
+
+        // create notification 
+        const notification = {
+            title: "New Review Recieved",
+            message: `${user.name} has given a review in ${course?.title}`
+        }
+
+        res.status(201).json({
+            success: true,
+            course,
+            message: "Review for course added successfully"
+        })
+
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400, "Error while adding review in course"));
     }
 })
