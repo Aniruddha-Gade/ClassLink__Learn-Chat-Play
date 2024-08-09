@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .message-header {
+            text-align: center;
+            padding: 10px;
+            background-color: #0073e6;
+            color: #ffffff;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .message-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .message-body {
+            padding: 20px;
+            color: #333333;
+        }
+
+        .course-info {
+            margin: 20px 0;
+        }
+
+        .course-info h4 {
+            margin-bottom: 10px;
+            color: #0073e6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #dddddd;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #0073e6;
+            color: #ffffff;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #0073e6;
+            color: #ffffff;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .footer a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="message-header">
+            <h1>Your ClassLink order is confirmed!</h1>
+        </div>
+        <div class="message-body">
+            <p>Hi <%= user.name %>,</p>
+            <p><%= user.email %>,</p>
+            <p>We're just as excited as you are!</p>
+
+            <div class="course-info">
+                <h4>Here's what you ordered:</h4>
+                <table>
+                    <tr>
+                        <td>
+                            <strong>Order #:</strong>
+                            <%= order._id %>
+                        </td>
+                        <td>
+                            <strong>Order Date:</strong>
+                            <%= order.date %>
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Cost</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <%= order.name %>
+                        </td>
+                        <td>1</td>
+                        <td>₹<%= order.price %>
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td style="text-align:right;"><strong>Original Price:</strong></td>
+                        <td style="text-align:right;">₹<%= order.price %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;"><strong>CGST (9%):</strong></td>
+                        <td style="text-align:right;">₹<%= (order.price * 0.09).toFixed(2) %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;"><strong>SGST (9%):</strong></td>
+                        <td style="text-align:right;">₹<%= (order.price * 0.09).toFixed(2) %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;"><strong>Total:</strong></td>
+                        <td style="text-align:right;">₹<%= (order.price * 1.18).toFixed(2) %>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <p>
+                If you have any questions, please contact our support team at
+                <a href="mailto:gadeaniruddha2@gmail.com">gadeaniruddha2@gmail.com</a>.
+            </p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 ClassLink. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>
