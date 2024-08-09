@@ -413,10 +413,10 @@ export const addReviewInCourse = catchAsyncError(async (req: Request, res: Respo
 
         // check user is in course or not (purchased or not)
         const isCourseExits = userCoursesList?.some((course: any) => course?._id.toString() === courseId.toString())
+        console.log("isCourseExits = ", isCourseExits)
         if (!isCourseExits) {
             return next(new ErrorHandler("You are not eligible to access this course", 400, "Error while adding review in course"));
         }
-        console.log("isCourseExits = ", isCourseExits)
 
 
         // push Review
@@ -452,5 +452,78 @@ export const addReviewInCourse = catchAsyncError(async (req: Request, res: Respo
 
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while adding review in course"));
+    }
+})
+
+
+
+
+
+// =========================== ADD REPLY TO REVIEW IN COURSE ===========================
+interface IAddReplyToReviewData {
+    comment: string,
+    reviewId: string,
+    courseId: Number,
+}
+
+export const addReplyToReview = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        // get data
+        const { comment, reviewId, courseId } = req.body as IAddReplyToReviewData
+        const userId = req.user._id
+
+
+        // validate data
+        if (!comment || !reviewId || !courseId) {
+            return next(new ErrorHandler("Comment, reviewId, courseId are required", 400, "Error while adding review in course"));
+        }
+
+
+        // find course
+        const course = await CourseModel.findById(courseId)
+        if (!course) {
+            return next(new ErrorHandler("Course not found", 404, "Error while adding reply to review in course"));
+        }
+
+        // Make sure the user is the owner of course
+        if (course.createdBy.toString() !== userId) {
+            return next(new ErrorHandler("You are not eligible to reply this review", 404, "Error while adding reply to review in course"));
+        }
+
+
+        // find user
+        const user = await userModel.findById(userId)
+        if (!user) {
+            return next(new ErrorHandler("User not found", 404, "Error while adding reply to review in course"));
+        }
+
+        // get all courses of user 
+        // const userCoursesList = user.courses
+
+        // check user is in course or not (purchased or not)
+        const review = course?.reviews.find((rev: any) => rev?._id.toString() === reviewId.toString())
+        if (!review) {
+            return next(new ErrorHandler("You are not eligible to access this course", 400, "Error while adding reply to review in course"));
+        }
+
+
+        // push Review
+        const reviewReply: any = {
+            user: req.user,
+            comment
+        }
+        review?.commentReplies?.push(reviewReply)
+        // save updated course
+        await course.save()
+
+
+        res.status(201).json({
+            success: true,
+            course,
+            message: "Reply to Review added successfully"
+        })
+
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400, "Error while adding reply to review in course"));
     }
 })
