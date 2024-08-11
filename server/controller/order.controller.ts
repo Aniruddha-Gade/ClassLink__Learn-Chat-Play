@@ -93,10 +93,10 @@ export const createOrder = catchAsyncError(async (req: Request, res: Response, n
 
 
         // update course purchased count
-        if (course.purchased === 0) {
-            course.purchased = 1;
-        } else {
+        if (course?.purchased) {
             course.purchased += 1;
+        } else {
+            course.purchased = 1;
         }
 
         await course.save();
