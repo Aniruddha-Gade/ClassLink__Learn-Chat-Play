@@ -84,11 +84,12 @@ export const createOrder = catchAsyncError(async (req: Request, res: Response, n
         user?.courses.push(course?._id)
         await user.save()
 
-        // send notification to Instructor
+        // create notification for Instructor
         await notificationModel.create({
-            user: userId,
+            userId,
+            instructorId: course.createdBy,
             title: "New Order",
-            message: `You have new order from course - ${course.title}`
+            message: `Student: ${user.name} purchased a course - ${course.title}`
         })
 
 
