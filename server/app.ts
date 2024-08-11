@@ -5,7 +5,7 @@ import { ErrorMiddleware } from "./middleware/error";
 import userRouter from "./routes/user.route";
 import courseRouter from "./routes/course.route";
 import orderRouter from "./routes/order.route";
-import notificationsRouter from "./routes/getNotification.route";
+import notificationsRouter from "./routes/notification.route";
 require("dotenv").config();
 
 export const app = express();
