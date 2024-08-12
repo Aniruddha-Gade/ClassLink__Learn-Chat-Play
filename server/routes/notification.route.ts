@@ -7,7 +7,7 @@ const notificationsRouter = Router()
 // Only for Instructors
 notificationsRouter.get("/get-all-notifications", isAuthenticated, isInstructor, getAllNotifications)
 notificationsRouter.get("/get-all-unread-notifications", isAuthenticated, isInstructor, getAllUnReadNotifications)
-notificationsRouter.get("/update-notification/:id", isAuthenticated, isInstructor, updateNotification)
+notificationsRouter.put("/update-notification/:id", isAuthenticated, isInstructor, updateNotification)
 
 
 
