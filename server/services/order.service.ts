@@ -12,6 +12,20 @@ export const newOrder = catchAsyncError(async (data: any, res: Response, next: N
         order,
         message: "User has successfully ordered a course"
     })
-
-
 })
+
+
+
+
+// =========================== GET ALL ORDERS ===========================
+export const getAllOrdersService = async (res: Response) => {
+
+    const allOrders = await orderModel.find().sort({ createdAt: -1 })
+
+    res.status(201).json({
+        success: true,
+        allOrders,
+        message: "All orders fetched successfully"
+    })
+
+}

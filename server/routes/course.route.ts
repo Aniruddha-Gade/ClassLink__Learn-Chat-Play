@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { isAuthenticated, isInstructor, isStudent } from "../middleware/auth"
-import { addAnswerToQuestionInCourse, addQuestionInCourse, addReplyToReview, addReviewInCourse, editCourse, getAllCourse, getCourseContentByUser, getSingleCourse, uploadCourse } from "../controller/course.controller"
+import { addAnswerToQuestionInCourse, addQuestionInCourse, addReplyToReview, addReviewInCourse, editCourse, getAllCourse, getAllCourses, getCourseContentByUser, getSingleCourse, uploadCourse } from "../controller/course.controller"
 
 const courseRouter = Router()
 
@@ -9,13 +9,20 @@ const courseRouter = Router()
 courseRouter.post("/create-course", isAuthenticated, isInstructor, uploadCourse)
 courseRouter.put("/edit-course/:id", isAuthenticated, isInstructor, editCourse)
 courseRouter.put("/add-reply-to-review", isAuthenticated, isInstructor, addReplyToReview)
+courseRouter.get("/get-courses", isAuthenticated, isInstructor, getAllCourses)
 
 
+// open routes
 courseRouter.get("/get-course/:id", getSingleCourse)
 courseRouter.get("/get-all-courses", getAllCourse)
+
+// Any Authenticated user
 courseRouter.get("/get-course-content/:id", isAuthenticated, getCourseContentByUser)
 courseRouter.put("/add-question", isAuthenticated, addQuestionInCourse)
 courseRouter.put("/add-answer", isAuthenticated, addAnswerToQuestionInCourse)
+
+
+// only for Student
 courseRouter.put("/add-review/:id", isAuthenticated, isStudent, addReviewInCourse)
 
 

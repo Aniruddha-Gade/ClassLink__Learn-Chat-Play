@@ -9,7 +9,7 @@ import path from 'path';
 import sendMail from '../utils/sendMail';
 import { accessTokenOptions, refreshTokenOptions, sendToken } from '../utils/jwt';
 import { redis } from '../utils/redis';
-import { getUserById } from '../services/user.service';
+import { getAllUsersService, getUserById } from '../services/user.service';
 require('dotenv').config()
 
 
@@ -479,5 +479,19 @@ export const updateAvatar = catchAsyncError(async (req: Request, res: Response, 
 
     } catch (error) {
         return next(new ErrorHandler(error.message, 400, "Error while updating avatar"));
+    }
+})
+
+
+
+
+// =========================== UPDATE USER AVATAR ===========================
+export const getAllUsers = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        getAllUsersService(res)
+
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400, "Error while fetching all users"));
     }
 })

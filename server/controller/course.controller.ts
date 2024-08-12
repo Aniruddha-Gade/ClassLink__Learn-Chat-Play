@@ -3,7 +3,7 @@ import cloudinary from 'cloudinary';
 import { catchAsyncError } from '../utils/catchAsyncError';
 import { NextFunction, Request, Response } from 'express';
 import ErrorHandler from '../utils/ErrorHandler';
-import { createCourse } from '../services/course.service';
+import { createCourse, getAllCourseService } from '../services/course.service';
 import CourseModel from '../models/course.model';
 import { redis } from './../utils/redis';
 import mongoose from 'mongoose';
@@ -12,7 +12,7 @@ import path from 'path';
 import sendMail from './../utils/sendMail';
 import userModel from '../models/user.model';
 import notificationModel from '../models/notification.model';
-import cron from 'node-cron'
+
 
 
 // =========================== UPLOAD COURSE ===========================
@@ -204,14 +204,24 @@ export const getAllCourse = catchAsyncError(async (req: Request, res: Response, 
 export const getCourseContentByUser = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        const userCourseList = req.user?.courses
+        const userId = req.user?._id
         const courseId = req.params.id
 
-        const courseExists = userCourseList?.find((course: any) => course._id.toString() == courseId)
-
-        if (!courseExists) {
-            return next(new ErrorHandler("You are not eligible to access this course", 400, "Error while fetching course content"));
+        // find user
+        const user = await userModel.findById(userId)
+        if (!user) {
+            return next(new ErrorHandler("User not found", 404, "Error while adding question in course`"));
         }
+
+
+        // Check if the student has purchased the course
+        const hasStudentPurchasedCourse = user.courses.some((course: any) => course.equals(courseId));
+        // console.log("hasStudentPurchasedCourse =", hasStudentPurchasedCourse);
+
+        if (!hasStudentPurchasedCourse) {
+            return next(new ErrorHandler("You have not purchased this course, you are not eligible access this course", 400, "Error while adding question in course`"));
+        }
+
 
         const course = await CourseModel.findById(courseId)
         const content = course?.courseData
@@ -557,18 +567,13 @@ export const addReplyToReview = catchAsyncError(async (req: Request, res: Respon
 
 
 
+// =========================== GET ALL COURSES - ONLY FOR INSTRUCTORS ===========================
+export const getAllCourses = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
 
-// =========================== CRON JOB - DELETE NOTIFICATION 30 DAYS OLD AT EVERY NIGHT ===========================
-cron.schedule("0 0 0 * * *", async () => {
-    console.log("Running cron")
-    const thirtyDaysAgoDate = new Date(Date.now() - 30 * 24 * 30 * 30 * 1000)
+        getAllCourseService(req, res)
 
-    await notificationModel.deleteMany(
-        {
-            status: 'read',
-            $lt: { thirtyDaysAgoDate } // less than 30 days, in short - delete data before 30 days
-        }
-    )
-
-    console.log("Deleted read notifications")
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400, "Error while fetching all courses"));
+    }
 })

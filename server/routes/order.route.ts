@@ -1,11 +1,15 @@
 import { Router } from "express"
-import { isAuthenticated, isStudent } from "../middleware/auth"
-import { createOrder } from "../controller/order.controller"
+import { isAuthenticated, isInstructor, isStudent } from "../middleware/auth"
+import { createOrder, getAllOrders } from "../controller/order.controller"
 
 const orderRouter = Router()
 
-// only for student
+// only for Student
 orderRouter.post('/create-order', isAuthenticated, isStudent, createOrder)
+
+
+// only for Instructor
+orderRouter.get('/get-all-orders', isAuthenticated, isInstructor, getAllOrders)
 
 
 

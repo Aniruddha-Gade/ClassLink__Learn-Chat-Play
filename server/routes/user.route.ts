@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { activateUser, getUserInfo, loginUser, logoutUser, registerUser, socialAuth, updateAccessToken, updateAvatar, updatePassword, updateUserInfo } from "../controller/user.controller";
-import { isAuthenticated } from "../middleware/auth";
+import { activateUser, getAllUsers, getUserInfo, loginUser, logoutUser, registerUser, socialAuth, updateAccessToken, updateAvatar, updatePassword, updateUserInfo } from "../controller/user.controller";
+import { isAdmin, isAuthenticated } from "../middleware/auth";
 
 const userRouter = Router()
 
@@ -14,6 +14,10 @@ userRouter.post('/social-auth', socialAuth)
 userRouter.post('/update-userinfo', isAuthenticated, updateUserInfo)
 userRouter.put('/update-user-password', isAuthenticated, updatePassword)
 userRouter.put('/update-user-avatar', isAuthenticated, updateAvatar)
+
+// only for Admin
+userRouter.get('/get-all-users', isAuthenticated, isAdmin, getAllUsers)
+
 
 
 export default userRouter
