@@ -283,7 +283,7 @@ export const addQuestionInCourse = catchAsyncError(async (req: Request, res: Res
         // send notification to Instructor of course
         await notificationModel.create({
             title: "New Question",
-            message: `You have new question from '${req.user?.name}' student in course - ${course.title}`,
+            message: `You have new question from '${req.user?.name}' student in course - ${course.title} , section - ${courseContent.title}`,
             userId,
             instructorId: course.createdBy
         })
@@ -318,7 +318,7 @@ export const addAnswerToQuestionInCourse = catchAsyncError(async (req: Request, 
     try {
 
         const { answer, questionId, courseId, contentId } = req.body as IAddAnswerToQuestionInCourseData
-
+        const userId = req.user._id
 
         // check content ID valid or not
         if (!mongoose.Types.ObjectId.isValid(contentId)) {
@@ -356,8 +356,14 @@ export const addAnswerToQuestionInCourse = catchAsyncError(async (req: Request, 
         await course.save()
 
         // create notification
-        if (req.user._id === question.user._id) {
-            console.log("received notification")
+        if (userId === question.user._id) {
+            // send notification to Instructor of course
+            await notificationModel.create({
+                title: "New Reply for question has received",
+                message: `You have new question reply from '${req.user?.name}' student in course - ${course.title} , section - ${courseContent.title}`,
+                userId,
+                instructorId: course.createdBy
+            })
         }
 
         // send mail
