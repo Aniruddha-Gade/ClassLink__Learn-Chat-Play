@@ -12,7 +12,7 @@ import path from 'path';
 import sendMail from './../utils/sendMail';
 import userModel from '../models/user.model';
 import notificationModel from '../models/notification.model';
-
+import cron from 'node-cron'
 
 
 // =========================== UPLOAD COURSE ===========================
@@ -552,4 +552,23 @@ export const addReplyToReview = catchAsyncError(async (req: Request, res: Respon
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while adding reply to review in course"));
     }
+})
+
+
+
+
+
+// =========================== CRON JOB - DELETE NOTIFICATION 30 DAYS OLD AT EVERY NIGHT ===========================
+cron.schedule("0 0 0 * * *", async () => {
+    console.log("Running cron")
+    const thirtyDaysAgoDate = new Date(Date.now() - 30 * 24 * 30 * 30 * 1000)
+
+    await notificationModel.deleteMany(
+        {
+            status: 'read',
+            $lt: { thirtyDaysAgoDate } // less than 30 days, in short - delete data before 30 days
+        }
+    )
+
+    console.log("Deleted read notifications")
 })
