@@ -47,6 +47,7 @@ export const createOrder = catchAsyncError(async (req: Request, res: Response, n
         // for crating order
         const data: any = {
             courseId,
+            instructorId: course.createdBy,
             userId,
             payment_info
         }
@@ -122,7 +123,7 @@ export const createOrder = catchAsyncError(async (req: Request, res: Response, n
 export const getAllOrders = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        getAllOrdersService(res)
+        getAllOrdersService(req, res)
 
     } catch (error) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching all orders"));

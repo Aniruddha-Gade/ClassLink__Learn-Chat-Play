@@ -5,6 +5,7 @@ import mongoose, { Document, Model, Schema } from 'mongoose';
 export interface IOrder extends Document {
     courseId: string,
     userId: string,
+    instructorId: string,
     payment_info: Object,
 }
 
@@ -15,6 +16,10 @@ const orderSchema = new Schema<IOrder>({
         required: true
     },
     userId: {
+        type: String,
+        required: true
+    },
+    instructorId: {
         type: String,
         required: true
     },
