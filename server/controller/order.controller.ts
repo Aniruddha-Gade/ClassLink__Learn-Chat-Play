@@ -10,6 +10,7 @@ import sendMail from './../utils/sendMail';
 import path from 'path';
 import ejs from 'ejs';
 import notificationModel from '../models/notification.model';
+import mongoose from 'mongoose';
 
 
 
@@ -81,7 +82,11 @@ export const createOrder = catchAsyncError(async (req: Request, res: Response, n
         }
 
         // add course to user list
-        user?.courses.push(course?._id)
+        user?.courses.push(course._id as mongoose.Types.ObjectId);
+        // add user in user list of course
+        course.users.push(userId as mongoose.Types.ObjectId)
+
+        // update user in DB
         await user.save()
 
         // create notification for Instructor
@@ -94,11 +99,8 @@ export const createOrder = catchAsyncError(async (req: Request, res: Response, n
 
 
         // update course purchased count
-        if (course?.purchased) {
-            course.purchased += 1;
-        } else {
-            course.purchased = 1;
-        }
+        course.purchased = (course.purchased as number) + 1;
+
 
         await course.save();
 

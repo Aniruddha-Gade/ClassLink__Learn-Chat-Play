@@ -19,7 +19,7 @@ export interface IUser extends Document {
     };
     accountType: 'Admin' | 'Instructor' | 'Student';
     isVerified: boolean;
-    courses: Array<{ courseId: string }>;
+    courses: mongoose.Types.ObjectId[];
     comparePassword: (password: string) => Promise<boolean>;
     signAccessToken: () => string;
     signRefreshToken: () => string;
@@ -62,7 +62,8 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
     },
     courses: [
         {
-            courseId: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Course'
         }
     ],
 }, { timestamps: true });
