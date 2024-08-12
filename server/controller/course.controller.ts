@@ -11,6 +11,7 @@ import ejs from 'ejs';
 import path from 'path';
 import sendMail from './../utils/sendMail';
 import userModel from '../models/user.model';
+import notificationModel from '../models/notification.model';
 
 
 
@@ -242,6 +243,7 @@ export const addQuestionInCourse = catchAsyncError(async (req: Request, res: Res
     try {
 
         const { question, courseId, contentId } = req.body as IAddQuestionInCourseData
+        const userId = req.user._id
 
 
         // check content ID valid or not
@@ -253,6 +255,14 @@ export const addQuestionInCourse = catchAsyncError(async (req: Request, res: Res
         const course = await CourseModel.findById(courseId)
         if (!course) {
             return next(new ErrorHandler("Course not found", 400, "Error while adding question in course`"));
+        }
+
+        // Check if the student has purchased the course
+        const hasStudentPurchasedCourse = course.users.some((enrolledUser: any) => enrolledUser.equals(userId));
+        // console.log("hasStudentPurchasedCourse =", hasStudentPurchasedCourse);
+
+        if (!hasStudentPurchasedCourse) {
+            return next(new ErrorHandler("You have not purchased this course, you are not eligible to add question", 400, "Error while adding question in course`"));
         }
 
 
@@ -269,6 +279,14 @@ export const addQuestionInCourse = catchAsyncError(async (req: Request, res: Res
             questionReplies: [],
         }
         courseContent.questions.push(newQuestion)
+
+        // send notification to Instructor of course
+        await notificationModel.create({
+            title: "New Question",
+            message: `You have new question from '${req.user?.name}' student in course - ${course.title}`,
+            userId,
+            instructorId: course.createdBy
+        })
 
         // save updated course
         await course.save()
@@ -389,6 +407,7 @@ export const addReviewInCourse = catchAsyncError(async (req: Request, res: Respo
         // get data
         const { review, rating } = req.body as IAddReviewData
         const courseId = req.params.id
+        const userId = req.user._id
 
         // validate data
         if (!review || !rating || !courseId) {
@@ -408,14 +427,13 @@ export const addReviewInCourse = catchAsyncError(async (req: Request, res: Respo
             return next(new ErrorHandler("User not found", 404, "Error while adding review in course"));
         }
 
-        // get all courses of user 
-        const userCoursesList = user.courses
 
-        // check user is in course or not (purchased or not)
-        const isCourseExits = userCoursesList?.some((course: any) => course?._id.toString() === courseId.toString())
-        console.log("isCourseExits = ", isCourseExits)
-        if (!isCourseExits) {
-            return next(new ErrorHandler("You are not eligible to access this course", 400, "Error while adding review in course"));
+        // Check if the student has purchased the course
+        const hasStudentPurchasedCourse = course.users.some((enrolledUser: any) => enrolledUser.equals(userId));
+        // console.log("hasStudentPurchasedCourse =", hasStudentPurchasedCourse);
+
+        if (!hasStudentPurchasedCourse) {
+            return next(new ErrorHandler("You have not purchased this course, you are not eligible to add question", 400, "Error while adding question in course`"));
         }
 
 
@@ -438,11 +456,13 @@ export const addReviewInCourse = catchAsyncError(async (req: Request, res: Respo
         // save updated course
         await course.save()
 
-        // create notification 
-        const notification = {
+        // send notification to Instructor of course 
+        await notificationModel.create({
+            userId,
+            instructorId: course.createdBy,
             title: "New Review Recieved",
-            message: `${user.name} has given a review in ${course?.title}`
-        }
+            message: `Student: ${user.name} has reviewd a course - ${course.title}`
+        })
 
         res.status(201).json({
             success: true,
