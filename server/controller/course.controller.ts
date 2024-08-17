@@ -628,6 +628,29 @@ export const deleteCourse = catchAsyncError(async (req: Request, res: Response, 
 
 
 
+// =========================== GET ALL ARCHIVED COURSES FOR SPECIFIC INSTRUCTOR ===========================
+export const getArchivedCourses = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const archivedCourses = await CourseModel.find(
+            { createdBy: req.user._id, isArchived: true },
+        )
+
+        res.status(200).json({
+            success: true,
+            archivedCourses,
+        });
+
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400, "Error while deleting course"));
+    }
+})
+
+
+
+
+
+
+
 // =========================== CRON JOB - DELETE COURSE MARKED AS ARCHIVED-TRUE, AFTER 15 DAYS ===========================
 cron.schedule("0 0 * * *", async () => {
     const fifteenDaysAgo = new Date(Date.now() - 15 * 24 * 60 * 60 * 1000);
