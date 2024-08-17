@@ -9,7 +9,7 @@ import path from 'path';
 import sendMail from '../utils/sendMail';
 import { accessTokenOptions, refreshTokenOptions, sendToken } from '../utils/jwt';
 import { redis } from '../utils/redis';
-import { getAllUsersService, getUserById } from '../services/user.service';
+import { getAllUsersService, getUserById, updateUserRoleService } from '../services/user.service';
 require('dotenv').config()
 
 
@@ -493,5 +493,25 @@ export const getAllUsers = catchAsyncError(async (req: Request, res: Response, n
 
     } catch (error) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching all users"));
+    }
+})
+
+
+
+
+// =========================== UPDATE USER AVATAR ===========================
+export const updateUserRole = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id, accountType } = req.body
+
+        // validate data
+        if (!id || !accountType) {
+            return next(new ErrorHandler('user id and accountType  required', 404, "Error while updating user role"));
+        }
+
+        updateUserRoleService(res, id, accountType)
+
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400, "Error while updating user role"));
     }
 })

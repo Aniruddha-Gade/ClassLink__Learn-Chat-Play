@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { activateUser, getAllUsers, getUserInfo, loginUser, logoutUser, registerUser, socialAuth, updateAccessToken, updateAvatar, updatePassword, updateUserInfo } from "../controller/user.controller";
+import { activateUser, getAllUsers, getUserInfo, loginUser, logoutUser, registerUser, socialAuth, updateAccessToken, updateAvatar, updatePassword, updateUserInfo, updateUserRole } from "../controller/user.controller";
 import { isAdmin, isAuthenticated } from "../middleware/auth";
 
 const userRouter = Router()
@@ -17,6 +17,7 @@ userRouter.put('/update-user-avatar', isAuthenticated, updateAvatar)
 
 // only for Admin
 userRouter.get('/get-all-users', isAuthenticated, isAdmin, getAllUsers)
+userRouter.put('/update-user-role', isAuthenticated, isAdmin, updateUserRole)
 
 
 

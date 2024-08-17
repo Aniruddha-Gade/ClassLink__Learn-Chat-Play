@@ -30,3 +30,21 @@ export const getAllUsersService = async (res: Response) => {
     })
 
 }
+
+
+// =========================== GET ALL USERS ===========================
+export const updateUserRoleService = async (res: Response, id: string, accountType: string) => {
+const user =await userModel.findById(id)
+console.log("user = ",user)     
+    const updatedUser = await userModel.findByIdAndUpdate(id,
+        { accountType },
+        { new: true, runValidators: true } // Ensure validation runs on update
+    )
+
+    res.status(201).json({
+        success: true,
+        updatedUser,
+        message: "User updated successfully"
+    })
+
+}
