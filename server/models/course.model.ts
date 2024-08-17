@@ -168,7 +168,7 @@ const courseSchema = new Schema<ICourse>({
         type: Date,
         default: null, // Stores the date when the course was marked for deletion
     },
-})
+}, { timestamps: true })
 
 
 const CourseModel: Model<ICourse> = mongoose.model("Course", courseSchema)
