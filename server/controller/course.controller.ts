@@ -577,3 +577,51 @@ export const getAllCourses = catchAsyncError(async (req: Request, res: Response,
         return next(new ErrorHandler(error.message, 400, "Error while fetching all courses"));
     }
 })
+
+
+
+
+
+// =========================== DELETE COURSE ONLY FOR INSTRUCTORS ===========================
+export const deleteCourse = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { coureId } = req.body
+        const instructorId = req.user._id
+
+        // validate data
+        if (!coureId) {
+            return next(new ErrorHandler('Course id required', 400, "Error while deleting course"));
+        }
+
+        // find course
+        const course = await CourseModel.findById(coureId)
+        if (!course) {
+            return next(new ErrorHandler('Course not found', 400, "Error while deleting course"));
+        }
+
+
+        // check requested instructor and course creator is same or not
+        if (course.createdBy.toString() !== instructorId) {
+            return next(new ErrorHandler('You are not authorized to delete this course', 400, "Error while deleting course"));
+        }
+
+        // don't delete course immediately, mark it as archived
+        // By using a cron job, delete by scheduling for 15 days
+
+        course.isArchived = true;
+        course.archiveDate = new Date(); // Mark the current date as the archive date
+
+        await course.save();
+
+        // Send response
+        res.status(200).json({
+            success: true,
+            message: 'Course marked for deletion. It will be deleted after 15 days',
+        });
+
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400, "Error while deleting course"));
+    }
+})
+
+
