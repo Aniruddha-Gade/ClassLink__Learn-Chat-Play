@@ -54,6 +54,8 @@ interface ICourse extends Document {
     ratings?: Number,
     purchased?: Number,
     users: mongoose.Types.ObjectId[];
+    isArchived:Boolean;
+    archiveDate:Date;
 }
 
 
@@ -158,6 +160,14 @@ const courseSchema = new Schema<ICourse>({
             ref: 'User'
         }
     ],
+    isArchived: {
+        type: Boolean,
+        default: false, // Indicates if the course is marked for deletion
+    },
+    archiveDate: {
+        type: Date,
+        default: null, // Stores the date when the course was marked for deletion
+    },
 })
 
 
