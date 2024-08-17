@@ -54,8 +54,8 @@ interface ICourse extends Document {
     ratings?: Number,
     purchased?: Number,
     users: mongoose.Types.ObjectId[];
-    isArchived:Boolean;
-    archiveDate:Date;
+    isArchived: Boolean;
+    archiveDate: Date | null;
 }
 
 

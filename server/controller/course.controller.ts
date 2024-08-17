@@ -585,16 +585,16 @@ export const getAllCourses = catchAsyncError(async (req: Request, res: Response,
 // =========================== DELETE COURSE ONLY FOR INSTRUCTORS ===========================
 export const deleteCourse = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { coureId } = req.body
+        const { courseId } = req.body
         const instructorId = req.user._id
 
         // validate data
-        if (!coureId) {
+        if (!courseId) {
             return next(new ErrorHandler('Course id required', 400, "Error while deleting course"));
         }
 
         // find course
-        const course = await CourseModel.findById(coureId)
+        const course = await CourseModel.findById(courseId)
         if (!course) {
             return next(new ErrorHandler('Course not found', 400, "Error while deleting course"));
         }
@@ -642,6 +642,50 @@ export const getArchivedCourses = catchAsyncError(async (req: Request, res: Resp
 
     } catch (error) {
         return next(new ErrorHandler(error.message, 400, "Error while deleting course"));
+    }
+})
+
+
+
+
+
+
+// =========================== GET ALL ARCHIVED COURSES FOR SPECIFIC INSTRUCTOR ===========================
+export const unarchiveCourse = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const courseId = req.params.id;
+        const instructorId = req.user._id;
+
+        // validate data
+        if (!courseId) {
+            return next(new ErrorHandler('CourseId is required', 400, "Error while unarchiving course"));
+        }
+
+        const course = await CourseModel.findById(courseId);
+        if (!course) {
+            return next(new ErrorHandler('Course not found', 400, "Error while unarchiving course"));
+        }
+
+        // check requested instructor and course creator is same or not
+        if (course.createdBy.toString() !== instructorId) {
+            return next(new ErrorHandler('You are not authorized to delete this course', 400, "Error while unarchiving course"));
+        }
+
+        // mark false (not to delete)
+        course.isArchived = false;
+        course.archiveDate = null; // Reset the archive date
+
+        await course.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Course unarchived successfully.',
+        });
+
+
+
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400, "Error while unarchiving course"));
     }
 })
 
