@@ -172,7 +172,7 @@ export const getAllCourse = catchAsyncError(async (req: Request, res: Response, 
         }
 
         else {
-            const courses = await CourseModel.find()
+            const courses = await CourseModel.find({ isArchived: false })
                 .select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links")
 
             if (!courses) {

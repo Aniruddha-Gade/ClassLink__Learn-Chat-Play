@@ -22,7 +22,8 @@ export const getAllCourseService = async (req: Request, res: Response) => {
     const instructorId = req.user._id
 
     const allCourses = await CourseModel.find({
-        createdBy: instructorId // get only instructor build courses
+        createdBy: instructorId, // get only instructor build courses
+        isArchived: false
     }).sort({ createdAt: -1 })
 
     res.status(201).json({
