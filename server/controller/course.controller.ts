@@ -12,7 +12,7 @@ import path from 'path';
 import sendMail from './../utils/sendMail';
 import userModel from '../models/user.model';
 import notificationModel from '../models/notification.model';
-
+const cron = require('node-cron');
 
 
 // =========================== UPLOAD COURSE ===========================
@@ -625,3 +625,18 @@ export const deleteCourse = catchAsyncError(async (req: Request, res: Response, 
 })
 
 
+
+
+
+// =========================== CRON JOB - DELETE COURSE MARKED AS ARCHIVED-TRUE, AFTER 15 DAYS ===========================
+cron.schedule("0 0 * * *", async () => {
+    const fifteenDaysAgo = new Date(Date.now() - 15 * 24 * 60 * 60 * 1000);
+
+    await CourseModel.deleteMany({
+        isArchived: true,
+        archiveDate: { $lte: fifteenDaysAgo }
+    });
+
+    console.log('Archived courses deleted 🟢🟢');
+
+})
