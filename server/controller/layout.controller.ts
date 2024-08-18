@@ -73,7 +73,7 @@ export const updateLayout = catchAsyncError(async (req: Request, res: Response, 
             return next(new ErrorHandler('type required', 404, "Error while editing layout"));
         }
 
-        
+
         // Banner
         if (type === "Banner") {
             const bannerData: any = await LayoutModel.findOne({ type: "Banner" });
@@ -128,5 +128,26 @@ export const updateLayout = catchAsyncError(async (req: Request, res: Response, 
         });
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while editing layout"));
+    }
+});
+
+
+
+
+// =========================== GET LAYOUT BY TYPE ===========================
+export const getLayoutByType = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        const layout = await LayoutModel.findOne({ type: req.params.type })
+
+        // send success response
+        res.status(200).json({
+            success: true,
+            layout,
+            message: "Layout fetched successfully",
+        });
+
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400, "Error while ftching layout by type"));
     }
 });
