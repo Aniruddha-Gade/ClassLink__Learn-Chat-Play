@@ -56,7 +56,9 @@ const Header: FC<HeaderProps> = ({ activeItem }) => {
                                 isMobile={false}
                                 activeItem={activeItem}
                             />
+                           {/* change theme */}
                             <ThemeSwitcher />
+                         
                             {/* profile */}
                             <Image
                                 className="cursor-pointer"
@@ -66,10 +68,8 @@ const Header: FC<HeaderProps> = ({ activeItem }) => {
                                 alt="Profile Icon"
                             />
 
-
-
                             {/* show only for mobile devices */}
-                            <div className='800px:hidden'>
+                            <div className='800px:hidden flex items-center '>
                                 <MobileMenu activeItem={activeItem} />
                             </div>
 

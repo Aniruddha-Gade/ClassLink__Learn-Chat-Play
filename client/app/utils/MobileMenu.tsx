@@ -16,8 +16,6 @@ import {
 
 
 type MobileMenuProps = {
-    // open: boolean;
-    // setOpen: (open: boolean) => void;
     activeItem: number;
 }
 
@@ -42,13 +40,15 @@ const MobileMenu: FC<MobileMenuProps> = ({ activeItem }) => {
                 isOpen={isOpen}
                 placement="right"
                 onClose={onClose}
-            // closeOnOverlayClick={true} 
-            // finalFocusRef={btnRef}
+                closeOnOverlayClick={true} 
+                finalFocusRef={btnRef}
             >
                 <DrawerOverlay />
 
 
-                <DrawerContent style={{ background: '#181818', color: 'white', maxWidth: '75vw' }}>
+                <DrawerContent
+                    className='dark:bg-[#181818] bg-white max-w-[75vw]'
+                >
                     <DrawerCloseButton />
 
                     <DrawerHeader style={{ marginTop: '20px' }}></DrawerHeader>
