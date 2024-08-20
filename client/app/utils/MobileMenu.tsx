@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { navItemsData } from '../constants/navbar';
+import { ThemeSwitcher } from './ThemeSwitcher'
+import { useTheme } from "next-themes";
 
 import {
     Drawer,
@@ -23,6 +25,9 @@ type MobileMenuProps = {
 const MobileMenu: FC<MobileMenuProps> = ({ activeItem }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const btnRef = React.useRef<HTMLButtonElement>(null);
+    const { theme, setTheme } = useTheme();
+    console.log("theme = ", theme)
+
 
     return (
         <>
@@ -40,7 +45,7 @@ const MobileMenu: FC<MobileMenuProps> = ({ activeItem }) => {
                 isOpen={isOpen}
                 placement="right"
                 onClose={onClose}
-                closeOnOverlayClick={true} 
+                closeOnOverlayClick={true}
                 finalFocusRef={btnRef}
             >
                 <DrawerOverlay />
@@ -81,6 +86,14 @@ const MobileMenu: FC<MobileMenuProps> = ({ activeItem }) => {
                                     </Link>
                                 ))
                             }
+                        </div>
+
+                        <div onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                            className='flex items-center gap-2 font-medium text-[18px] w-full px-6 py-3 font-Poppins rounded-xl duration-100
+                                    dark:text-white/80 text-black hover:dark:bg-white/15 hover:bg-green-600'
+                        >
+                            <ThemeSwitcher />
+                            <p>Theme</p>
                         </div>
                     </DrawerBody>
                 </DrawerContent>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FC } from "react";
-import {navItemsData}from '../constants/navbar'
+import { navItemsData } from '../constants/navbar'
 import Image from "next/image";
 
 
@@ -28,12 +28,12 @@ const NavItems: FC<NavItemsProps> = ({ isMobile, activeItem }) => {
                                         : 'dark:text-white/80 hover:text-white text-black hover:dark:bg-white/15 hover:dark:text-white hover:bg-green-600 '} `}
                             >
                                 <Image
-                                                className="cursor-pointer"
-                                                src={item.icon}
-                                                width={30}
-                                                height={30}
-                                                alt={`${item.name} icon`}
-                                            />
+                                    className="cursor-pointer"
+                                    src={item.icon}
+                                    width={30}
+                                    height={30}
+                                    alt={`${item.name} icon`}
+                                />
                                 {item.name}
                             </span>
                         </Link>

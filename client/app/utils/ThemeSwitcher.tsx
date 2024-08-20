@@ -15,7 +15,7 @@ export const ThemeSwitcher = () => {
     }
 
     return (
-        <div className="flex-center">
+        <div>
             {theme === "light" ? (
                 <Image
                     src="/assets/icons/moon-icon.png"
