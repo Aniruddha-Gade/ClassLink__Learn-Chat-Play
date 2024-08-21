@@ -6,18 +6,27 @@ import Link from 'next/link';
 import NavItems from '../utils/NavItems'
 import { ThemeSwitcher } from '../utils/ThemeSwitcher'
 import MobileMenu from './../utils/MobileMenu';
+import LoginSignup from './auth/LoginSignup';
 
+
+import {
+    Dialog,
+    DialogTrigger,
+} from "../components/ui/dialog"
 
 type HeaderProps = {
     open: boolean;
     setOpen: (open: boolean) => void;
     activeItem: number;
+    route: string;
+    setRoute: (route: string) => void
 }
 
-const Header: FC<HeaderProps> = ({ activeItem }) => {
+const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute }) => {
 
     const [active, setActive] = useState(false)
-    const [openSidebar, setOpenSidebar] = useState(false)
+
+    const token = ""
 
     if (typeof window !== undefined) {
         window.addEventListener("scroll", () => {
@@ -31,7 +40,7 @@ const Header: FC<HeaderProps> = ({ activeItem }) => {
     }
 
     return (
-        <div className='w-full relative '>
+        <nav className='w-full relative '>
             <div className={`${active ? 'fixed top-0 left-0 dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black dark:border-[#ffffff1c] shadow-xl transition duration-500 '
                 : 'dark:border-[#ffffff1c] dark:shadow '} 
                 w-full h-[80px] z-[80] border-b-2 border-b-[#1717173f] `}
@@ -56,19 +65,36 @@ const Header: FC<HeaderProps> = ({ activeItem }) => {
                                 isMobile={false}
                                 activeItem={activeItem}
                             />
-                           {/* change theme */}
+                            {/* change theme */}
                             <ThemeSwitcher />
-                         
-                            {/* profile */}
-                            <Image
-                                className="cursor-pointer"
-                                src='/assets/icons/profile-icon.png'
-                                width={30}
-                                height={30}
-                                alt="Profile Icon"
-                            />
 
-                            {/* show only for mobile devices */}
+                            {/* profile photo + dropdown-menu / login */}
+                            {
+                                token ? (
+                                    <div>
+                                        Dada, tu logged aahes
+                                    </div>
+                                )
+                                    :
+                                    (
+                                        <Dialog>
+                                            <DialogTrigger >
+                                                <Image
+                                                    className="cursor-pointer"
+                                                    src='/assets/icons/profile-icon.png'
+                                                    width={30}
+                                                    height={30}
+                                                    alt="Profile Icon"
+                                                />
+                                            </DialogTrigger>
+                                            <LoginSignup />
+                                        </Dialog>
+                                    )
+                            }
+
+
+
+                            {/* show menu only for mobile devices */}
                             <div className='800px:hidden flex items-center '>
                                 <MobileMenu activeItem={activeItem} />
                             </div>
@@ -79,7 +105,7 @@ const Header: FC<HeaderProps> = ({ activeItem }) => {
 
 
             </div>
-        </div>
+        </nav>
     )
 }
 

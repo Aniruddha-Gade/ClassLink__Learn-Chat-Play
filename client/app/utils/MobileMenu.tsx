@@ -26,7 +26,7 @@ const MobileMenu: FC<MobileMenuProps> = ({ activeItem }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const btnRef = React.useRef<HTMLButtonElement>(null);
     const { theme, setTheme } = useTheme();
-    console.log("theme = ", theme)
+
 
 
     return (
