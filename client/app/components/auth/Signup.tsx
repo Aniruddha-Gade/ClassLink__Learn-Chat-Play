@@ -56,10 +56,10 @@ const Signup: FC<Props> = () => {
                     </label>
 
                     <Select onValueChange={handleChange('accountType')}>
-                        <SelectTrigger className="w-[220px] text-[14px]">
+                        <SelectTrigger className="w-[220px] text-[14px] focus:outline-none border dark:border-white border-black rounded outline-none font-Poppins ">
                             <SelectValue placeholder="Account Type" />
                         </SelectTrigger>
-                        <SelectContent className='text-[14px] '>
+                        <SelectContent className='text-[14px]'>
                             <SelectItem value="Student">Student</SelectItem>
                             <SelectItem value="Instructor">Instructor</SelectItem>
                         </SelectContent>
@@ -162,11 +162,11 @@ const Signup: FC<Props> = () => {
                                 />
                             )
                     }
-                    {
-                        errors.password && touched.password &&
-                        <span className='text-red-500 pt-2 block'>{errors.password}</span>
-                    }
                 </div>
+                {
+                    errors.password && touched.password &&
+                    <span className='text-red-500 pt-2 block'>{errors.password}</span>
+                }
 
                 <div className='w-full mt-5'>
                     <button type='submit' className={`${styles.button}`} >

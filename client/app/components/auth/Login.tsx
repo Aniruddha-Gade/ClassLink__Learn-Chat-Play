@@ -42,7 +42,7 @@ const Login: FC<Props> = () => {
                     className={`${styles.label}`}
                     htmlFor="email"
                 >
-                    Enter your email <AsteriskSymbol/>
+                    Enter your email <AsteriskSymbol />
                 </label>
                 <input
                     id='email'
@@ -64,7 +64,7 @@ const Login: FC<Props> = () => {
                         className={`${styles.label}`}
                         htmlFor="password"
                     >
-                        Enter your password <AsteriskSymbol/>
+                        Enter your password <AsteriskSymbol />
                     </label>
                     <input
                         id='password'
@@ -98,11 +98,11 @@ const Login: FC<Props> = () => {
                                 />
                             )
                     }
-                    {
-                        errors.password && touched.password &&
-                        <span className='text-red-500 pt-2 block'>{errors.password}</span>
-                    }
                 </div>
+                {
+                    errors.password && touched.password &&
+                    <span className='text-red-500 pt-2 block'>{errors.password}</span>
+                }
 
                 <div className='w-full mt-5'>
                     <button type='submit' className={`${styles.button}`} >

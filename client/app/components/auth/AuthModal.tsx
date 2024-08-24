@@ -34,7 +34,7 @@ const AuthModal: React.FC<Props> = () => {
 
 
     return (
-        <DialogContent className='h-[670px] w-full rounded-full '>
+        <DialogContent className='h-[670px] w-full  '>
             <DialogHeader>
                 <DialogTitle>
                     <div className={`${styles.title} font-semibold flex items-center`}>
