@@ -1,8 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useFormik, } from 'formik';
-import * as Yup from 'yup';
 import { styles } from '../../styles/style';
 import Image from 'next/image';
 import Login from './Login'
@@ -23,31 +21,27 @@ type Props = {
 }
 
 
-const schema = Yup.object().shape({
-    email: Yup.string().email("Invalid email").required("Please enter your email"),
-    password: Yup.string().required("Please enter your password").min(6),
-})
 
 
 const AuthModal: React.FC<Props> = () => {
 
-    const formik = useFormik({
-        initialValues: { email: "", password: "" },
-        validationSchema: schema,
-        onSubmit: async ({ email, password }) => {
-            console.log({ email, password })
-        }
-    })
+    const [tabValue, setTabValue] = useState('login')
 
-    const { errors, touched, values, handleChange, handleSubmit } = formik
-    const [showPassword, setShowPassword] = useState(false)
+    const onTabValueChange = (val: string) => {
+        setTabValue(val)
+    }
+
+
 
     return (
-        <DialogContent className='h-[670px] w-full '>
+        <DialogContent className='h-[670px] w-full rounded-full '>
             <DialogHeader>
                 <DialogTitle>
-                    <p className={`${styles.title} flex items-center`}>
-                        Login With ClassLink
+                    <div className={`${styles.title} font-semibold flex items-center`}>
+                        <p>
+                            <span className='text-green-600'>{tabValue === 'login' ? 'Login With' : 'Join To'} </span>
+                            ClassLink
+                        </p>
                         <Image
                             className="object-contain w-9 h-9 md:w-10 md:h-10 lg:w-12 lg:h-12"
                             src='/assets/icons/classLink-logo.png'
@@ -55,16 +49,24 @@ const AuthModal: React.FC<Props> = () => {
                             height={26}
                             alt="Profile Icon"
                         />
-                    </p>
+                    </div>
                 </DialogTitle>
                 <DialogDescription>
-                    Secure login with ClassLink
+                    <div>
+                        {tabValue === 'login' ?
+                            <p>Welcome back! Dive into learning, chatting, and playing with your instructors.</p>
+                            :
+                            <p>
+                                Welcome to ClassLink. Create your account today to access exclusive learning resources, interactive chats, and exciting games.
+                            </p>
+                        }
+                    </div>
                 </DialogDescription>
             </DialogHeader>
 
 
             <div className='flex-center w-full '>
-                <Tabs className='w-full h-full' defaultValue='login'>
+                <Tabs className='w-full h-full' defaultValue='login' onValueChange={onTabValueChange}>
                     <TabsList className='bg-transparent w-full rounded-none'>
                         <div className='flex w-full bg-transparent'>
                             <TabsTrigger value="login"
@@ -93,7 +95,6 @@ const AuthModal: React.FC<Props> = () => {
                     </TabsContent>
                 </Tabs>
             </div>
-
 
 
         </DialogContent >
