@@ -6,7 +6,7 @@ import Link from 'next/link';
 import NavItems from '../utils/NavItems'
 import { ThemeSwitcher } from '../utils/ThemeSwitcher'
 import MobileMenu from './../utils/MobileMenu';
-import LoginSignup from './auth/LoginSignup';
+import AuthModal from './auth/AuthModal';
 
 
 import {
@@ -87,7 +87,7 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute }) => {
                                                     alt="Profile Icon"
                                                 />
                                             </DialogTrigger>
-                                            <LoginSignup />
+                                            <AuthModal />
                                         </Dialog>
                                     )
                             }
