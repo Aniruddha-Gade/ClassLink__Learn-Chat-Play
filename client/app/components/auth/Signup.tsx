@@ -16,8 +16,11 @@ import {
 } from "../ui/select"
 
 
-interface Props {
 
+
+type Props = {
+    setRoute: (route: string) => void;
+    setOpen: (open: boolean) => void;
 }
 
 
@@ -30,13 +33,15 @@ const schema = Yup.object().shape({
 });
 
 
-const Signup: FC<Props> = () => {
+const Signup: FC<Props> = ({setRoute,setOpen}) => {
 
     const formik = useFormik({
         initialValues: { name: "", email: "", password: "", accountType: "", avatar: "" },
         validationSchema: schema,
-        onSubmit: async ({ email, password, accountType, avatar, name }) => {
+        onSubmit: async ( { email, password, accountType, avatar, name }) => {
             console.log({ email, password, accountType, avatar, name })
+            setRoute("verification")
+            setOpen(true)
         }
     })
 
@@ -118,8 +123,6 @@ const Signup: FC<Props> = () => {
                         }
                     </div>
                 </div>
-
-
 
 
                 {/* password field */}

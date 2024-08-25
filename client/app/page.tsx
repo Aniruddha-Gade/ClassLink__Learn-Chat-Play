@@ -4,7 +4,8 @@ import React, { FC, useState } from 'react'
 import Heading from './utils/Heading'
 import Header from './components/Header'
 import Hero from '../app/components/Route/Hero'
-
+import Verification from "./components/auth/Verification"
+import AuthModal from "./components/auth/AuthModal"
 
 interface Props { }
 
@@ -14,6 +15,8 @@ const Page: FC<Props> = (props) => {
   const [open, setOpen] = useState(false)
   const [activeItem, setActiveItem] = useState(0)
   const [route, setRoute] = useState("")
+
+  console.log({open, route})
 
   return (
     <div>
@@ -32,6 +35,16 @@ const Page: FC<Props> = (props) => {
         setRoute={setRoute}
       />
 
+      {
+        route === 'auth' && <>
+          <AuthModal open={open} setOpen={setOpen} setRoute={setRoute} />
+        </>
+      }
+      {
+        route === 'verification' && <>
+          <Verification open={open} setOpen={setOpen} />
+        </>
+      }
 
 
       <Hero />

@@ -6,13 +6,8 @@ import Link from 'next/link';
 import NavItems from '../utils/NavItems'
 import { ThemeSwitcher } from '../utils/ThemeSwitcher'
 import MobileMenu from './../utils/MobileMenu';
-import AuthModal from './auth/AuthModal';
 
 
-import {
-    Dialog,
-    DialogTrigger,
-} from "../components/ui/dialog"
 
 type HeaderProps = {
     open: boolean;
@@ -22,7 +17,7 @@ type HeaderProps = {
     setRoute: (route: string) => void
 }
 
-const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute }) => {
+const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen }) => {
 
     const [active, setActive] = useState(false)
 
@@ -65,10 +60,12 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute }) => {
                                 isMobile={false}
                                 activeItem={activeItem}
                             />
+
                             {/* change theme */}
                             <ThemeSwitcher />
 
-                            {/* profile photo + dropdown-menu / login */}
+
+                            {/* profile photo + dropdown-menu / login-signup */}
                             {
                                 token ? (
                                     <div>
@@ -77,18 +74,14 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute }) => {
                                 )
                                     :
                                     (
-                                        <Dialog>
-                                            <DialogTrigger >
-                                                <Image
-                                                    className="cursor-pointer"
-                                                    src='/assets/icons/profile-icon.png'
-                                                    width={30}
-                                                    height={30}
-                                                    alt="Profile Icon"
-                                                />
-                                            </DialogTrigger>
-                                            <AuthModal />
-                                        </Dialog>
+                                        <Image
+                                            className="cursor-pointer"
+                                            src='/assets/icons/profile-icon.png'
+                                            width={30}
+                                            height={30}
+                                            onClick={() => { setOpen(true); setRoute("auth") }}
+                                            alt="Profile Icon"
+                                        />
                                     )
                             }
 

@@ -8,8 +8,8 @@ import Image from 'next/image';
 import AsteriskSymbol from '@/app/utils/AsteriskSymbol';
 
 
-interface Props {
-
+type Props = {
+    setRoute: (route: string) => void
 }
 
 
@@ -20,7 +20,7 @@ const schema = Yup.object().shape({
 })
 
 
-const Login: FC<Props> = () => {
+const Login: FC<Props> = ({setRoute}) => {
 
     const formik = useFormik({
         initialValues: { email: "", password: "" },
