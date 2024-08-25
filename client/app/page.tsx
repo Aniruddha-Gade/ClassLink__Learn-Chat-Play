@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useState } from 'react'
+import React, { FC, useState,useEffect } from 'react'
 import Heading from './utils/Heading'
 import Header from './components/Header'
 import Hero from '../app/components/Route/Hero'
@@ -16,7 +16,10 @@ const Page: FC<Props> = (props) => {
   const [activeItem, setActiveItem] = useState(0)
   const [route, setRoute] = useState("")
 
-  console.log({open, route})
+  console.log({ open, route })
+useEffect(()=>{
+  setOpen(true); setRoute("verification") 
+},[])
 
   return (
     <div>
@@ -42,7 +45,7 @@ const Page: FC<Props> = (props) => {
       }
       {
         route === 'verification' && <>
-          <Verification open={open} setOpen={setOpen} />
+          <Verification open={open} setOpen={setOpen} setRoute={setRoute } />
         </>
       }
 

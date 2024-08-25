@@ -38,7 +38,7 @@ const AuthModal: React.FC<Props> = ({ setRoute, setOpen, open }) => {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className='h-[670px] w-full  '>
+            <DialogContent className='h-[670px] w-full rounded-3xl sm:rounded-3xl '>
                 <DialogHeader>
                     <DialogTitle>
                         <div className={`${styles.title} font-semibold flex items-center`}>

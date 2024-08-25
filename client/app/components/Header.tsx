@@ -27,8 +27,10 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
         window.addEventListener("scroll", () => {
             if (window.scrollY > 80) {
                 setActive(true)
+                console.log("true")
             }
             else {
+                console.log("false")
                 setActive(false)
             }
         })
@@ -56,6 +58,13 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
                             </Link>
                         </div>
                         <div className='flex items-center gap-3'>
+                            <div
+                                className='text-black w-fit m-5 dark:text-white bg-red-300 rounded-xl p-3 '
+                                onClick={() => { setOpen(true); setRoute("verification") }}
+                            >
+                                Open verification
+                            </div>
+
                             <NavItems
                                 isMobile={false}
                                 activeItem={activeItem}
