@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useState } from 'react'
+import React, { FC, useState , useEffect} from 'react'
 import Image from 'next/image';
 import Link from 'next/link';
 import NavItems from '../utils/NavItems'
@@ -22,19 +22,26 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
     const [active, setActive] = useState(false)
 
     const token = ""
-
-    if (typeof window !== undefined) {
-        window.addEventListener("scroll", () => {
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+          const handleScroll = () => {
             if (window.scrollY > 0) {
-                setActive(true)
-                console.log("true")
+              setActive(true);
+              console.log("true");
+            } else {
+              setActive(false);
+              console.log("false");
             }
-            else {
-                console.log("false")
-                setActive(false)
-            }
-        })
-    }
+          };
+    
+          window.addEventListener("scroll", handleScroll);
+    
+          // Clean up the event listener on component unmount
+          return () => {
+            window.removeEventListener("scroll", handleScroll);
+          };
+        }
+      }, []); 
 
     return (
         <nav className='w-full relative '>
@@ -45,7 +52,7 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
                 <div className='w-[95%] 800px:w-[92%] h-full py-2 m-auto '>
                     <div className="flex-between h-full w-full ">
                         <div className=''>
-                            <Link href="/" className='flex items-center gap-2 text-[20px] 800px:text-[25px] font-Poppins font-medium text-black dark:text-white '>
+                            <Link href="/" className='flex items-center gap-2 text-[20px] 800px:text-[25px] font-Poppins font-semibold text-black dark:text-white '>
                                 ClassLink
                                 <Image
                                     className="cursor-pointer object-contain w-9 h-9 md:w-10 md:h-10 lg:w-12 lg:h-12"
@@ -58,12 +65,6 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
                             </Link>
                         </div>
                         <div className='flex items-center gap-3'>
-                            <div
-                                className='text-black w-fit m-5 dark:text-white bg-red-300 rounded-xl p-3 '
-                                onClick={() => { setOpen(true); setRoute("verification") }}
-                            >
-                                Open verification
-                            </div>
 
                             <NavItems
                                 isMobile={false}

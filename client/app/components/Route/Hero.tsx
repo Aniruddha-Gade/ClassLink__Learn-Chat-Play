@@ -5,7 +5,7 @@
 
 const Hero = () => {
     return (
-        <div className="bg-white dark:bg-black text-black dark:text-white h-full flex flex-col gap-5 ">
+        <div className="bg-white dark:bg-black text-black dark:text-white h-full flex flex-col gap-5 duration-200">
 
 
             <div className='flex flex-col gap-10 p-10 '>
