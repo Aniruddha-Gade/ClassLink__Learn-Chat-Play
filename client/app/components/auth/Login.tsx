@@ -5,7 +5,7 @@ import { useFormik, } from 'formik';
 import * as Yup from 'yup';
 import { styles } from '../../styles/style';
 import Image from 'next/image';
-import AsteriskSymbol from '@/app/utils/AsteriskSymbol';
+import AsteriskSymbol from './../../utils/AsteriskSymbol';
 
 
 type Props = {
