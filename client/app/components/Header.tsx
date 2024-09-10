@@ -25,7 +25,7 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
 
     if (typeof window !== undefined) {
         window.addEventListener("scroll", () => {
-            if (window.scrollY > 80) {
+            if (window.scrollY > 0) {
                 setActive(true)
                 console.log("true")
             }
@@ -38,9 +38,9 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
 
     return (
         <nav className='w-full relative '>
-            <div className={`${active ? 'fixed top-0 left-0 dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black dark:border-[#ffffff1c] shadow-xl transition duration-500 '
+            <div className={`${active ? 'fixed top-0 left-0 dark:bg-opacity-50 bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:to-black dark:border-[#ffffff1c] shadow-xl transition duration-500 '
                 : 'dark:border-[#ffffff1c] dark:shadow '} 
-                w-full h-[80px] z-[80] border-b-2 border-b-[#1717173f] `}
+                w-full h-[80px] z-[80] border-b-2 border-b-[#1717173f]`}
             >
                 <div className='w-[95%] 800px:w-[92%] h-full py-2 m-auto '>
                     <div className="flex-between h-full w-full ">
