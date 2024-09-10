@@ -288,7 +288,7 @@ export const updateAccessToken = catchAsyncError(async (req: Request, res: Respo
 export const getUserInfo = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = req.user?._id as string;
-        getUserById(userId, res)
+        getUserById(req, res,userId)
 
     } catch (error) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching userInfo"));

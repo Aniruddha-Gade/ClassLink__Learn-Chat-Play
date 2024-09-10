@@ -1,4 +1,8 @@
+'use client'
+
+
 import './globals.css'
+import { Providers } from './Provider';
 import ThemeProvider from './utils/Theme-provider';
 
 import { Poppins } from "next/font/google";
@@ -25,10 +29,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} ${josefin.variable} bg-white bg-no-repeat dark:bg-gradient-to-b dark:from-gray-900 dark:to-black duration-300 `}>
-        <ThemeProvider attribute='class' defaultTheme='system' enableSystem  >
-          {children}
-        </ThemeProvider>
-
+        <Providers>
+          <ThemeProvider attribute='class' defaultTheme='system' enableSystem  >
+            {children}
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   )

@@ -1,16 +1,18 @@
-import { Response } from "express"
+import {Request, Response } from "express"
 import { redis } from "../utils/redis"
 import userModel from "../models/user.model"
 
 // =========================== GET USER BY ID ===========================
-export const getUserById = async (id: string, res: Response) => {
+export const getUserById = async (req: Request,  res: Response,id: string) => {
     const userJson = await redis.get(id)
+    const access_token = req?.cookies?.access_token as string
 
     if (userJson) {
         const user = JSON.parse(userJson)
         res.status(201).json({
             success: true,
             user,
+            access_token,
             message: "User data fetch by ID successfully"
         })
     }

@@ -16,10 +16,7 @@ const Page: FC<Props> = (props) => {
   const [activeItem, setActiveItem] = useState(0)
   const [route, setRoute] = useState("")
 
-  console.log({ open, route })
-useEffect(()=>{
-  setOpen(true); setRoute("verification") 
-},[])
+
 
   return (
     <div>

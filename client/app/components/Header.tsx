@@ -27,10 +27,8 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
           const handleScroll = () => {
             if (window.scrollY > 0) {
               setActive(true);
-              console.log("true");
             } else {
               setActive(false);
-              console.log("false");
             }
           };
     
