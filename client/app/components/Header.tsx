@@ -3,6 +3,7 @@
 import React, { FC, useState , useEffect} from 'react'
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSelector } from 'react-redux'
 import NavItems from '../utils/NavItems'
 import { ThemeSwitcher } from '../utils/ThemeSwitcher'
 import MobileMenu from './../utils/MobileMenu';
@@ -21,7 +22,9 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
 
     const [active, setActive] = useState(false)
 
-    const token = ""
+    const { token } = useSelector((state: any) => state.auth)
+    console.log("token from header = ", token)
+
     useEffect(() => {
         if (typeof window !== "undefined") {
           const handleScroll = () => {

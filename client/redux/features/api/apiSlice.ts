@@ -36,7 +36,7 @@ export const apiSlice = createApi({
                     console.log("USER INFO API RESULT => ", result)
                     dispatch(
                         userLoggedIn({
-                            accessToken: result.data.accessToken,
+                            accessToken: result.data.access_token,
                             user: result.data.user,
                         })
                     );

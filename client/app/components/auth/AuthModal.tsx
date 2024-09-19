@@ -90,7 +90,7 @@ const AuthModal: React.FC<Props> = ({ setRoute, setOpen, open }) => {
                         {/* login content */}
                         <TabsContent className='flex flex-col gap-5 mt-10' value='login'  >
                             {/* login form */}
-                            <Login setRoute={setRoute} />
+                            <Login setRoute={setRoute} setOpen={setOpen} />
                         </TabsContent>
 
                         {/* signup content */}
