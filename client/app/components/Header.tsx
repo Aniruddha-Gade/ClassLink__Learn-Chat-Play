@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import NavItems from '../utils/NavItems'
 import { ThemeSwitcher } from '../utils/ThemeSwitcher'
 import MobileMenu from './../utils/MobileMenu';
+import UserDropdownMenu from '../utils/UserDropdownMenu'
 
 
 
@@ -22,8 +23,8 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
 
     const [active, setActive] = useState(false)
 
-    const { token } = useSelector((state: any) => state.auth)
-    console.log("token from header = ", token)
+    const { token, user } = useSelector((state: any) => state.auth)
+    // console.log("token from header = ", token)
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -78,10 +79,8 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
 
                             {/* profile photo + dropdown-menu / login-signup */}
                             {
-                                token ? (
-                                    <div>
-                                        Dada, tu logged aahes
-                                    </div>
+                                token && user ? (
+                                    <UserDropdownMenu />
                                 )
                                     :
                                     (
