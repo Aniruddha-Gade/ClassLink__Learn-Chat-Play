@@ -1,7 +1,7 @@
 'use client'
 
 import React, { FC, useEffect, useState } from 'react'
-import {useRouter} from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useFormik, } from 'formik';
 import { toast } from 'sonner';
 import * as Yup from 'yup';
@@ -10,7 +10,7 @@ import Image from 'next/image';
 import AsteriskSymbol from './../../utils/AsteriskSymbol';
 import LoadingButtonText from '../../utils/LoadingButtonText';
 import { useLoginMutation } from '../../../redux/features/auth/authApi';
-
+import { signIn } from 'next-auth/react'
 
 type Props = {
     setRoute: (route: string) => void
@@ -41,20 +41,20 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
     const [showPassword, setShowPassword] = useState(false)
     const [login, { isSuccess, error, isLoading }] = useLoginMutation()
     const router = useRouter()
-    
-        useEffect(() => {
-            if (isSuccess) {
-                toast.success("Login Successfully")
-                setOpen(false)
+
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success("Login Successfully")
+            setOpen(false)
+        }
+        if (error) {
+            if ("data" in error) {
+                console.log("USER REGISTER API ERROR => , error")
+                const errorData = error as any
+                toast.error(errorData.data.message)
             }
-            if (error) {
-                if ("data" in error) {
-                    console.log("USER REGISTER API ERROR => , error")
-                    const errorData = error as any
-                    toast.error(errorData.data.message)
-                }
-            }
-        }, [isSuccess, error, setOpen, router])
+        }
+    }, [isSuccess, error, setOpen, router])
 
     return (
         <div className='w-full'>
@@ -127,7 +127,7 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
                 }
 
                 <div className='w-full mt-5'>
-                <button type='submit' disabled={isLoading} className={`${styles.button}`} >
+                    <button type='submit' disabled={isLoading} className={`${styles.button}`} >
                         {
                             isLoading ? <LoadingButtonText />
                                 : 'Login'
@@ -140,13 +140,15 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
                 </h5>
                 <div className='w-full flex-center gap-4 my-3'>
                     <Image
-                        src="/assets/icons/google-logo.png"
-                        width={35}
-                        height={35}
-                        className='cursor-pointer'
-                        alt="google icon"
+                    onClick={()=> signIn("google")}
+                    src="/assets/icons/google-logo.png"
+                    width={35}
+                    height={35}
+                    className='cursor-pointer'
+                    alt="google icon"
                     />
                     <Image
+                    onClick={()=> signIn("github")}
                         src="/assets/icons/github-logo.png"
                         width={35}
                         height={35}

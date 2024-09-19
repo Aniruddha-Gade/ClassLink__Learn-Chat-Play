@@ -8,7 +8,7 @@ import NavItems from '../utils/NavItems'
 import { ThemeSwitcher } from '../utils/ThemeSwitcher'
 import MobileMenu from './../utils/MobileMenu';
 import UserDropdownMenu from '../utils/UserDropdownMenu'
-
+import {useSession } from 'next-auth/react'
 
 
 type HeaderProps = {
@@ -24,6 +24,8 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
     const [active, setActive] = useState(false)
 
     const { token, user } = useSelector((state: any) => state.auth)
+    const {data} = useSession()
+    console.log("User social auth data = ", data)
     // console.log("token from header = ", token)
 
     useEffect(() => {
