@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import Image from 'next/image';
+import { useSelector } from 'react-redux'
 import Link from 'next/link'
 import {
   DropdownMenu,
@@ -21,6 +22,7 @@ import { useRouter } from 'next/navigation'
 
 const UserDropdownMenu = () => {
   const [logout, setLogout] = useState(false)
+  const { token, user } = useSelector((state: any) => state.auth)
   const { } = useLogoutQuery(undefined, {
     skip: !logout ? true : false
   })
@@ -39,7 +41,7 @@ const UserDropdownMenu = () => {
         <DropdownMenuTrigger className='outline-none border-none '>
           <div className='w-8 h-8 '>
             <Image
-              src='/assets/images/aniruddha-profile.jpg'
+              src={user?.avatar?.url ? user?.avatar?.url : `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`}
               width={30}
               height={30}
               className='w-full h-full rounded-full object-cover'
