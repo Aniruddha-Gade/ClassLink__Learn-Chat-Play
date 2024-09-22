@@ -6,7 +6,7 @@ interface ProtectedProps {
   children: React.ReactNode;
 }
 
-export default function useProtected({ children }: ProtectedProps) {
+export default function Protected({ children }: ProtectedProps) {
   const { user, token } = useSelector((state: any) => state.auth);
 
   const isAuthenticated = user && token ? true : false
