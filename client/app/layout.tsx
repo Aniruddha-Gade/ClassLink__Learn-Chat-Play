@@ -2,12 +2,17 @@
 
 
 import './globals.css'
+import React from 'react'
 import { Providers } from './Provider';
 import ThemeProvider from './utils/Theme-provider';
-import{SessionProvider} from "next-auth/react"
+import { SessionProvider } from "next-auth/react"
 
 import { Poppins } from "next/font/google";
 import { Josefin_Sans } from "next/font/google";
+
+import { useLoadUserQuery } from '../redux/features/api/apiSlice'
+import Loader from "./components/Loader/Loader"
+
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -31,13 +36,27 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable} ${josefin.variable} bg-white bg-no-repeat dark:bg-gradient-to-b dark:from-gray-900 dark:to-black duration-300 `}>
         <Providers>
-        <SessionProvider>
-          <ThemeProvider attribute='class' defaultTheme='system' enableSystem  >
-            {children}
-          </ThemeProvider>
-        </SessionProvider>
+          <SessionProvider>
+            <ThemeProvider attribute='class' defaultTheme='system' enableSystem  >
+              <Custom>
+                {children}
+              </Custom>
+            </ThemeProvider>
+          </SessionProvider>
         </Providers>
       </body>
     </html>
+  )
+}
+
+
+const Custom: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isLoading } = useLoadUserQuery({})
+  return (
+    <>
+      {
+        isLoading ? <Loader /> : <>{children}</>
+      }
+    </>
   )
 }
