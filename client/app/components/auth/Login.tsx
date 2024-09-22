@@ -49,9 +49,10 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
         }
         if (error) {
             if ("data" in error) {
-                console.log("USER REGISTER API ERROR => , error")
+                console.log("USER REGISTER API ERROR => ", error)
                 const errorData = error as any
                 toast.error(errorData.data.message)
+                console.log("errorData.data.message = ", errorData.data.message)
             }
         }
     }, [isSuccess, error, setOpen, router])

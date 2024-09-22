@@ -1,14 +1,16 @@
 'use client'
 
-import React, { FC, useState , useEffect} from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import Image from 'next/image';
 import Link from 'next/link';
+import {toast} from 'sonner'
 import { useSelector } from 'react-redux'
 import NavItems from '../utils/NavItems'
 import { ThemeSwitcher } from '../utils/ThemeSwitcher'
 import MobileMenu from './../utils/MobileMenu';
 import UserDropdownMenu from '../utils/UserDropdownMenu'
-import {useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
+import { useSocialAuthMutation } from '../../redux/features/auth/authApi';
 
 
 type HeaderProps = {
@@ -24,28 +26,42 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
     const [active, setActive] = useState(false)
 
     const { token, user } = useSelector((state: any) => state.auth)
-    const {data} = useSession()
-    console.log("User social auth data = ", data)
     // console.log("token from header = ", token)
+    const { data } = useSession()
+    const [socialAuth, { isSuccess, error }] = useSocialAuthMutation()
+
+    useEffect(() => {
+        if (!user) {
+            if (data) {
+                socialAuth({ email: data?.user?.email, name: data?.user?.name, avatar: data?.user?.image })
+            }
+        }
+
+        if (isSuccess) {
+            toast.success("Login successfully")
+        }
+    }, [data, user, isSuccess, socialAuth])
+
+
 
     useEffect(() => {
         if (typeof window !== "undefined") {
-          const handleScroll = () => {
-            if (window.scrollY > 0) {
-              setActive(true);
-            } else {
-              setActive(false);
-            }
-          };
-    
-          window.addEventListener("scroll", handleScroll);
-    
-          // Clean up the event listener on component unmount
-          return () => {
-            window.removeEventListener("scroll", handleScroll);
-          };
+            const handleScroll = () => {
+                if (window.scrollY > 0) {
+                    setActive(true);
+                } else {
+                    setActive(false);
+                }
+            };
+
+            window.addEventListener("scroll", handleScroll);
+
+            // Clean up the event listener on component unmount
+            return () => {
+                window.removeEventListener("scroll", handleScroll);
+            };
         }
-      }, []); 
+    }, []);
 
     return (
         <nav className='w-full relative '>

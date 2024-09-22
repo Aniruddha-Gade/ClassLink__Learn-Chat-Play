@@ -54,6 +54,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
     accountType: {
         type: String,
         enum: ['Admin', 'Instructor', 'Student'],
+        default:"Student",
         reuired: true
     },
     isVerified: {

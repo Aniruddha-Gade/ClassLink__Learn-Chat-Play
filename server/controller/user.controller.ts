@@ -288,7 +288,7 @@ export const updateAccessToken = catchAsyncError(async (req: Request, res: Respo
 export const getUserInfo = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = req.user?._id as string;
-        getUserById(req, res,userId)
+        getUserById(req, res, userId)
 
     } catch (error) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching userInfo"));
@@ -308,16 +308,16 @@ interface ISocialAuth {
 
 export const socialAuth = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { email, name, avatar, accountType } = req.body as ISocialAuth
-        if (!email || !name || !avatar || !accountType) {
-            return next(new ErrorHandler('Email, name, avatar, accountType is required for social auth', 400, "Error while social auth"));
+        const { email, name, avatar, } = req.body as ISocialAuth
+        if (!email || !name || !avatar) {
+            return next(new ErrorHandler('Email, name, avatar is required for social auth', 400, "Error while social auth"));
         }
 
         // if user exist then send token ,
         // if not, then create user and send token
         const user = await userModel.findOne({ email })
         if (!user) {
-            const newUser = await userModel.create({ email, name, avatar, accountType })
+            const newUser = await userModel.create({ email, name, avatar })
             sendToken(newUser, 200, res)
         }
         else {
@@ -443,7 +443,7 @@ export const updateAvatar = catchAsyncError(async (req: Request, res: Response, 
         }
 
         // find user
-        const userId = req.user?._id
+        const userId = req?.user?._id
         const user = await userModel.findById(userId)
         if (!user) {
             return next(new ErrorHandler('User not found', 404, "Error while updating avatar"));

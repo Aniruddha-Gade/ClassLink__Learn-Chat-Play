@@ -11,7 +11,7 @@ import cron from 'node-cron'
 // =========================== GET ALL UNREAD NOTIFICATIONS ===========================
 export const getAllUnReadNotifications = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userId = req.user?._id
+        const userId = req?.user?._id
 
         const allUnReadNotifications = await notificationModel.find({
             status: { $eq: "unread" }, // fetch un-read notifications
@@ -39,7 +39,7 @@ export const getAllUnReadNotifications = catchAsyncError(async (req: Request, re
 // =========================== GET ALL NOTIFICATIONS ===========================
 export const getAllNotifications = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const instructorId = req.user._id
+        const instructorId = req?.user?._id
 
 
         // get all notifications
@@ -100,7 +100,7 @@ export const getAllNotifications = catchAsyncError(async (req: Request, res: Res
 // =========================== UPDATE SPECIFIC NOTIFICATIONS ===========================
 export const updateNotification = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const instructorId = req.user._id
+        const instructorId = req?.user?._id
         const notificationId = req.params.id
 
         // validate id

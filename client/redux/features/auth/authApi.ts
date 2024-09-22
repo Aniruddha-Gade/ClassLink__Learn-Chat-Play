@@ -69,8 +69,8 @@ export const authApi = apiSlice.injectEndpoints({
         }),
 
 
-         // logout
-         logout: builder.query({
+        // logout
+        logout: builder.query({
             query: () => ({
                 url: "/auth/logout",
                 method: "GET",
@@ -80,16 +80,38 @@ export const authApi = apiSlice.injectEndpoints({
                 try {
                     const result = await queryFulfilled;
                     console.log("LOGOUT USER API RESULT => ", result)
+                    dispatch(
+                        userLoggedOut()
+                    )
                 } catch (error: any) {
                     console.log("LOGOUT USER API ERROR => ", error)
                 }
-                dispatch(
-                    userLoggedOut()
-                )
+            }
+        }),
+
+
+        // social Auth
+        socialAuth: builder.mutation({
+            query: ({ email, name, avatar }) => ({
+                url: "/auth/social-auth",
+                method: "POST",
+                body: { email, name, avatar },
+                credentials: "include" as const,
+            }),
+            async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+                try {
+                    const result = await queryFulfilled;
+                    console.log("SOCIAL AUTH API RESULT => ", result)   
+                    dispatch(userLoggedIn({
+                        accessToken: result.data.accessToken, user: result.data.user
+                    }))
+                } catch (error: any) {
+                    console.log("SOCIAL AUTH API ERROR => ", error)
+                }
             }
         })
     }),
 });
 
 
-export const { useRegisterMutation, useActivationMutation, useLoginMutation, useLogoutQuery } = authApi
+export const { useRegisterMutation, useActivationMutation, useLoginMutation, useLogoutQuery, useSocialAuthMutation  } = authApi
