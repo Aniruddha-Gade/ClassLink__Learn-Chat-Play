@@ -3,7 +3,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import Image from 'next/image';
 import Link from 'next/link';
-import {toast} from 'sonner'
+import { toast } from 'sonner'
 import { useSelector } from 'react-redux'
 import NavItems from '../utils/NavItems'
 import { ThemeSwitcher } from '../utils/ThemeSwitcher'
@@ -11,6 +11,7 @@ import MobileMenu from './../utils/MobileMenu';
 import UserDropdownMenu from '../utils/UserDropdownMenu'
 import { useSession } from 'next-auth/react'
 import { useSocialAuthMutation } from '../../redux/features/auth/authApi';
+import { useLogoutQuery } from '../../redux/features/auth/authApi'
 
 
 type HeaderProps = {
@@ -29,6 +30,11 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
     // console.log("token from header = ", token)
     const { data } = useSession()
     const [socialAuth, { isSuccess, error }] = useSocialAuthMutation()
+    const [logout, setLogout] = useState(false)
+    const { } = useLogoutQuery(undefined, {
+        skip: !logout ? true : false
+    })
+
 
     useEffect(() => {
         if (!user) {
@@ -37,8 +43,14 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
             }
         }
 
-        if (isSuccess) {
-            toast.success("Login successfully")
+        if (data === null) {
+            if (isSuccess) {
+                toast.success("Login successfully by Social-Auth ")
+            }
+        }
+
+        if (data === null) {
+            setLogout(true)
         }
     }, [data, user, isSuccess, socialAuth])
 

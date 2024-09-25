@@ -15,6 +15,7 @@ import {
 import { useLogoutQuery } from '../../redux/features/auth/authApi'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { signOut } from "next-auth/react"
 
 
 
@@ -28,12 +29,13 @@ const UserDropdownMenu = () => {
   })
   const router = useRouter()
 
+
   const logoutHandler = async () => {
+    console.log("clicked for logout")
     setLogout(true)
+    await signOut()
     toast.success("Logout successfully")
-    router.push("/")
-    console.log("redirect to home")
-  }
+}
 
   return (
     <div>

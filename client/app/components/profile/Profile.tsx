@@ -3,6 +3,10 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import SidebarProfile from "./SidebarProfile"
+import { useLogoutQuery } from '../../../redux/features/auth/authApi'
+import { signOut } from "next-auth/react"
+import { toast } from 'sonner'
+
 
 
 interface Props {
@@ -15,9 +19,18 @@ const Profile: React.FC<Props> = () => {
     const { user } = useSelector((state: any) => state.auth)
     const [avatar, setAvatar] = useState(null)
     const [active, setActive] = useState(1)
+    const [logout, setLogout] = useState(false)
+    const { } = useLogoutQuery(undefined, {
+        skip: !logout ? true : false
+    })
+
 
     const logoutHandler = async () => {
         console.log("clicked for logout")
+        setLogout(true)
+        await signOut()
+        toast.success("Logout successfully")
+
     }
 
     useEffect(() => {

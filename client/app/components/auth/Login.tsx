@@ -32,7 +32,6 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
         initialValues: { email: "", password: "" },
         validationSchema: schema,
         onSubmit: async ({ email, password }) => {
-            console.log({ email, password })
             await login({ email, password })
         }
     })
@@ -51,8 +50,8 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
             if ("data" in error) {
                 console.log("USER REGISTER API ERROR => ", error)
                 const errorData = error as any
-                toast.error(errorData.data.message)
-                console.log("errorData.data.message = ", errorData.data.message)
+                toast.error(errorData?.data?.message)
+                console.log("errorData.data.message = ", errorData?.data?.message)
             }
         }
     }, [isSuccess, error, setOpen, router])
