@@ -59,7 +59,7 @@ const Header: FC<HeaderProps> = ({ activeItem, open, route, setRoute, setOpen })
     useEffect(() => {
         if (typeof window !== "undefined") {
             const handleScroll = () => {
-                if (window.scrollY > 0) {
+                if (window.scrollY > 40) {
                     setActive(true);
                 } else {
                     setActive(false);
