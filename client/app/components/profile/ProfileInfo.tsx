@@ -2,9 +2,10 @@ import React, { FC, useEffect, useState } from "react";
 import Image from "next/image";
 import { styles } from "../../../app/styles/style";
 import { formatDate } from '../../../lib/formatDate'
-import { useUpdateAvatarMutation } from "../../../redux/features/user/userApi";
+import { useUpdateAvatarMutation, useUpdateUserInfoMutation } from "../../../redux/features/user/userApi";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
-
+import { Button } from "../ui/button"
+import { toast } from "sonner";
 
 type Props = {
     avatar: string | null;
@@ -17,6 +18,10 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
     const [loadUser, setLoadUser] = useState(false)
     const { } = useLoadUserQuery(undefined, { skip: loadUser ? false : true })
 
+    // update-user-info
+    const [updateUserInfo, {isLoading: updateUserInfoIsLoading,isSuccess: updateUserInfoSuccess, error:updateUserInfoError }]=useUpdateUserInfoMutation() 
+
+    // image Handler
     const imageHandler = async (e: any) => {
         const fileReader = new FileReader()
         fileReader.onload = () => {
@@ -33,12 +38,31 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
             setLoadUser(true)
         }
         if (error) {
-            console.log("ERROR WHILE UPDATING USER AVATAR => ", error)
+            if ("data" in error) {
+                console.log("ERROR WHILE UPDATING USER AVATAR => ", error)
+                const errorData = error as any
+                toast.error(errorData.data.message)
+            }
         }
-    }, [isSuccess, error])
+
+
+        if (updateUserInfoSuccess) {
+            setLoadUser(true)
+            toast.success("Name changed Successfully")
+        }
+        if (updateUserInfoError) {
+            if ("data" in updateUserInfoError) {
+                console.log("UPDATE USER-INFO API ERROR => ", updateUserInfoError)
+                const errorData = updateUserInfoError as any
+                toast.error(errorData.data.message)
+            }
+
+        }
+    }, [isSuccess, error,updateUserInfoSuccess,updateUserInfoError])
 
     const handleSubmit = async (e: any) => {
-        console.log("submit");
+        e.preventDefault()
+        updateUserInfo(name)
     };
 
     return (
@@ -82,7 +106,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
 
             <br />
             <br />
-            <div className="w-full pl-6 800px:pl-10">
+            <div className="w-full pl-6 800px:pl-10 pb-24">
                 <form onSubmit={handleSubmit}>
                     <div className="800px:w-[50%] m-auto pb-4 flex flex-col gap-5">
                         <div className="w-[100%]">
@@ -94,6 +118,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
                                 onChange={(e) => setName(e.target.value)}
                             />
                         </div>
+
                         <div className="w-[100%] pt-2 ">
                             <label className="block text-black dark:text-white">Email Address</label>
                             <input
@@ -105,6 +130,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
 
                             />
                         </div>
+
                         <div className="w-[100%] pt-2 ">
                             <label className="block text-black dark:text-white">Account Type</label>
                             <input
@@ -115,6 +141,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
                                 value={user?.accountType}
                             />
                         </div>
+
                         <div className="w-[100%] pt-2 ">
                             <label className="block text-black dark:text-white">Account Verified</label>
                             <input
@@ -125,6 +152,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
                                 value={user?.isVerified === false ? "No" : "Yes"}
                             />
                         </div>
+
                         <div className="w-[100%] pt-2 ">
                             <label className="block text-black dark:text-white">Account Created At</label>
                             <input
@@ -135,7 +163,16 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
                                 value={formatDate(user?.createdAt)}
                             />
                         </div>
+                   
+                        <Button type='submit' >
+                            {
+                                updateUserInfoIsLoading ? "Submitting..." : 'Submit'
+                            }
+                    </Button>
                     </div>
+
+
+
                 </form>
             </div>
         </div>

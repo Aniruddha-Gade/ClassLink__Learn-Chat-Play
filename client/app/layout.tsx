@@ -12,6 +12,7 @@ import { Josefin_Sans } from "next/font/google";
 
 import { useLoadUserQuery } from '../redux/features/api/apiSlice'
 import Loader from "./components/Loader/Loader"
+import { Toaster } from "./components/ui/sonner"
 
 
 const poppins = Poppins({
@@ -40,6 +41,7 @@ export default function RootLayout({
             <ThemeProvider attribute='class' defaultTheme='system' enableSystem  >
               <Custom>
                 {children}
+                <Toaster />
               </Custom>
             </ThemeProvider>
           </SessionProvider>
