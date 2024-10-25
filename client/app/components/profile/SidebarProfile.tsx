@@ -21,16 +21,23 @@ type Props = {
 }
 
 
+const VerticalLine = () => {
+    return (
+        <div className='bg-green-500 h-full absolute left-0 bottom-0 w-1 rounded-s-full '>
+        </div>
+    )
+}
+
 const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logoutHandler }) => {
 
     const [isDialogOpen, setDialogOpen] = useState(false);
 
 
     return (
-        <div className="w-full">
+        <div className="w-full min-w-[250px]">
             {/* my account */}
             <div
-                className={`w-full flex gap-3 items-center px-3 py-4 cursor-pointer 
+                className={`relative w-full flex gap-3 items-center px-3 py-4 cursor-pointer 
                             ${active === 1 ? "bg-slate-300 dark:bg-slate-800" : "bg-transparent"} `}
                 onClick={() => setActive(1)}
             >
@@ -44,11 +51,14 @@ const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logo
                     alt="Profile"
                 />
                 <h5 className="hidden 800px:block pl-2 font-Poppins text-black dark:text-white">My Account</h5>
+                {
+                    active === 1 && <VerticalLine />
+                }
             </div>
 
             {/* Change Password */}
             <div
-                className={`w-full flex gap-3 items-center px-3 py-4 cursor-pointer
+                className={`relative w-full flex gap-3 items-center px-3 py-4 cursor-pointer
                      ${active === 2 ? "dark:bg-slate-800 bg-white" : "bg-transparent"}`}
                 onClick={() => setActive(2)}
             >
@@ -60,11 +70,14 @@ const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logo
                     className=''
                 />
                 <h5 className="hidden 800px:block pl-2 font-Poppins text-black dark:text-white">Change Password</h5>
+                {
+                    active === 2 && <VerticalLine />
+                }
             </div>
 
             {/* Enrolled Courses */}
             <div
-                className={`w-full flex gap-3 items-center px-3 py-4 cursor-pointer
+                className={`relative w-full flex gap-3 items-center px-3 py-4 cursor-pointer
                      ${active === 3 ? "dark:bg-slate-800 bg-white" : "bg-transparent"}`}
                 onClick={() => setActive(3)}
             >
@@ -76,11 +89,14 @@ const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logo
                     className=''
                 />
                 <h5 className="hidden 800px:block pl-2 font-Poppins text-black dark:text-white">Enrolled Courses</h5>
+                {
+                    active === 3 && <VerticalLine />
+                }
             </div>
 
             {/* logout */}
             <div
-                className={`w-full flex gap-3 items-center px-3 py-4 cursor-pointer
+                className={`relative w-full flex gap-3 items-center px-3 py-4 cursor-pointer
                      ${active === 4 ? "dark:bg-slate-800 bg-white" : "bg-transparent"}`}
                 onClick={() => {
                     setActive(4);
@@ -96,7 +112,9 @@ const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logo
                     className=''
                 />
                 <h5 className="hidden 800px:block pl-2 font-Poppins text-black dark:text-white">Logout</h5>
-
+                {
+                    active === 4 && <VerticalLine />
+                }
             </div>
 
             <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
@@ -118,7 +136,10 @@ const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logo
                                 Logout
                             </Button>
                             <Button
-                                onClick={() => setDialogOpen(false)}
+                                onClick={() => {
+                                    setDialogOpen(false)
+                                    setActive(1);
+                                }}
                                 className="dark:text-white bg-green-500 dark:bg-green-500 hover:bg-green-600 hover:dark:bg-green-600">
                                 Cancel
                             </Button>
