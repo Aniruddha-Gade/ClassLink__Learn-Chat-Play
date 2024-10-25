@@ -1,7 +1,9 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Image from "next/image";
 import { styles } from "../../../app/styles/style";
 import { formatDate } from '../../../lib/formatDate'
+import { useUpdateAvatarMutation } from "../../../redux/features/user/userApi";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 
 
 type Props = {
@@ -11,10 +13,29 @@ type Props = {
 
 const ProfileInfo: FC<Props> = ({ avatar, user }) => {
     const [name, setName] = useState(user && user.name);
+    const [updateAvatar, { isLoading, isSuccess, error }] = useUpdateAvatarMutation()
+    const [loadUser, setLoadUser] = useState(false)
+    const { } = useLoadUserQuery(undefined, { skip: loadUser ? false : true })
 
     const imageHandler = async (e: any) => {
-        console.log('gggg');
+        const fileReader = new FileReader()
+        fileReader.onload = () => {
+            const avatar = fileReader.result
+            if (fileReader.readyState === 2) {
+                updateAvatar(avatar)
+            }
+        }
+        fileReader.readAsDataURL(e.target.files[0]);
     };
+
+    useEffect(() => {
+        if (isSuccess) {
+            setLoadUser(true)
+        }
+        if (error) {
+            console.log("ERROR WHILE UPDATING USER AVATAR => ", error)
+        }
+    }, [isSuccess, error])
 
     const handleSubmit = async (e: any) => {
         console.log("submit");
@@ -24,26 +45,37 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
         <div className="relative ">
             <div className="w-full flex justify-center">
                 <div className="relative ">
-                    <Image
-                        src={user?.avatar?.url || avatar || `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`}
-                        alt={`${user.name} profile`}
-                        width={30}
-                        height={30}
-                        className="w-[120px] h-[120px] cursor-pointer border-[3px] border-[#37a39a] rounded-full"
-                    />
-                    <input
-                        type="file"
-                        name=""
-                        id="avatar"
-                        onChange={imageHandler}
-                        className='hidden'
-                        accept="image/png,image/jpg,image/jpeg,image/webp "
-                    />
-                    <label htmlFor="avatar">
-                        <div className="w-[30px] h-[38px] bg-slate-900 rounded-full absolute bottom-2 right-2 flex items-center justify-center cursor-pointer">
-                            change
-                        </div>
-                    </label>
+                    {
+                        isLoading ?
+                            <div className="w-[120px] h-[120px] cursor-not-allowed border-[3px] border-[#37a39a] rounded-full skeleton"
+                            ></div>
+                            :
+                            <Image
+                                src={user?.avatar?.url || avatar || `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`}
+                                alt={`${user.name} profile`}
+                                width={30}
+                                height={30}
+                                className="w-[120px] h-[120px] border-[3px] border-[#37a39a] rounded-full"
+                            />
+                    }
+                    {
+                        !isLoading &&
+                        <>
+                            <input
+                                type="file"
+                                name=""
+                                id="avatar"
+                                onChange={imageHandler}
+                                className='hidden'
+                                accept="image/png,image/jpg,image/jpeg,image/webp "
+                            />
+                            <label htmlFor="avatar">
+                                <div className="w-[68px] h-[28px] bg-slate-600 rounded-full absolute bottom-2 -right-5 flex items-center justify-center cursor-pointer">
+                                    change
+                                </div>
+                            </label>
+                        </>
+                    }
                 </div>
             </div>
 

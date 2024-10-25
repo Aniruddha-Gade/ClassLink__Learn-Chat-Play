@@ -59,7 +59,7 @@ const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logo
             {/* Change Password */}
             <div
                 className={`relative w-full flex gap-3 items-center px-3 py-4 cursor-pointer
-                     ${active === 2 ? "dark:bg-slate-800 bg-white" : "bg-transparent"}`}
+                     ${active === 2 ? "bg-slate-300 dark:bg-slate-800" : "bg-transparent"} `}
                 onClick={() => setActive(2)}
             >
                 <Image
@@ -78,7 +78,7 @@ const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logo
             {/* Enrolled Courses */}
             <div
                 className={`relative w-full flex gap-3 items-center px-3 py-4 cursor-pointer
-                     ${active === 3 ? "dark:bg-slate-800 bg-white" : "bg-transparent"}`}
+                     ${active === 3 ? "bg-slate-300 dark:bg-slate-800" : "bg-transparent"} `}
                 onClick={() => setActive(3)}
             >
                 <Image
@@ -97,7 +97,7 @@ const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logo
             {/* logout */}
             <div
                 className={`relative w-full flex gap-3 items-center px-3 py-4 cursor-pointer
-                     ${active === 4 ? "dark:bg-slate-800 bg-white" : "bg-transparent"}`}
+                     ${active === 4 ? "bg-slate-300 dark:bg-slate-800" : "bg-transparent"} `}
                 onClick={() => {
                     setActive(4);
                     setDialogOpen(true); // Open the dialog when clicked
@@ -120,7 +120,7 @@ const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logo
             <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Are you sure you want to logout?</DialogTitle>
+                        <DialogTitle className='text-black dark:text-white'>Are you sure you want to logout?</DialogTitle>
                         <DialogDescription className='mb-10'>
                             This action will not delete your data.<br />
                             You can login again any time.
