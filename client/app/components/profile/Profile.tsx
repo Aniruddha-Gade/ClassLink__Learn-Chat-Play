@@ -7,6 +7,7 @@ import { useLogoutQuery } from '../../../redux/features/auth/authApi'
 import { signOut } from "next-auth/react"
 import { toast } from 'sonner'
 import ProfileInfo from './ProfileInfo'
+import ChangePassword from './ChangePassword'
 
 
 interface Props {
@@ -73,6 +74,15 @@ const Profile: React.FC<Props> = () => {
                 active === 1 && (
                     <div className='w-full h-full bg-transparent mt-[80px] '>
                         <ProfileInfo avatar={avatar} user={user} />
+                    </div>
+                )
+
+            }
+
+{
+                active === 2 && (
+                    <div className='w-full h-full bg-transparent mt-[80px] '>
+                        <ChangePassword  />
                     </div>
                 )
 
