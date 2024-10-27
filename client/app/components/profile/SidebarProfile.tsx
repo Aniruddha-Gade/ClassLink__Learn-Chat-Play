@@ -34,7 +34,7 @@ const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logo
 
 
     return (
-        <div className="w-full min-w-[250px]">
+        <div className="w-full min-w-[250px">
             {/* my account */}
             <div
                 className={`relative w-full flex gap-3 items-center px-3 py-4 cursor-pointer 

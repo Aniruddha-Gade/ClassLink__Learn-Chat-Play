@@ -29,7 +29,7 @@ const ChangePassword: FC<Props> = (props) => {
           onSubmit={passwordChangeHandler}
           className="flex flex-col items-center"
         >
-          <div className="800px:w-[50%] m-auto pb-4 flex flex-col gap-5">
+          <div className="w-full 800px:w-[50%] m-auto pb-4 flex flex-col gap-5">
             <div className="w-[100%] mt-5">
               <label htmlFor='old-password' className="cursor-pointer block pb-2 text-black dark:text-[#fff]">
                 Enter your old password

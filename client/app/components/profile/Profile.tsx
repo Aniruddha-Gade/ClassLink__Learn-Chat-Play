@@ -56,8 +56,8 @@ const Profile: React.FC<Props> = () => {
 
     return (
         <div className="w-[85% flex mx-auto min-h-screen">
-            <div className={`sticky w-[100px] 800px:w-[250px] h-[450px] bg-slate-100 dark:bg-slate-900 bg-opacity-90 border border-[#0000001c] dark:border-[#ffffff1d] 
-                             rounded-lg shadow-xl dark:shadow-md my-[80px] left-[30px] 
+            <div className={`sticky w-[70px] 800px:w-[350px] h-[450px h-fit py-10 bg-slate-100 dark:bg-slate-900 bg-opacity-90 border border-[#0000001c] dark:border-[#ffffff1d] 
+                             rounded-lg shadow-xl dark:shadow-md my-[80px] left-[10px] 800px:left-[30px] 
                              ${scroll ? "top-[120px]" : "top-[30px]"}`}
             >
                 <SidebarProfile
@@ -79,10 +79,10 @@ const Profile: React.FC<Props> = () => {
 
             }
 
-{
+            {
                 active === 2 && (
                     <div className='w-full h-full bg-transparent mt-[80px] '>
-                        <ChangePassword  />
+                        <ChangePassword />
                     </div>
                 )
 
