@@ -1,9 +1,9 @@
-import {Request, Response } from "express"
+import { Request, Response } from "express"
 import { redis } from "../utils/redis"
 import userModel from "../models/user.model"
 
 // =========================== GET USER BY ID ===========================
-export const getUserById = async (req: Request,  res: Response,id: string) => {
+export const getUserById = async (req: Request, res: Response, id: string) => {
     const userJson = await redis.get(id)
     const access_token = req?.cookies?.access_token as string
 
@@ -36,8 +36,7 @@ export const getAllUsersService = async (res: Response) => {
 
 // =========================== GET ALL USERS ===========================
 export const updateUserRoleService = async (res: Response, id: string, accountType: string) => {
-const user =await userModel.findById(id)
-console.log("user = ",user)     
+
     const updatedUser = await userModel.findByIdAndUpdate(id,
         { accountType },
         { new: true, runValidators: true } // Ensure validation runs on update

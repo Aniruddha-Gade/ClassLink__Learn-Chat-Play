@@ -13,13 +13,13 @@ type Props = {
 };
 
 const ProfileInfo: FC<Props> = ({ avatar, user }) => {
-    const [name, setName] = useState(user && user.name);
+    const [name, setName] = useState<string>(user && user.name ? user.name : "");
     const [updateAvatar, { isLoading, isSuccess, error }] = useUpdateAvatarMutation()
     const [loadUser, setLoadUser] = useState(false)
     const { } = useLoadUserQuery(undefined, { skip: loadUser ? false : true })
 
     // update-user-info
-    const [updateUserInfo, {isLoading: updateUserInfoIsLoading,isSuccess: updateUserInfoSuccess, error:updateUserInfoError }]=useUpdateUserInfoMutation() 
+    const [updateUserInfo, { isLoading: updateUserInfoIsLoading, isSuccess: updateUserInfoSuccess, error: updateUserInfoError }] = useUpdateUserInfoMutation()
 
     // image Handler
     const imageHandler = async (e: any) => {
@@ -34,8 +34,10 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
     };
 
     useEffect(() => {
+        // for update avatar
         if (isSuccess) {
             setLoadUser(true)
+            toast.success("Avatar updated Successfully")
         }
         if (error) {
             if ("data" in error) {
@@ -45,7 +47,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
             }
         }
 
-
+        // for user name update
         if (updateUserInfoSuccess) {
             setLoadUser(true)
             toast.success("Name changed Successfully")
@@ -58,8 +60,10 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
             }
 
         }
-    }, [isSuccess, error,updateUserInfoSuccess,updateUserInfoError])
+    }, [isSuccess, error, updateUserInfoSuccess, updateUserInfoError])
 
+
+    // handle submit
     const handleSubmit = async (e: any) => {
         e.preventDefault()
         updateUserInfo(name)
@@ -163,16 +167,11 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
                                 value={formatDate(user?.createdAt)}
                             />
                         </div>
-                   
+
                         <Button type='submit' >
-                            {
-                                updateUserInfoIsLoading ? "Submitting..." : 'Submit'
-                            }
-                    </Button>
+                            {updateUserInfoIsLoading ? "Submitting..." : 'Submit'}
+                        </Button>
                     </div>
-
-
-
                 </form>
             </div>
         </div>
