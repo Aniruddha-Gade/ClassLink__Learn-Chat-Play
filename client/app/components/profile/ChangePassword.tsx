@@ -1,7 +1,10 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { styles } from './../../styles/style';
 import { Button } from "../ui/button"
 import { toast } from "sonner";
+import { useUpdateUserAccountPasswordMutation } from "../../../redux/features/user/userApi";
+
+
 
 type Props = {}
 
@@ -10,12 +13,48 @@ const ChangePassword: FC<Props> = (props) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [updateUserAccountPassword, { isSuccess, isLoading, error }] = useUpdateUserAccountPasswordMutation()
+
 
   // password Change Handler
-  const passwordChangeHandler = (e: React.FormEvent) => {
+  const passwordChangeHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (oldPassword === "") {
+      toast.error("Old password is required")
+    }
+    else if (newPassword === "") {
+      toast.error("New password is required")
+    }
+    else if (confirmPassword === "") {
+      toast.error("confirm password is required")
+    }
+    else if (newPassword !== confirmPassword) {
+      toast.error("Password should match")
+    }
+    else {
+      // await updateUserAccountPassword(oldPassword, newPassword)
+    }
+
   }
+
+
+  // for update password
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Password Updated Successfully")
+    }
+    if (error) {
+      if ("data" in error) {
+        console.log("ERROR WHILE UPDATING USER PASSWORD => ", error)
+        const errorData = error as any
+        toast.error(errorData.data.message)
+      }
+    }
+  }, [isSuccess, error])
+
+
+
 
   return (
     <div className="w-full pl-7 px-2 800px:px-5 800px:pl-0">
@@ -38,7 +77,6 @@ const ChangePassword: FC<Props> = (props) => {
                 id='old-password'
                 type="password"
                 className={`${styles.input} w-[95%] mb-4 800px:mb-0 text-black dark:text-[#fff]`}
-                required
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
               />
@@ -50,7 +88,6 @@ const ChangePassword: FC<Props> = (props) => {
                 id='new-password'
                 type="password"
                 className={`${styles.input} w-[95%] mb-4 800px:mb-0 text-black dark:text-[#fff]`}
-                required
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
               />
@@ -62,16 +99,15 @@ const ChangePassword: FC<Props> = (props) => {
                 id='confirm-new-password'
                 type="password"
                 className={`${styles.input} w-[95%] mb-4 800px:mb-0 text-black dark:text-[#fff]`}
-                required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
 
 
-
-            <Button type='submit' >
-              Update
+{/* update password btn */}
+            <Button type='submit' disabled={isLoading} >
+             {isLoading ? "Updating Password...!": "Update"}
             </Button>
           </div>
         </form>

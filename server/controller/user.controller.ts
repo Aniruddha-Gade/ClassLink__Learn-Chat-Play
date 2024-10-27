@@ -384,7 +384,7 @@ interface IUpdatePassword {
 export const updatePassword = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { oldPassword, newPassword } = req.body as IUpdatePassword
-
+console.log({oldPassword, newPassword})
         // validate data
         if (!oldPassword || !newPassword) {
             return next(new ErrorHandler('Old and new password required', 404, "Error while updating password"));
