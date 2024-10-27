@@ -66,7 +66,11 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
     // handle submit
     const handleSubmit = async (e: any) => {
         e.preventDefault()
-        updateUserInfo(name)
+        if (name !== "") {
+           await updateUserInfo(name)
+        } else {
+            toast.error("Please enter your name")
+        }
     };
 
     return (
