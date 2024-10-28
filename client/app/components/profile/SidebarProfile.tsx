@@ -1,14 +1,10 @@
 import React, { useState } from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
+import { ACCOUNT_TYPE } from '../../constants/account-types'
 
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "../ui/dialog"
+
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "../ui/dialog"
 import { Button } from "../ui/button"
 
 
@@ -93,6 +89,31 @@ const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logo
                     active === 3 && <VerticalLine />
                 }
             </div>
+
+
+            {/* Admin Dashboard */}
+            {
+                user?.accountType === ACCOUNT_TYPE.ADMIN && (
+                    <Link
+                        className={`relative w-full flex gap-3 items-center px-3 py-4 cursor-pointer
+                     ${active === 5 ? "bg-slate-300 dark:bg-slate-800" : "bg-transparent"} `}
+                        href='/admin'
+                    >
+                        <Image
+                            src="/assets/icons/admin-icon.png"
+                            alt="admin icon"
+                            width={25}
+                            height={25}
+                            className=''
+                        />
+                        <h5 className="hidden 800px:block pl-2 font-Poppins text-black dark:text-white">Admin Dashboard</h5>
+                        {
+                            active === 5 && <VerticalLine />
+                        }
+                    </Link>
+                )
+            }
+
 
             {/* logout */}
             <div

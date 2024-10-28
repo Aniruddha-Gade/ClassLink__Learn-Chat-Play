@@ -41,7 +41,7 @@ const UserDropdownMenu = () => {
     <div>
       <DropdownMenu>
         <DropdownMenuTrigger className='outline-none border-none '>
-          <div className='w-8 h-8 '>
+          <div className='w-7 h-7 '>
             <Image
               src={user?.avatar?.url ? user?.avatar?.url : `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`}
               width={30}
