@@ -30,10 +30,10 @@ const ChangePassword: FC<Props> = (props) => {
       toast.error("confirm password is required")
     }
     else if (newPassword !== confirmPassword) {
-      toast.error("Password should match")
+      toast.error("New Password and Confirm password should match")
     }
     else {
-      // await updateUserAccountPassword(oldPassword, newPassword)
+      await updateUserAccountPassword({ oldPassword, newPassword })
     }
 
   }
@@ -97,7 +97,7 @@ const ChangePassword: FC<Props> = (props) => {
               <label htmlFor='confirm-new-password' className="cursor-pointer block pb-2 text-black dark:text-[#fff]">Enter your confirm password</label>
               <input
                 id='confirm-new-password'
-                type="password"
+                type="text"
                 className={`${styles.input} w-[95%] mb-4 800px:mb-0 text-black dark:text-[#fff]`}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -105,9 +105,9 @@ const ChangePassword: FC<Props> = (props) => {
             </div>
 
 
-{/* update password btn */}
+            {/* update password btn */}
             <Button type='submit' disabled={isLoading} >
-             {isLoading ? "Updating Password...!": "Update"}
+              {isLoading ? "Updating Password...!" : "Update"}
             </Button>
           </div>
         </form>
