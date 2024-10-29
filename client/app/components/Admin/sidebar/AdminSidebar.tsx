@@ -29,7 +29,7 @@ const Item: FC<ItemProps> = ({ title, to, icon, selected, setSelected }) => {
             onClick={() => setSelected(title)}
             icon={icon}
         >
-            <Typography className="!text-[16px] !font-Poppins">{title}</Typography>
+            <Typography className="!text-[16px] text-black dark:text-[#ffffffc1] !font-Poppins">{title}</Typography>
             <Link href={to} />
         </MenuItem>
     );
@@ -62,27 +62,27 @@ const Sidebar = () => {
     return (
         <Box
             sx={{
-                "&.pro-sidebar-inner": {
-                    background: `${theme === "dark" ? "#111C43 !important" : "#fff !important"}`,
+                "& .pro-sidebar-inner": {
+                backgroundColor: theme === "dark" ? "#232420" : "#fff",
                 },
                 "&.pro-icon-wrapper": {
-                    backgroundColor: "transparent !important",
+                    backgroundColor: "transparent ",
                 },
                 "&.pro-inner-item:hover": {
-                    color: "#868dfb !important",
+                    color: "#868dfb ",
                 },
                 "&.pro-menu-item.active": {
-                    color: "#6870fa !important",
+                    color: "#6870fa ",
                 },
                 "&.pro-inner-item": {
-                    padding: "5px 35px 5px 20px !important",
+                    padding: "5px 35px 5px 20px ",
                 },
                 opacity: 1,
                 "&.pro-menu-item": {
                     color: `${theme !== "dark" && "#000"}`,
                 },
             }}
-            className="bg-white dark:bg-[#111C43]"
+            className="bg-white dark:bg-[#111C43] "
         >
             <ProSidebar
                 collapsed={isCollapsed}
@@ -108,7 +108,7 @@ const Sidebar = () => {
                                 ml="15px"
                             >
                                 <Link href="/">
-                                    <h3 className="text-[25px] font-Poppins font-semibold dark:text-green-600 text-black">
+                                    <h3 className="text-[25px] font-Poppins font-semibold text-green-600">
                                         ClassLink
                                     </h3>
                                 </Link>
@@ -143,9 +143,9 @@ const Sidebar = () => {
                                     {user?.name}
                                 </Typography>
                                 <Typography
-                                    variant="h7"
-                                    sx={{ m: "10px 0 0" }}
-                                    className="text-[14px] text-black dark:text-[#ffffffc1] capitalize"
+                                    variant="h6"
+                                    sx={{ m: "2px 0 0" }}
+                                    className="!text-[13px] text-black dark:text-[#ffffffc1] capitalize"
                                 >
                                     {user?.accountType}
                                 </Typography>
