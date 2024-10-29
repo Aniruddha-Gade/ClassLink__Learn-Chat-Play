@@ -16,6 +16,7 @@ import { useLogoutQuery } from '../../redux/features/auth/authApi'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { signOut } from "next-auth/react"
+import { ACCOUNT_TYPE } from '../constants/account-types'
 
 
 
@@ -61,7 +62,7 @@ const UserDropdownMenu = () => {
             <DropdownMenuItem >Profile</DropdownMenuItem>
           </Link>
 
-          <Link href='/dashboard'>
+          <Link href={`${user?.accountType  === ACCOUNT_TYPE.ADMIN ? '/admin' : user?.accountType  === ACCOUNT_TYPE.INSTRUCTOR ? '/instructor' : 'dashboard'  } `}>
             <DropdownMenuItem >Dashboard</DropdownMenuItem>
           </Link>
 

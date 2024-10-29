@@ -1,4 +1,5 @@
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
@@ -14,6 +15,8 @@ import WysiwygIcon from "@mui/icons-material/Wysiwyg";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+
+
 
 export {
     HomeOutlinedIcon,
@@ -32,4 +35,5 @@ export {
     ManageHistoryIcon,
     SettingsIcon,
     ExitToAppIcon,
+    AccountCircleIcon
 };

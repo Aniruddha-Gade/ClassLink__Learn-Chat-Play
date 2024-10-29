@@ -115,6 +115,30 @@ const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logo
             }
 
 
+             {/* Instructor Dashboard */}
+             {
+                user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
+                    <Link
+                        className={`relative w-full flex gap-3 items-center px-3 py-4 cursor-pointer
+                     ${active === 5 ? "bg-slate-300 dark:bg-slate-800" : "bg-transparent"} `}
+                        href='/instructor'
+                    >
+                        <Image
+                            src="/assets/icons/admin-icon.png"
+                            alt="Instructor icon"
+                            width={25}
+                            height={25}
+                            className=''
+                        />
+                        <h5 className="hidden 800px:block pl-2 font-Poppins text-black dark:text-white">Instructor Dashboard</h5>
+                        {
+                            active === 5 && <VerticalLine />
+                        }
+                    </Link>
+                )
+            }
+
+
             {/* logout */}
             <div
                 className={`relative w-full flex gap-3 items-center px-3 py-4 cursor-pointer
@@ -124,7 +148,6 @@ const SidebarProfile: React.FC<Props> = ({ user, active, setActive, avatar, logo
                     setDialogOpen(true); // Open the dialog when clicked
                 }}
             >
-
                 <Image
                     src="/assets/icons/logout-icon.png"
                     alt="key icon"

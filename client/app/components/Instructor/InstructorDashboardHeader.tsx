@@ -21,7 +21,7 @@ import { Button } from "../ui/button"
 
 type Props = {};
 
-const DashboardHeader: FC<Props> = () => {
+const InstructorDashboardHeader: FC<Props> = () => {
 
 
     return (
@@ -32,7 +32,7 @@ const DashboardHeader: FC<Props> = () => {
 
             <DropdownMenu>
                 <DropdownMenuTrigger>
-                    <div className="relative cursor-pointer m-2">
+                    <div className="relative cursor-pointer">
                         <Image
                             src='/assets/icons/notification-icon.png'
                             className="cursor-pointer object-contain w-7 h-7 "
@@ -87,4 +87,4 @@ const DashboardHeader: FC<Props> = () => {
     );
 };
 
-export default DashboardHeader;
+export default InstructorDashboardHeader;

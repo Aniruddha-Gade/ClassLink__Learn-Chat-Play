@@ -3,6 +3,6 @@
 
 export enum ACCOUNT_TYPE {
   STUDENT = "Student",
-  INSRUCTOR = "Instructor",
+  INSTRUCTOR = "Instructor",
   ADMIN = "Admin",
 }

@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography } from "@mui/material";
 import "react-pro-sidebar/dist/css/styles.css";
-import { HomeOutlinedIcon, ArrowForwardIosIcon, AccountCircleIcon,ArrowBackIosIcon, PeopleOutlinedIcon, ReceiptOutlinedIcon, BarChartOutlinedIcon, MapOutlinedIcon, GroupsIcon, OndemandVideoIcon, VideoCallIcon, WebIcon, QuizIcon, WysiwygIcon, ManageHistoryIcon, SettingsIcon, ExitToAppIcon, } from "../../../../lib/Icon../../Icon";
+import { HomeOutlinedIcon, ArrowForwardIosIcon, ArrowBackIosIcon, PeopleOutlinedIcon, ReceiptOutlinedIcon, BarChartOutlinedIcon, MapOutlinedIcon, GroupsIcon, OndemandVideoIcon, VideoCallIcon, WebIcon, QuizIcon, WysiwygIcon, ManageHistoryIcon, SettingsIcon, ExitToAppIcon, AccountCircleIcon} from "../../../../lib/Icon";
 import avatarDefault from "../../../../public/assets/icons/profile-icon.png";
 import { useSelector } from "react-redux";
 import Link from "next/link";
@@ -37,7 +37,7 @@ const Item: FC<ItemProps> = ({ title, to, icon, selected, setSelected }) => {
 
 
 
-const Sidebar = () => {
+const InstructorSidebar = () => {
     const { user } = useSelector((state: any) => state.auth);
 
     const [logout, setLogout] = useState(false);
@@ -63,7 +63,7 @@ const Sidebar = () => {
         <Box
             sx={{
                 "& .pro-sidebar-inner": {
-                backgroundColor: theme === "dark" ? "#232420" : "#fff",
+                    backgroundColor: theme === "dark" ? "#232420" : "#fff",
                 },
                 "&.pro-icon-wrapper": {
                     backgroundColor: "transparent ",
@@ -153,11 +153,10 @@ const Sidebar = () => {
                         </Box>
                     )}
 
-
                     <Box paddingLeft={isCollapsed ? undefined : "10%"}>
                         <Item
                             title="Dashboard"
-                            to="/admin"
+                            to="/instructor"
                             icon={<HomeOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
@@ -170,6 +169,7 @@ const Sidebar = () => {
                             setSelected={setSelected}
                         />
 
+                        {/* data */}
                         <Typography
                             variant="h5"
                             sx={{ m: "15px 0 5px 25px" }}
@@ -179,19 +179,20 @@ const Sidebar = () => {
                         </Typography>
                         <Item
                             title="Users"
-                            to="/admin/users"
+                            to="/instructor/users"
                             icon={<GroupsIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
                         <Item
                             title="Invoices"
-                            to="/admin/invoices"
+                            to="/instructor/invoices"
                             icon={<ReceiptOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
 
+                        {/* Content */}
                         <Typography
                             variant="h5"
                             className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
@@ -201,63 +202,23 @@ const Sidebar = () => {
                         </Typography>
                         <Item
                             title="Create Course"
-                            to="/admin/create-course"
+                            to="/instructor/create-course"
                             icon={<VideoCallIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
                         <Item
                             title="Live Courses"
-                            to="/admin/courses"
+                            to="/instructor/courses"
                             icon={<OndemandVideoIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
 
-                        <Typography
-                            variant="h5"
-                            className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
-                            sx={{ m: "15px 0 5px 20px" }}
-                        >
-                            {!isCollapsed && "Customization"}
-                        </Typography>
-                        <Item
-                            title="Hero"
-                            to="/admin/hero"
-                            icon={<WebIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        <Item
-                            title="FAQ"
-                            to="/faq"
-                            icon={<QuizIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        <Item
-                            title="Categories"
-                            to="/admin/categories"
-                            icon={<WysiwygIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
 
-                        <Typography
-                            variant="h5"
-                            className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
-                            sx={{ m: "15px 0 5px 20px" }}
-                        >
-                            {!isCollapsed && "Controllers"}
-                        </Typography>
-                        <Item
-                            title="Manage Team"
-                            to="/admin/team"
-                            icon={<PeopleOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
 
+
+                        {/* Analytics */}
                         <Typography
                             variant="h6"
                             className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
@@ -267,26 +228,27 @@ const Sidebar = () => {
                         </Typography>
                         <Item
                             title="Courses Analytics"
-                            to="/admin/courses-analytics"
+                            to="/instructor/courses-analytics"
                             icon={<BarChartOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
                         <Item
                             title="Orders Analytics"
-                            to="/admin/orders-analytics"
+                            to="/instructor/orders-analytics"
                             icon={<MapOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
                         <Item
                             title="Users Analytics"
-                            to="/admin/users-analytics"
+                            to="/instructor/users-analytics"
                             icon={<ManageHistoryIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
 
+                        {/* Extras */}
                         <Typography
                             variant="h6"
                             className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
@@ -296,7 +258,7 @@ const Sidebar = () => {
                         </Typography>
                         <Item
                             title="Settings"
-                            to="/admin/settings"
+                            to="/instructor/settings"
                             icon={<SettingsIcon />}
                             selected={selected}
                             setSelected={setSelected}
@@ -309,4 +271,4 @@ const Sidebar = () => {
 };
 
 
-export default Sidebar
+export default InstructorSidebar
