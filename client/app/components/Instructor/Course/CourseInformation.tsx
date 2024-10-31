@@ -258,7 +258,6 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
                     </Button>
                 </div>
 
-
             </form>
         </div>
     );
