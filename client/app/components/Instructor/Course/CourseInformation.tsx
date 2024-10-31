@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { styles } from '../../../styles/style';
 import AsteriskSymbol from '../../../utils/AsteriskSymbol';
 import { Button } from "../../ui/button"
-
+import Image from 'next/image'
 
 
 interface Props {
@@ -215,22 +215,31 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
                     />
                     <label htmlFor="file">
                         <div
-                            className={`w-full min-h-[10vh] dark:border-white border-[#00000026] p-3 border flex items-center justify-center ${dragging ? "bg-blue-500" : "bg-transparent"
-                                }`}
+                            className={`w-full min-h-[30vh] dark:border-white border-[#00000026] p-3 border flex items-center justify-center 
+                                      cursor-pointer ${dragging ? "bg-blue-500" : "bg-transparent"}`}
                             onDragOver={handleDragOver}
                             onDragLeave={handleDragLeave}
                             onDrop={handleDrop}
                         >
                             {courseInfo.thumbnail ? (
-                                <img
+                                <Image
                                     src={courseInfo.thumbnail}
-                                    alt=""
+                                    width={100}
+                                    height={100}
                                     className="max-h-full w-full object-cover"
+                                    alt="Course Thumbnail"
                                 />
                             ) : (
-                                <span className="text-black dark:text-white">
-                                    Drag and drop your thumbnail here or click to browse
-                                </span>
+                                <div className="">
+                                    <p className='text-black dark:text-white text-center mb-4'>Drag and drop your thumbnail here or click to browse</p>
+                                    <Image
+                                         src='/assets/images/drag-and-drop.jpg'
+                                        width={900}
+                                        height={900}
+                                        className="max-h-full w-full object-cover"
+                                        alt="Course Thumbnail"
+                                    />
+                                </div>
                             )}
                         </div>
                     </label>
