@@ -1,6 +1,10 @@
 import { Router } from "express"
 import { isAuthenticated, isInstructor, isStudent } from "../middleware/auth"
-import { addAnswerToQuestionInCourse, addQuestionInCourse, addReplyToReview, addReviewInCourse, deleteCourse, editCourse, getAllCourse, getAllCourses, getArchivedCourses, getCourseContentByUser, getSingleCourse, unarchiveCourse, uploadCourse } from "../controller/course.controller"
+import {
+    addAnswerToQuestionInCourse, addQuestionInCourse, addReplyToReview, addReviewInCourse,
+    deleteCourse, editCourse, getAllCourse, getAllCourses, getArchivedCourses, getCourseContentByUser,
+    getSingleCourse, unarchiveCourse, uploadCourse, getVideoCipherOTP
+} from "../controller/course.controller"
 
 const courseRouter = Router()
 
@@ -19,6 +23,7 @@ courseRouter.put('/unarchive-course/:id', isAuthenticated, isInstructor, unarchi
 // open routes
 courseRouter.get("/get-course/:id", getSingleCourse)
 courseRouter.get("/get-all-courses", getAllCourse)
+courseRouter.post("/get-video-cipher-OTP", getVideoCipherOTP)
 
 // Any Authenticated user
 courseRouter.get("/get-course-content/:id", isAuthenticated, getCourseContentByUser)

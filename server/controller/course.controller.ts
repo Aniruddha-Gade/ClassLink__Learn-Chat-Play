@@ -9,6 +9,7 @@ import { redis } from './../utils/redis';
 import mongoose from 'mongoose';
 import ejs from 'ejs';
 import path from 'path';
+import axios from 'axios';
 import sendMail from './../utils/sendMail';
 import userModel from '../models/user.model';
 import notificationModel from '../models/notification.model';
@@ -686,6 +687,50 @@ export const unarchiveCourse = catchAsyncError(async (req: Request, res: Respons
 
     } catch (error) {
         return next(new ErrorHandler(error.message, 400, "Error while unarchiving course"));
+    }
+})
+
+
+
+
+// =========================== GET VIDEO CIPHER OTP ===========================
+export const getVideoCipherOTP = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const videoId = req.body.videoId;
+        // validate data
+        if (!videoId) {
+            return next(new ErrorHandler('videoId is required', 400, "Error while OTP and playbackInfo of video fetching from VdoCipher"));
+        }
+
+        const vdoCipherSecretKey = 'QAdAcCUcsBcahNMhB7w46qAZp2cZ7qkiIRlkEyi5oRdVi4YNtPr4apJqLtTQfHLS';
+
+        const response = await axios.post(
+            `https://dev.vdocipher.com/api/videos/${videoId}/otp`,
+            {},
+            {
+              headers: {
+                Authorization: `Apisecret ${vdoCipherSecretKey}`,
+              },
+            }
+          );
+
+        console.log('vdoCipher Response = ', response)
+        const otp = response.data.otp;
+        const playbackInfo = response.data.playbackInfo;
+
+
+        res.status(200).json({
+            success: true,
+            otp, 
+            playbackInfo,
+            message: 'OTP and playbackInfo of video fetched successfully from VdoCipher.',
+        });
+
+
+
+    } catch (error) {
+        console.log("Error while OTP and playbackInfo of video fetching from VdoCipher => ", error)
+        return next(new ErrorHandler(error.message, 400, "Error while OTP and playbackInfo of video fetching from VdoCipher"));
     }
 })
 
