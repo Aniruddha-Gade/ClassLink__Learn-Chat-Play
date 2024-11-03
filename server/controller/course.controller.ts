@@ -13,6 +13,7 @@ import axios from 'axios';
 import sendMail from './../utils/sendMail';
 import userModel from '../models/user.model';
 import notificationModel from '../models/notification.model';
+require("dotenv").config();
 const cron = require('node-cron');
 
 
@@ -702,7 +703,7 @@ export const getVideoCipherOTP = catchAsyncError(async (req: Request, res: Respo
             return next(new ErrorHandler('videoId is required', 400, "Error while OTP and playbackInfo of video fetching from VdoCipher"));
         }
 
-        const vdoCipherSecretKey = 'QAdAcCUcsBcahNMhB7w46qAZp2cZ7qkiIRlkEyi5oRdVi4YNtPr4apJqLtTQfHLS';
+        const vdoCipherSecretKey = process.env.VDO_CIPHER_SCRET_KEY
 
         const response = await axios.post(
             `https://dev.vdocipher.com/api/videos/${videoId}/otp`,
@@ -714,7 +715,6 @@ export const getVideoCipherOTP = catchAsyncError(async (req: Request, res: Respo
             }
           );
 
-        console.log('vdoCipher Response = ', response)
         const otp = response.data.otp;
         const playbackInfo = response.data.playbackInfo;
 
