@@ -11,11 +11,12 @@ interface Props {
     courseData: any,
     active: number,
     setActive: (active: number) => void,
+    createCourseIsLoading: boolean,
     handleCreateCourse: any
 }
 
 
-const CoursePreview: React.FC<Props> = ({ courseData, active, setActive, handleCreateCourse }) => {
+const CoursePreview: React.FC<Props> = ({ courseData, active, setActive, handleCreateCourse, createCourseIsLoading }) => {
 
     const discountPercentage = ((courseData?.estimatedPrice - courseData?.price) / courseData?.estimatedPrice) * 100;
 
@@ -143,6 +144,7 @@ const CoursePreview: React.FC<Props> = ({ courseData, active, setActive, handleC
                 <Button
                     onClick={() => prevButton()}
                     value="previous"
+                    disabled={createCourseIsLoading}
                     className="w-full 800px:w-[180px] h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
                 >
                     Previous
@@ -151,9 +153,10 @@ const CoursePreview: React.FC<Props> = ({ courseData, active, setActive, handleC
                 <Button
                     onClick={() => createCourse()}
                     value="Create"
+                    disabled={createCourseIsLoading}
                     className="w-full 800px:w-[180px] h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
                 >
-                    Create
+                    {createCourseIsLoading ? 'Creating...!': 'Create'}
                 </Button>
             </div>
 

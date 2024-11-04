@@ -1,11 +1,14 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import CourseInformation from './CourseInformation'
 import CourseOptions from './CourseOptions'
 import CourseData from './CourseData'
 import CourseContent from './CourseContent'
 import CoursePreview from './CoursePreview'
+import { useCreateCourseMutation } from "../../../../redux/features/courses/coursesApi"
+import { redirect } from 'next/navigation'
+import { toast } from 'sonner';
 
 
 interface Props {
@@ -13,6 +16,8 @@ interface Props {
 }
 
 const CreateCourse: React.FC<Props> = () => {
+
+    const [createCourse, { isLoading: createCourseIsLoading, error: createCourseError, isSuccess: createCourseIsSuccess }] = useCreateCourseMutation()
 
     const [active, setActive] = useState(3);
     const [courseInfo, setCourseInfo] = useState({
@@ -128,12 +133,30 @@ const CreateCourse: React.FC<Props> = () => {
         setCourseData(data)
     }
 
-    // console.log("Final courseData = ", courseData)
+    console.log("Final courseData = ", courseData)
 
     // handle Create Course
     const handleCreateCourse = async () => {
+        const data = courseData
+        await createCourse({ data })
 
     }
+
+
+
+    useEffect(() => {
+        if (createCourseIsSuccess) {
+            toast.success("Course created successfully")
+            redirect("/instructor/all-courses")
+        }
+        if (createCourseError) {
+            if ("data" in createCourseError) {
+                console.log("CREATE COURSE API ERROR => ", createCourseError)
+                const errorData = createCourseError as any
+                toast.error(errorData.data.message)
+            }
+        }
+    }, [createCourseIsSuccess, createCourseError])
 
     return (
         <div className='w-full flex min-h-screen pb-20'>
@@ -170,6 +193,7 @@ const CreateCourse: React.FC<Props> = () => {
                         courseData={courseData}
                         active={active}
                         setActive={setActive}
+                        createCourseIsLoading={createCourseIsLoading}
                         handleCreateCourse={handleCreateCourse}
                     />
                 }

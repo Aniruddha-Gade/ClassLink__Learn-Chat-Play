@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react'
 import { styles } from '../../../styles/style';
-import Image from 'next/image'
 import { Button } from "../../ui/button"
 import { toast } from 'sonner'
 import { MdOutlineKeyboardArrowDown } from "react-icons/md"
