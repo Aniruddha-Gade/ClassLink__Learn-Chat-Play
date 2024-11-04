@@ -4,7 +4,7 @@ import { styles } from '../../../styles/style'
 import Ratings from "../../../utils/Ratings"
 import { Button } from "../../ui/button"
 import { IoCheckmarkDoneOutline } from "react-icons/io5"
-
+import FlowersRain from "../../../utils/FlowersRain"
 
 
 interface Props {
@@ -12,11 +12,12 @@ interface Props {
     active: number,
     setActive: (active: number) => void,
     createCourseIsLoading: boolean,
+    createCourseIsSuccess: boolean,
     handleCreateCourse: any
 }
 
 
-const CoursePreview: React.FC<Props> = ({ courseData, active, setActive, handleCreateCourse, createCourseIsLoading }) => {
+const CoursePreview: React.FC<Props> = ({ courseData, active, setActive, handleCreateCourse, createCourseIsLoading , createCourseIsSuccess}) => {
 
     const discountPercentage = ((courseData?.estimatedPrice - courseData?.price) / courseData?.estimatedPrice) * 100;
 
@@ -32,8 +33,13 @@ const CoursePreview: React.FC<Props> = ({ courseData, active, setActive, handleC
     }
 
 
+
     return (
         <div className='w-[90%] m-autp py-5 pl-10 mb-5 text-black dark:text-white'>
+        
+            { createCourseIsSuccess && <FlowersRain/> }
+
+
             <div className='w-full relative'>
                 <div className='w-full mt-10'>
                     <CoursePlayer

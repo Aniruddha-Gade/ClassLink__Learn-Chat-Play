@@ -7,7 +7,7 @@ import CourseData from './CourseData'
 import CourseContent from './CourseContent'
 import CoursePreview from './CoursePreview'
 import { useCreateCourseMutation } from "../../../../redux/features/courses/coursesApi"
-import { redirect } from 'next/navigation'
+import { redirect } from "next/navigation";
 import { toast } from 'sonner';
 
 
@@ -19,7 +19,7 @@ const CreateCourse: React.FC<Props> = () => {
 
     const [createCourse, { isLoading: createCourseIsLoading, error: createCourseError, isSuccess: createCourseIsSuccess }] = useCreateCourseMutation()
 
-    const [active, setActive] = useState(3);
+    const [active, setActive] = useState(0);
     const [courseInfo, setCourseInfo] = useState({
         name: "",
         description: "",
@@ -147,7 +147,10 @@ const CreateCourse: React.FC<Props> = () => {
     useEffect(() => {
         if (createCourseIsSuccess) {
             toast.success("Course created successfully")
-            redirect("/instructor/all-courses")
+            setTimeout(()=>{
+                console.log("redirecting to all-courses page.....")
+                redirect("/instructor/all-courses");
+            }, 3000)
         }
         if (createCourseError) {
             if ("data" in createCourseError) {
@@ -194,6 +197,7 @@ const CreateCourse: React.FC<Props> = () => {
                         active={active}
                         setActive={setActive}
                         createCourseIsLoading={createCourseIsLoading}
+                        createCourseIsSuccess={createCourseIsSuccess}
                         handleCreateCourse={handleCreateCourse}
                     />
                 }
