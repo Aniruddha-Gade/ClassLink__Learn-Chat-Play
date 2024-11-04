@@ -39,7 +39,7 @@ interface ICourseData extends Document {
 
 interface ICourse extends Document {
     createdBy: mongoose.Schema.Types.ObjectId,
-    title: string,
+    name: string,
     description: string,
     price: Number,
     estimatedPrice?: Number,
@@ -105,7 +105,7 @@ const courseSchema = new Schema<ICourse>({
         ref: 'User',
         required: true
     },
-    title: {
+    name: {
         type: String,
         required: true
     },
@@ -114,7 +114,7 @@ const courseSchema = new Schema<ICourse>({
         required: true
     },
     price: {
-        type: Number,
+        type: String,
         required: true
     },
     estimatedPrice: {
