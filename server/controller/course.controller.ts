@@ -23,7 +23,8 @@ export const uploadCourse = catchAsyncError(async (req: Request, res: Response, 
 
         // extract data 
         const createdBy = req.user._id
-        const data = req.body;
+        const data = req.body.data;
+        // console.log("course data = ", data)
         const thumbnail = data.thumbnail
 
         if (thumbnail) {
@@ -43,6 +44,7 @@ export const uploadCourse = catchAsyncError(async (req: Request, res: Response, 
         createCourse(data, res, next)
 
     } catch (error) {
+        console.log("Error while creating course => ", error)
         return next(new ErrorHandler(error.message, 400, "Error while creating course"));
     }
 })
