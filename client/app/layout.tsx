@@ -7,7 +7,7 @@ import { Providers } from './Provider';
 import ThemeProvider from './utils/Theme-provider';
 import { SessionProvider } from "next-auth/react"
 
-import { Poppins } from "next/font/google";
+import { Poppins, Boogaloo } from "next/font/google";
 import { Josefin_Sans } from "next/font/google";
 
 import { useLoadUserQuery } from '../redux/features/api/apiSlice'
@@ -19,6 +19,12 @@ const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-Poppins",
+});
+
+const boogaloo = Boogaloo({
+  subsets: ["latin"],
+  weight: ["400"] ,
+  variable: "--font-Boogaloo",
 });
 
 const josefin = Josefin_Sans({
@@ -35,7 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} ${josefin.variable} bg-white bg-no-repeat dark:bg-gradient-to-b dark:from-gray-900 dark:to-black duration-300 `}>
+      <body className={`${poppins.variable} ${josefin.variable} ${boogaloo.variable} bg-white bg-no-repeat dark:bg-gradient-to-b dark:from-gray-900 dark:to-black duration-300 `}>
         <Providers>
           <SessionProvider>
             <ThemeProvider attribute='class' defaultTheme='system' enableSystem  >

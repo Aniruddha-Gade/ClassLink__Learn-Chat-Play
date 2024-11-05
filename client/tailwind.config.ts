@@ -20,6 +20,7 @@ const config: Config = {
       fontFamily: {
         Poppins: ['var(--font-Poppins)'],
         Josefin: ['var(--font-Josefin)'],
+        Boogaloo: ['var(--font-Boogaloo)'],
 
       },
       backgroundImage: {
