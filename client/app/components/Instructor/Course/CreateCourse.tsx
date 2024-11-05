@@ -138,7 +138,9 @@ const CreateCourse: React.FC<Props> = () => {
     // handle Create Course
     const handleCreateCourse = async () => {
         const data = courseData
-        await createCourse({ data })
+        if (!createCourseIsLoading) {
+            await createCourse({ data })
+        }
 
     }
 
@@ -147,7 +149,7 @@ const CreateCourse: React.FC<Props> = () => {
     useEffect(() => {
         if (createCourseIsSuccess) {
             toast.success("Course created successfully")
-            setTimeout(()=>{
+            setTimeout(() => {
                 console.log("redirecting to all-courses page.....")
                 redirect("/instructor/all-courses");
             }, 3000)
