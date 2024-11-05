@@ -6,7 +6,7 @@ import CourseOptions from './CourseOptions'
 import CourseData from './CourseData'
 import CourseContent from './CourseContent'
 import CoursePreview from './CoursePreview'
-import { useCreateCourseMutation } from "../../../../redux/features/courses/coursesApi"
+import { useCreateCourseMutation } from "../../../../redux/features/course/courseApi"
 import { redirect } from "next/navigation";
 import { toast } from 'sonner';
 
@@ -141,7 +141,6 @@ const CreateCourse: React.FC<Props> = () => {
         if (!createCourseIsLoading) {
             await createCourse({ data })
         }
-
     }
 
 
@@ -149,9 +148,9 @@ const CreateCourse: React.FC<Props> = () => {
     useEffect(() => {
         if (createCourseIsSuccess) {
             toast.success("Course created successfully")
-            setTimeout(() => {
+            setTimeout(()=>{
                 console.log("redirecting to all-courses page.....")
-                redirect("/instructor/all-courses");
+                redirect("/instructor/courses");
             }, 3000)
         }
         if (createCourseError) {
