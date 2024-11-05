@@ -60,7 +60,7 @@ export const createOrder = catchAsyncError(async (req: Request, res: Response, n
             },
             order: {
                 _id: course._id,
-                name: course.title,
+                name: course.name,
                 price: course.price,
                 date: new Date().toLocaleDateString("en-US", {
                     year: 'numeric', month: 'long',
@@ -78,7 +78,7 @@ export const createOrder = catchAsyncError(async (req: Request, res: Response, n
                 subject: "Order Confirmation",
                 emailData
             })
-        } catch (error) {
+        } catch (error: any) {
             return next(new ErrorHandler(error.message, 400, "Error while sending email of orderedcourse"));
         }
 
@@ -95,7 +95,7 @@ export const createOrder = catchAsyncError(async (req: Request, res: Response, n
             userId,
             instructorId: course.createdBy,
             title: "New Order",
-            message: `Student: ${user.name} purchased a course - ${course.title}`
+            message: `Student: ${user.name} purchased a course - ${course.name}`
         })
 
 
@@ -110,7 +110,7 @@ export const createOrder = catchAsyncError(async (req: Request, res: Response, n
         newOrder(data, res, next)
 
     }
-    catch (error) {
+    catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while ordering course"));
     }
 }
@@ -125,7 +125,7 @@ export const getAllOrders = catchAsyncError(async (req: Request, res: Response, 
 
         getAllOrdersService(req, res)
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching all orders"));
     }
 })

@@ -26,7 +26,7 @@ export const getAllUnReadNotifications = catchAsyncError(async (req: Request, re
         })
 
     }
-    catch (error) {
+    catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching all unread notifications"));
     }
 }
@@ -88,7 +88,7 @@ export const getAllNotifications = catchAsyncError(async (req: Request, res: Res
         })
 
     }
-    catch (error) {
+    catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while fecthing all notifications"));
     }
 }
@@ -130,7 +130,7 @@ export const updateNotification = catchAsyncError(async (req: Request, res: Resp
         getAllNotifications(req, res, next)
 
     }
-    catch (error) {
+    catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while updating notification"));
     }
 }

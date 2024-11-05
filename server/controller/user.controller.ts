@@ -70,7 +70,7 @@ export const registerUser = catchAsyncError(async (req: Request, res: Response, 
                 activationToken: activationToken.token,
                 message: `Please check your email : ${email} to activate your account`
             })
-        } catch (error) {
+        } catch (error:any) {
             console.log(`Error while sending email to user with email : ${email} => `, error)
             return next(new ErrorHandler(error.message, 400, "Error while registering user"))
         }
@@ -78,8 +78,6 @@ export const registerUser = catchAsyncError(async (req: Request, res: Response, 
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while registering user"))
     }
-
-
 })
 
 
@@ -191,7 +189,7 @@ export const loginUser = catchAsyncError(async (req: Request, res: Response, nex
         sendToken(user, 200, res)
 
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while loging user"));
     }
 })
@@ -216,7 +214,7 @@ export const logoutUser = catchAsyncError(async (req: Request, res: Response, ne
             message: "User logout successfully"
         });
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while logout user"));
     }
 })
@@ -271,12 +269,9 @@ export const updateAccessToken = catchAsyncError(async (req: Request, res: Respo
         // store in redis with 7 days expiry time
         await redis.set(user._id, JSON.stringify(user), "EX", 604800) // 7 days
 
-        res.status(200).json({
-            success: true,
-            accessToken,
-        });
+        next()
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while updating access token"));
     }
 })
@@ -290,7 +285,7 @@ export const getUserInfo = catchAsyncError(async (req: Request, res: Response, n
         const userId = req.user?._id as string;
         getUserById(req, res, userId)
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching userInfo"));
     }
 })
@@ -323,7 +318,7 @@ export const socialAuth = catchAsyncError(async (req: Request, res: Response, ne
         else {
             sendToken(user, 200, res)
         }
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while social auth"));
     }
 })
@@ -367,7 +362,7 @@ export const updateUserInfo = catchAsyncError(async (req: Request, res: Response
         })
 
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while updating userinfo"));
     }
 })
@@ -421,7 +416,7 @@ export const updatePassword = catchAsyncError(async (req: Request, res: Response
         })
 
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while updating password"));
     }
 })
@@ -478,7 +473,7 @@ export const updateAvatar = catchAsyncError(async (req: Request, res: Response, 
             message: "User avatar updated successully"
         })
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while updating avatar"));
     }
 })
@@ -492,7 +487,7 @@ export const getAllUsers = catchAsyncError(async (req: Request, res: Response, n
 
         getAllUsersService(res)
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching all users"));
     }
 })
@@ -512,7 +507,7 @@ export const updateUserRole = catchAsyncError(async (req: Request, res: Response
 
         updateUserRoleService(res, id, accountType)
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while updating user role"));
     }
 })

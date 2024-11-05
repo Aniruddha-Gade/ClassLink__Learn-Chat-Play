@@ -43,7 +43,7 @@ export const uploadCourse = catchAsyncError(async (req: Request, res: Response, 
         // create course in DB
         createCourse(data, res, next)
 
-    } catch (error) {
+    } catch (error: any) {
         console.log("Error while creating course => ", error)
         return next(new ErrorHandler(error.message, 400, "Error while creating course"));
     }
@@ -100,7 +100,7 @@ export const editCourse = catchAsyncError(async (req: Request, res: Response, ne
             message: "Course updated successfully"
         })
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while creating course"));
     }
 })
@@ -148,7 +148,7 @@ export const getSingleCourse = catchAsyncError(async (req: Request, res: Respons
             })
         }
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching course"));
     }
 })
@@ -195,7 +195,7 @@ export const getAllCourse = catchAsyncError(async (req: Request, res: Response, 
             })
         }
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching courses"));
     }
 })
@@ -297,7 +297,7 @@ export const addQuestionInCourse = catchAsyncError(async (req: Request, res: Res
         // send notification to Instructor of course
         await notificationModel.create({
             title: "New Question",
-            message: `You have new question from '${req.user?.name}' student in course - ${course.title} , section - ${courseContent.title}`,
+            message: `You have new question from '${req.user?.name}' student in course - ${course.name} , section - ${courseContent.title}`,
             userId,
             instructorId: course.createdBy
         })
@@ -374,7 +374,7 @@ export const addAnswerToQuestionInCourse = catchAsyncError(async (req: Request, 
             // send notification to Instructor of course
             await notificationModel.create({
                 title: "New Reply for question has received",
-                message: `You have new question reply from '${req.user?.name}' student in course - ${course.title} , section - ${courseContent.title}`,
+                message: `You have new question reply from '${req.user?.name}' student in course - ${course.name} , section - ${courseContent.title}`,
                 userId,
                 instructorId: course.createdBy
             })
@@ -395,7 +395,7 @@ export const addAnswerToQuestionInCourse = catchAsyncError(async (req: Request, 
                     subject: "Question Reply",
                     emailData
                 })
-            } catch (error) {
+            } catch (error: any) {
                 return next(new ErrorHandler(error.message, 400, "Error while sending email for question reply"));
             }
         }
@@ -481,7 +481,7 @@ export const addReviewInCourse = catchAsyncError(async (req: Request, res: Respo
             userId,
             instructorId: course.createdBy,
             title: "New Review Recieved",
-            message: `Student: ${user.name} has reviewd a course - ${course.title}`
+            message: `Student: ${user.name} has reviewd a course - ${course.name}`
         })
 
         res.status(201).json({
@@ -577,7 +577,7 @@ export const getAllCourses = catchAsyncError(async (req: Request, res: Response,
 
         getAllCourseService(req, res)
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching all courses"));
     }
 })
@@ -623,7 +623,7 @@ export const deleteCourse = catchAsyncError(async (req: Request, res: Response, 
             message: 'Course marked for deletion. It will be deleted after 15 days',
         });
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while deleting course"));
     }
 })
@@ -644,7 +644,7 @@ export const getArchivedCourses = catchAsyncError(async (req: Request, res: Resp
             archivedCourses,
         });
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while deleting course"));
     }
 })
@@ -688,7 +688,7 @@ export const unarchiveCourse = catchAsyncError(async (req: Request, res: Respons
 
 
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while unarchiving course"));
     }
 })
@@ -711,11 +711,11 @@ export const getVideoCipherOTP = catchAsyncError(async (req: Request, res: Respo
             `https://dev.vdocipher.com/api/videos/${videoId}/otp`,
             {},
             {
-              headers: {
-                Authorization: `Apisecret ${vdoCipherSecretKey}`,
-              },
+                headers: {
+                    Authorization: `Apisecret ${vdoCipherSecretKey}`,
+                },
             }
-          );
+        );
 
         const otp = response.data.otp;
         const playbackInfo = response.data.playbackInfo;
@@ -723,14 +723,14 @@ export const getVideoCipherOTP = catchAsyncError(async (req: Request, res: Respo
 
         res.status(200).json({
             success: true,
-            otp, 
+            otp,
             playbackInfo,
             message: 'OTP and playbackInfo of video fetched successfully from VdoCipher.',
         });
 
 
 
-    } catch (error) {
+    } catch (error: any) {
         console.log("Error while OTP and playbackInfo of video fetching from VdoCipher => ", error)
         return next(new ErrorHandler(error.message, 400, "Error while OTP and playbackInfo of video fetching from VdoCipher"));
     }

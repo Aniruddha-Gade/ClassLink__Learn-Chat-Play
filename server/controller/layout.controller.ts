@@ -56,7 +56,7 @@ export const createLayout = catchAsyncError(async (req: Request, res: Response, 
         })
 
     }
-    catch (error) {
+    catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while creating layout"));
     }
 }

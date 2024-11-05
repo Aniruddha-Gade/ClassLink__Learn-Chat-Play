@@ -39,7 +39,7 @@ export const isAuthenticated = catchAsyncError(async (req: Request, res: Respons
         // call next middleware
         next()
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while authenticating"));
     }
 })
@@ -58,7 +58,7 @@ export const isStudent = catchAsyncError(async (req: Request, res: Response, nex
         // go to next middleware
         next();
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while authenticating student"));
     }
 })
@@ -76,7 +76,7 @@ export const isInstructor = catchAsyncError(async (req: Request, res: Response, 
         // go to next middleware
         next();
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while authenticating Instructor"));
     }
 })
@@ -94,7 +94,7 @@ export const isAdmin = catchAsyncError(async (req: Request, res: Response, next:
         // go to next middleware
         next();
 
-    } catch (error) {
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while authenticating Admin"));
     }
 })

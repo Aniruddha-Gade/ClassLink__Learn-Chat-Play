@@ -25,7 +25,7 @@ export const getUserAnalytics = catchAsyncError(async (req: Request, res: Respon
     })
 
   }
-  catch (error) {
+  catch (error: any) {
     return next(new ErrorHandler(error.message, 400, "Error while updating notification"));
   }
 }
@@ -47,7 +47,7 @@ export const getCourseAnalytics = catchAsyncError(async (req: Request, res: Resp
     })
 
   }
-  catch (error) {
+  catch (error: any) {
     return next(new ErrorHandler(error.message, 400, "Error while updating notification"));
   }
 }
@@ -69,7 +69,7 @@ export const getOrdersAnalytics = catchAsyncError(async (req: Request, res: Resp
     })
 
   }
-  catch (error) {
+  catch (error: any) {
     return next(new ErrorHandler(error.message, 400, "Error while updating notification"));
   }
 }
