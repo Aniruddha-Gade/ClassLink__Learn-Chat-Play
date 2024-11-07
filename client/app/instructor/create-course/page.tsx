@@ -24,6 +24,11 @@ const page = (props: Props) => {
                 
                 <div className="w-[85%]">
                     <InstructorDashboardHeader />
+
+                    <div className='font-Boogaloo text-green-600 text-4xl font-bold ml-20 mt-10'>
+                        CREATE NEW COURSE
+                    </div>
+
                     <CreateCourse />
                 </div>
             </div>
