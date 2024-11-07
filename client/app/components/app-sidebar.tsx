@@ -7,21 +7,21 @@ import {AudioWaveform,BookOpen,Bot, Command,Frame,GalleryVerticalEnd, Map,
   PieChart,Settings2,SquareTerminal,CircleFadingPlus, FilePen, ChartNoAxesCombined, Users
 } from "lucide-react"
 
-import { NavMain } from "./nav-main"
-import { NavProjects } from "./nav-projects"
-import { NavUser } from "./nav-user"
-import { TeamSwitcher } from "./team-switcher"
+import { NavMain } from "@/app/components/Admin/sidebar/nav-main"
+import { NavProjects } from "@/app/components/Admin/sidebar/nav-projects"
+import { NavUser } from "@/app/components/Admin/sidebar/nav-user"
+import { TeamSwitcher } from "@/app/components/Admin/sidebar/team-switcher"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "../../ui/sidebar"
+} from "@/app/components/ui/sidebar"
 
 
 
-export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
  
   const {  user } = useSelector((state: any) => state.auth)
  

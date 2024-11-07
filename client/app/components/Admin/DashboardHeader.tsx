@@ -1,7 +1,7 @@
 "use client";
 
 import { ThemeSwitcher } from "../../utils/ThemeSwitcher";
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import Image from 'next/image';
 import UserDropdownMenu from '../../utils/UserDropdownMenu'
 
@@ -15,7 +15,6 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 
-import { Button } from "../ui/button"
 
 
 
@@ -25,7 +24,7 @@ const DashboardHeader: FC<Props> = () => {
 
 
     return (
-        <div className="w-full flex items-center justify-end gap-3 p-6 fixed top-3 right-0">
+        <div className="flex items-center justify-end gap-3 px-6 fixed top-3 right-0">
             <ThemeSwitcher />
 
             <UserDropdownMenu/>

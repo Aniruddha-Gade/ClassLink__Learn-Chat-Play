@@ -20,7 +20,6 @@ body {
   color: rgb(var(--foreground-rgb));
 }
 
-
 /* ================= TAILWIND STYLES ================= */
 @layer utilities {
   .flex-center {
@@ -32,27 +31,25 @@ body {
   }
 }
 
-
-
 /* ================= LOADER - 1 Start ================= */
 .loader-1 {
   display: inline-block;
   font-size: 16px;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
-  color: #FFF;
+  color: #fff;
   position: relative;
 }
 .loader-1::before {
-  content: '';  
+  content: "";
   position: absolute;
-  left: 10px; 
-  bottom: 5px; 
-  width: 12px; 
-  height: 12px; 
+  left: 10px;
+  bottom: 5px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  border: 2px solid #FFF; 
-  border-bottom-color: #FF3D00;
+  border: 2px solid #fff;
+  border-bottom-color: #ff3d00;
   box-sizing: border-box;
   animation: rotation 0.6s linear infinite;
 }
@@ -66,7 +63,6 @@ body {
   }
 }
 /* ================= LOADER - 1 End ================= */
-
 
 /* =================== Loading skeleton start =================== */
 .skeleton {
@@ -101,8 +97,6 @@ body {
 }
 /* =================== Loading skeleton End =================== */
 
-
-
 /* =================== SCROLLBAR START =================== */
 ::-webkit-scrollbar {
   width: 8px;
@@ -116,8 +110,6 @@ body {
   background-color: #181818;
 }
 
-
-
 ::-webkit-scrollbar-thumb {
   background-color: #888;
   border-radius: 30px;
@@ -127,3 +119,29 @@ body {
   background-color: #555;
 }
 /* =================== SCROLLBAR END =================== */
+
+@layer base {
+  :root {
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+
+
