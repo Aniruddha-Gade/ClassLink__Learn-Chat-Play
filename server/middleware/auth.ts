@@ -10,7 +10,7 @@ require('dotenv').config()
 // =========================== IS AUTHENTICATED ===========================
 export const isAuthenticated = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const access_token = req.cookies.access_token as string
+        const access_token = (req.cookies.access_token as string) ||  (req.body.access_token as string)
 
         if (!access_token) {
             return next(new ErrorHandler('Please login to access this resource', 400, "Error while authenticating"));
