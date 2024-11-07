@@ -1,6 +1,9 @@
 import { Router } from "express";
-import { activateUser, getAllUsers, getUserInfo, loginUser, logoutUser, registerUser, socialAuth, updateAccessToken, updateAvatar, updatePassword, updateUserInfo, updateUserRole } from "../controller/user.controller";
-import { isAdmin, isAuthenticated } from "../middleware/auth";
+import { activateUser, getAllUsers, getUserInfo, loginUser, logoutUser, registerUser, 
+    socialAuth, updateAccessToken, updateAvatar, updatePassword, updateUserInfo, updateUserRole,
+    getAllUsersByInstructorCourses
+ } from "../controller/user.controller";
+import { isAdmin, isAuthenticated, isInstructor } from "../middleware/auth";
 
 const userRouter = Router()
 
@@ -19,6 +22,7 @@ userRouter.put('/update-user-avatar', updateAccessToken, isAuthenticated, update
 userRouter.get('/get-all-users', updateAccessToken, isAuthenticated, isAdmin, getAllUsers)
 userRouter.put('/update-user-role', updateAccessToken, isAuthenticated, isAdmin, updateUserRole)
 
-
+// only for Instructor
+userRouter.post('/get-all-users-by-instructor-courses', updateAccessToken, isAuthenticated, isInstructor, getAllUsersByInstructorCourses)
 
 export default userRouter

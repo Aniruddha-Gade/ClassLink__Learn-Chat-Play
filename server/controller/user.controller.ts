@@ -2,6 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken'
 import cloudinary from "cloudinary";
 import userModel, { IUser } from '../models/user.model';
+import CourseModel from '../models/course.model';
 import { catchAsyncError } from './../utils/catchAsyncError';
 import ErrorHandler from './../utils/ErrorHandler';
 import ejs from 'ejs'
@@ -225,7 +226,7 @@ export const logoutUser = catchAsyncError(async (req: Request, res: Response, ne
 // =========================== LOGOUT USER ===========================
 export const updateAccessToken = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const refresh_token = req.cookies.refresh_token as string;
+        const refresh_token = (req.cookies.refresh_token as string) ||  (req.body.refresh_token as string)
 
         const decodedToken = jwt.verify(
             refresh_token,
@@ -509,5 +510,50 @@ export const updateUserRole = catchAsyncError(async (req: Request, res: Response
 
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while updating user role"));
+    }
+})
+
+
+
+
+
+// =========================== GET ALL USERS BY INSTRUCTOR COURSES ===========================
+export const getAllUsersByInstructorCourses = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const instructorId = req.user._id
+        if (!instructorId) {
+            return next(new ErrorHandler('instructorId is required.', 404, "Error while fetching all users by instructor courses"));
+        }
+
+        // Find all courses created by the specific instructor
+        const courses = await CourseModel.find({ createdBy: instructorId }).populate({
+            path: 'users', // Populate the `users` field
+            select: 'name email avatar' // Only include name and email in user data
+        });
+
+
+        // Format the data to include course details and list of students
+        const coursesWithStudents = courses.map(course => ({
+            courseID: course._id,
+            courseName: course.name,
+            courseDescription: course.description,
+            coursePrice: course.price,
+            students: course.users.map((user: any) => ({
+                name: user.name,
+                email: user.email,
+                avatar: user.avatar,
+            }))
+        }));
+
+
+        // Return the users
+        res.status(200).json({
+            success: true,
+            coursesWithStudents,
+            message: "All Users for instructor courses by fecthed successfully"
+        });
+    }
+    catch (error: any) {
+        return next(new ErrorHandler(error.message, 400, "Error while fetching all users by instructor courses"));
     }
 })
