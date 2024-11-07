@@ -557,3 +557,30 @@ export const getAllUsersByInstructorCourses = catchAsyncError(async (req: Reques
         return next(new ErrorHandler(error.message, 400, "Error while fetching all users by instructor courses"));
     }
 })
+
+
+
+
+
+
+// =========================== GET ALL AMDIN & INSTRUCTOR ===========================
+export const getAllAdminAndInstructor = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        const instructors = await userModel.find({ accountType: "Instructor" })
+        const admins = await userModel.find({ accountType: "Admin" })
+
+
+
+        // Return the users
+        res.status(200).json({
+            success: true,
+            instructors,
+            admins,
+            message: "All admins and instructor fecthed successfully"
+        });
+    }
+    catch (error: any) {
+        return next(new ErrorHandler(error.message, 400, "Error while fetching all users by instructor courses"));
+    }
+})
