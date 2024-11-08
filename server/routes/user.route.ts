@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { activateUser, getAllUsers, getUserInfo, loginUser, logoutUser, registerUser, 
     socialAuth, updateAccessToken, updateAvatar, updatePassword, updateUserInfo, updateUserRole,
-    getAllUsersByInstructorCourses, getAllAdminAndInstructor
+    getAllUsersByInstructorCourses, getAllAdminAndInstructor, addNewMember, 
  } from "../controller/user.controller";
 import { isAdmin, isAuthenticated, isInstructor } from "../middleware/auth";
 
@@ -22,6 +22,7 @@ userRouter.put('/update-user-avatar', updateAccessToken, isAuthenticated, update
 userRouter.get('/get-all-users', updateAccessToken, isAuthenticated, isAdmin, getAllUsers)
 userRouter.put('/update-user-role', updateAccessToken, isAuthenticated, isAdmin, updateUserRole)
 userRouter.get('/get-all-admins-instructors', updateAccessToken, isAuthenticated, isAdmin, getAllAdminAndInstructor)
+userRouter.post('/add-new-member', updateAccessToken, isAuthenticated, isAdmin, addNewMember)
 
 // only for Instructor
 userRouter.post('/get-all-users-by-instructor-courses', updateAccessToken, isAuthenticated, isInstructor, getAllUsersByInstructorCourses)

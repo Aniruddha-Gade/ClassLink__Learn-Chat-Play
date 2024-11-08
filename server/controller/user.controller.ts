@@ -515,6 +515,31 @@ export const updateUserRole = catchAsyncError(async (req: Request, res: Response
 
 
 
+// =========================== ADD NEW USER BY ADMIN ONLY ===========================
+export const addNewMember = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { email, accountType } = req.body
+
+        // validate data
+        if (!email || !accountType) {
+            return next(new ErrorHandler('member email and accountType  required', 404, "Error while creating new user ny Admin"));
+        }
+
+        const newMember = await userModel.create({email, accountTyp})
+
+        // Return the users
+        res.status(200).json({
+            success: true,
+            newUser,
+            message: `New member created with AccountType - ${accountType} Email - ${email} by Admin successfully`
+        });
+
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400, "Error while creating new user ny Admin"));
+    }
+})
+
+
 
 
 // =========================== GET ALL USERS BY INSTRUCTOR COURSES ===========================
