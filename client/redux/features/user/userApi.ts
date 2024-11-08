@@ -27,9 +27,18 @@ export const userApi = apiSlice.injectEndpoints({
                 credentials: "include" as const,
             })
         }),
+        getAllAdminsAndInstructors: builder.query({
+            query: () => ({
+                url: "/auth/get-all-admins-instructors",
+                method: "GET",
+                credentials: "include" as const,
+            })
+        }),
 
     })
 })
 
 
-export const { useUpdateAvatarMutation,useUpdateUserInfoMutation, useUpdateUserAccountPasswordMutation } = userApi
+export const { useUpdateAvatarMutation,useUpdateUserInfoMutation,
+     useUpdateUserAccountPasswordMutation, useGetAllAdminsAndInstructorsQuery
+     } = userApi
