@@ -34,11 +34,19 @@ export const userApi = apiSlice.injectEndpoints({
                 credentials: "include" as const,
             })
         }),
+        addNewMember: builder.mutation({
+            query: ({name,email, accountType}) => ({
+                url: "/auth/add-new-member",
+                method: "POST",
+                body: { name, email, accountType  },
+                credentials: "include" as const,
+            })
+        }),
 
     })
 })
 
 
 export const { useUpdateAvatarMutation,useUpdateUserInfoMutation,
-     useUpdateUserAccountPasswordMutation, useGetAllAdminsAndInstructorsQuery
+     useUpdateUserAccountPasswordMutation, useGetAllAdminsAndInstructorsQuery, useAddNewMemberMutation
      } = userApi
