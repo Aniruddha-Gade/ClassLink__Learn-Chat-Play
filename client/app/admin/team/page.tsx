@@ -2,48 +2,54 @@
 
 'use client'
 
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Heading from '../../utils/Heading';
 import AdminProtected from '../../hooks/adminProtected';
 import DashboardHero from "../../components/Admin/DashboardHero"
 import { AdminSidebar } from './../../components/Admin/sidebar/AdminSidebar';
-import {TableStructure} from '../../components/Admin/team/Table'
-import {useGetAllAdminsAndInstructorsQuery} from "../../../redux/features/user/userApi"
+import { TableStructure } from '../../components/Admin/team/Table'
+import { useGetAllAdminsAndInstructorsQuery, useAddNewMemberMutation } from "../../../redux/features/user/userApi"
 
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "../../components/ui/sidebar"
-import { Avatar, AvatarFallback,AvatarImage} from "../../components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar"
 import { Separator } from "../../components/ui/separator"
-import {Breadcrumb,BreadcrumbItem,BreadcrumbLink,BreadcrumbList,BreadcrumbPage,BreadcrumbSeparator,} from "../../components/ui/breadcrumb"
-import {Button} from "../../components/ui/button"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, } from "../../components/ui/breadcrumb"
+import { Button } from "../../components/ui/button"
 import { Checkbox } from "../../components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
-import {IUser} from "../../../../types/types"
-import {formatDate} from '../../../lib/formatDate'
+import { IUser } from "../../../../types/types"
+import { formatDate } from '../../../lib/formatDate'
+
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, } from "../../components/ui/dialog"
+import { Input } from "../../components/ui/input"
+import { Label } from "../../components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "../../components/ui/select"
+import { toast } from 'sonner'
 
 
 export const columns: ColumnDef<IUser>[] = [
   {
-      id: "select",
-      header: ({ table }) => (
-          <Checkbox
-              checked={
-                  table.getIsAllPageRowsSelected() ||
-                  (table.getIsSomePageRowsSelected() && "indeterminate")
-              }
-              onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-              aria-label="Select all"
-          />
-      ),
-      cell: ({ row }) => (
-          <Checkbox
-              checked={row.getIsSelected()}
-              onCheckedChange={(value) => row.toggleSelected(!!value)}
-              aria-label="Select row"
-          />
-      ),
-      enableSorting: false,
-      enableHiding: false,
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
   },
   {
     accessorKey: "avatar",
@@ -59,44 +65,44 @@ export const columns: ColumnDef<IUser>[] = [
     },
   },
   {
-      accessorKey: "name",
-      header: ({ column }) => {
-          return (
-              <Button
-                  variant="ghost"
-                  onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              >
-                  Name
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
-              </Button>
-          )
-      },
-      cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
   },
   {
-      accessorKey: "email",
-      header: ({ column }) => {
-          return (
-              <Button
-                  variant="ghost"
-                  onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              >
-                  Email
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
-              </Button>
-          )
-      },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    accessorKey: "email",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Email
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
   {
-      accessorKey: "accountType",
-      header: ({ column }) => {
-          return (
-              <Button variant="ghost">
-                  Role
-              </Button>
-          )
-      },
+    accessorKey: "accountType",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost">
+          Role
+        </Button>
+      )
+    },
   },
   {
     accessorKey: "isVerified",
@@ -128,18 +134,18 @@ export const columns: ColumnDef<IUser>[] = [
   {
     accessorKey: "createdAt",
     header: ({ column }) => {
-        return (
-            <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-                Join on
-                <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-        )
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Join on
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
     },
     cell: ({ row }) => <div className="lowercase">{formatDate(row.getValue("createdAt"))}</div>,
-},
+  },
 
   // {
   //     accessorKey: "salary",
@@ -156,7 +162,7 @@ export const columns: ColumnDef<IUser>[] = [
   //     },
   //     cell: ({ row }) => {
   //         const salary = parseFloat(row.getValue("salary"))
-         
+
   //         const formatted = new Intl.NumberFormat("en-IN", {
   //             style: "currency",
   //             currency: "INR",
@@ -173,10 +179,52 @@ export const columns: ColumnDef<IUser>[] = [
 
 const Page = () => {
 
-  const  {data:allAdminInstructor, isLoading:isLoadingAllAdminsInstructor, error:errorAllAdminInstructor, }=useGetAllAdminsAndInstructorsQuery({})
+  const { data: allAdminInstructor, isLoading: isLoadingAllAdminsInstructor,
+    error: errorAllAdminInstructor, refetch } = useGetAllAdminsAndInstructorsQuery({}, { refetchOnMountOrArgChange: true })
 
-  // console.log("allAdminInstructor = ", allAdminInstructor?.instructors)
 
+  const [addNewMember, { isSuccess, isLoading, data, error }] = useAddNewMemberMutation({})
+  const [newMemberData, setNewMemberData] = useState({
+    email: "", name: "", accountType: ""
+  })
+
+
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setNewMemberData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const handleAccountTypeChange = (value) => {
+    setNewMemberData((prev) => ({
+      ...prev,
+      accountType: value,
+    }));
+  };
+
+  const handleAddNewMember = async () => {
+    // console.log("New Member Data:", newMemberData);
+    const { email, name, accountType } = newMemberData
+    await addNewMember({ email, name, accountType })
+  };
+
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch()
+      toast.success(`New ${newMemberData?.accountType} Added successfully`)
+    }
+    if (error) {
+      if ("data" in error) {
+        console.log("ADD NEW MEMBER BY ADMIN API ERROR => ", error)
+        const errorData = error as any
+        toast.error(errorData.data.message)
+      }
+    }
+  }, [isSuccess, error])
 
   return (
     <div>
@@ -214,25 +262,81 @@ const Page = () => {
               </div>
             </header>
 
-        <div className='font-Boogaloo text-green-600 text-4xl ml-5 font-bold mt-10'>
-                        MANAGE TEAM
-                    </div>
+            <div className='font-Boogaloo text-green-600 text-4xl ml-5 font-bold mt-10'>
+              MANAGE TEAM
+            </div>
 
-                    <div className='px-5'>
-                      <div className='flex justify-end'>
-                        <Button>
-                          Add New Admin
-                        </Button>
+            <div className='px-5 h-full'>
+              <div className='flex justify-end'>
+
+
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button>Add New Member</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px] text-black dark:text-white">
+                    <DialogHeader>
+                      <DialogTitle>Add New Member</DialogTitle>
+                      <DialogDescription>
+                        Enter name, email and select type of account. Click submit when you&apos;re done.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="name" className="text-right">
+                          Name
+                        </Label>
+                        <Input
+                          id="name"
+                          className="col-span-3"
+                          value={newMemberData.name}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="email" className="text-right">
+                          Email
+                        </Label>
+                        <Input
+                          id="email"
+                          className="col-span-3"
+                          value={newMemberData.email}
+                          onChange={handleInputChange}
+                        />
                       </div>
 
-
-{/* <Table  /> */}
-<p className='text-2xl text-black dark:text-white font-bold'>All Admins</p>
-<TableStructure data={allAdminInstructor?.admins} columns={columns} />
-
-<p className='text-2xl text-black dark:text-white font-bold mt-14'>All Instructors</p>
-<TableStructure data={allAdminInstructor?.instructors} columns={columns} />
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="username" className="text-right">
+                          Select
+                        </Label>
+                        <Select onValueChange={handleAccountTypeChange}>
+                          <SelectTrigger className="w-[280px] ">
+                            <SelectValue placeholder="Account Type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Admin">Admin</SelectItem>
+                            <SelectItem value="Instructor">Instructor</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
+                    <DialogFooter>
+                      <Button type="submit" onClick={handleAddNewMember} disabed={isLoading} >Add</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
+
+
+
+              {/* <Table for Admins /> */}
+              <p className='text-2xl text-black dark:text-white font-bold'>All Admins</p>
+              <TableStructure data={allAdminInstructor?.admins} columns={columns} />
+
+              {/* <Table for Instructor /> */}
+              <p className='text-2xl text-black dark:text-white font-bold mt-14'>All Instructors</p>
+              <TableStructure data={allAdminInstructor?.instructors} columns={columns} />
+            </div>
 
 
           </SidebarInset>
