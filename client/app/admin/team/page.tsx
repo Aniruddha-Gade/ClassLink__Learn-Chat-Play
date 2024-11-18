@@ -187,10 +187,11 @@ const Page = () => {
   const [newMemberData, setNewMemberData] = useState({
     email: "", name: "", accountType: ""
   })
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
 
-
-  const handleInputChange = (e) => {
+  // handle Input Change
+  const handleInputChange = (e:any) => {
     const { id, value } = e.target;
     setNewMemberData((prev) => ({
       ...prev,
@@ -198,15 +199,39 @@ const Page = () => {
     }));
   };
 
-  const handleAccountTypeChange = (value) => {
+  // handle Account Type Change
+  const handleAccountTypeChange = (value:any) => {
     setNewMemberData((prev) => ({
       ...prev,
       accountType: value,
     }));
   };
 
+  // validate Add New Member Form
+  const validateAddNewMemberForm =  ()=>{
+    if(!newMemberData){
+      toast.error("Form values are not initialized.");
+      return false
+    } 
+    else if(!newMemberData.name) {
+      toast.error("Name is required");
+      return false
+    }
+    else if(!newMemberData.email) {
+      toast.error("Email is required");
+      return false
+    }
+    else if(!newMemberData.accountType) {
+      toast.error("Account Type is required");
+      return false
+    }
+    return true
+  }
+
+  // handle Add New Member
   const handleAddNewMember = async () => {
-    // console.log("New Member Data:", newMemberData);
+    if(!validateAddNewMemberForm()) return;
+
     const { email, name, accountType } = newMemberData
     await addNewMember({ email, name, accountType })
   };
@@ -215,6 +240,7 @@ const Page = () => {
   useEffect(() => {
     if (isSuccess) {
       refetch()
+      setIsDialogOpen(false)
       toast.success(`New ${newMemberData?.accountType} Added successfully`)
     }
     if (error) {
@@ -224,7 +250,7 @@ const Page = () => {
         toast.error(errorData.data.message)
       }
     }
-  }, [isSuccess, error])
+  }, [isSuccess, error, refetch, ])
 
   return (
     <div>
@@ -270,9 +296,9 @@ const Page = () => {
               <div className='flex justify-end'>
 
 
-                <Dialog>
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen} >
                   <DialogTrigger asChild>
-                    <Button>Add New Member</Button>
+                    <Button onClick={()=> setIsDialogOpen(true)}>Add New Member</Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px] text-black dark:text-white">
                     <DialogHeader>
@@ -321,7 +347,9 @@ const Page = () => {
                       </div>
                     </div>
                     <DialogFooter>
-                      <Button type="submit" onClick={handleAddNewMember} disabed={isLoading} >Add</Button>
+                      <Button type="submit" onClick={handleAddNewMember} disabled={isLoading}>
+                        {isLoading ? 'Saving...!' : 'Add'}
+                      </Button>
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
