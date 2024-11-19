@@ -8,8 +8,9 @@ import AdminProtected from '../../hooks/adminProtected';
 import DashboardHero from "../../components/Admin/DashboardHero"
 import { AdminSidebar } from './../../components/Admin/sidebar/AdminSidebar';
 import { TableStructure } from '../../components/Admin/team/Table'
-import { useGetAllAdminsAndInstructorsQuery, useAddNewMemberMutation } from "../../../redux/features/user/userApi"
+import { useGetAllAdminsAndInstructorsQuery, useAddNewMemberMutation, useDeleteMemberMutation } from "../../../redux/features/user/userApi"
 
+import LoadingCloud from '../../components/Loader/LoadingCloud'
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "../../components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar"
 import { Separator } from "../../components/ui/separator"
@@ -17,7 +18,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Button } from "../../components/ui/button"
 import { Checkbox } from "../../components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, } from "lucide-react"
 import { IUser } from "../../../types/types"
 import { formatDate } from '../../../lib/formatDate'
 
@@ -80,6 +81,10 @@ export const columns: ColumnDef<IUser>[] = [
     cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
   },
   {
+    accessorKey: "_id",
+    header: "ID",
+  },
+  {
     accessorKey: "email",
     header: ({ column }) => {
       return (
@@ -94,16 +99,16 @@ export const columns: ColumnDef<IUser>[] = [
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
-  {
-    accessorKey: "accountType",
-    header: ({ column }) => {
-      return (
-        <Button variant="ghost">
-          Role
-        </Button>
-      )
-    },
-  },
+  // {
+  //   accessorKey: "accountType",
+  //   header: ({ column }) => {
+  //     return (
+  //       <Button variant="ghost">
+  //         Role
+  //       </Button>
+  //     )
+  //   },
+  // },
   {
     accessorKey: "isVerified",
     header: "Is Verified",
@@ -184,6 +189,7 @@ const Page = () => {
 
 
   const [addNewMember, { isSuccess, isLoading, data, error }] = useAddNewMemberMutation({})
+  const [deleteMember, { isSuccess:deleteMemberIsSuccess, isLoading:deleteMemberIsLoading, error:deleteMemberError }] = useDeleteMemberMutation({})
   const [newMemberData, setNewMemberData] = useState({
     email: "", name: "", accountType: ""
   })
@@ -237,11 +243,20 @@ const Page = () => {
   };
 
 
+  // handle Delete Member
+  const handleDeleteMember =async(id:string)=>{
+await deleteMember({id})
+  }
+
   useEffect(() => {
     if (isSuccess) {
       refetch()
       setIsDialogOpen(false)
       toast.success(`New ${newMemberData?.accountType} Added successfully`)
+    }
+    if(deleteMemberIsSuccess) {
+      refetch()
+      toast.success(`Member Deleted successfully`)
     }
     if (error) {
       if ("data" in error) {
@@ -250,7 +265,16 @@ const Page = () => {
         toast.error(errorData.data.message)
       }
     }
-  }, [isSuccess, error, refetch, ])
+    if (deleteMemberError) {
+      if ("data" in deleteMemberError) {
+        console.log("MEMBER DELETE BY ADMIN API ERROR => ", deleteMemberError)
+        const errorData = deleteMemberError as any
+        toast.error(errorData.data.message)
+      }
+    }
+  }, [isSuccess, error, refetch,deleteMemberError, deleteMemberIsSuccess ])
+
+
 
   return (
     <div>
@@ -359,11 +383,18 @@ const Page = () => {
 
               {/* <Table for Admins /> */}
               <p className='text-2xl text-black dark:text-white font-bold'>All Admins</p>
-              <TableStructure data={allAdminInstructor?.admins} columns={columns} loading={isLoadingAllAdminsInstructor} />
+              <TableStructure 
+              data={allAdminInstructor?.admins} columns={columns} 
+              handleDeleteMember={handleDeleteMember} loading={isLoadingAllAdminsInstructor} 
+              />
 
               {/* <Table for Instructor /> */}
               <p className='text-2xl text-black dark:text-white font-bold mt-14'>All Instructors</p>
-              <TableStructure data={allAdminInstructor?.instructors} columns={columns} loading={isLoadingAllAdminsInstructor}/>
+              <TableStructure 
+              data={allAdminInstructor?.instructors} columns={columns} 
+              handleDeleteMember={handleDeleteMember} loading={isLoadingAllAdminsInstructor}
+              />
+
             </div>
 
 
@@ -372,6 +403,10 @@ const Page = () => {
 
 
       </AdminProtected>
+
+      { 
+          deleteMemberIsLoading && <LoadingCloud />
+      }
     </div>
   );
 };

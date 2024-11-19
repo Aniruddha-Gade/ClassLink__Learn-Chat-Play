@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel,  useReactTable} from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Trash } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Checkbox } from "../../ui/checkbox";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../../ui/dropdown-menu";
@@ -11,16 +11,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { Skeleton } from "../../ui/skeleton"
 
 
-
 interface DataTableProps {
     data: any[];
     loading?: boolean;
     columns: ColumnDef<any>[];
+    handleDeleteMember:(id:string)=> void
 }
 
 
 
-export const TableStructure: React.FC<DataTableProps> = ({ data = [], loading = false, columns }) => {
+export const TableStructure: React.FC<DataTableProps> = ({ data = [], loading = false, columns, handleDeleteMember }) => {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -82,6 +82,8 @@ export const TableStructure: React.FC<DataTableProps> = ({ data = [], loading = 
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
+ <TableHead>Delete</TableHead>
+
                                 {headerGroup.headers.map((header) => (
                                     <TableHead key={header.id}>
                                         {header.isPlaceholder
@@ -103,7 +105,7 @@ export const TableStructure: React.FC<DataTableProps> = ({ data = [], loading = 
                                     <div className="flex flex-col gap-4  w-full">
                                        {
                                             Array.from({length:5}).map((_,index)=>(
-                                            <div className="flex w-full items-center space-x-6">
+                                            <div key={index} className="flex w-full items-center space-x-6">
                                                 <Skeleton className="h-11 w-11 rounded-full bg-[#E5E4E2] " />
                                                 <div className="space-y-2 w-full">
                                                     <Skeleton className="h-4 w-3/4 bg-[#E5E4E2] " />
@@ -117,6 +119,9 @@ export const TableStructure: React.FC<DataTableProps> = ({ data = [], loading = 
                         ) : table?.getRowModel()?.rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                                    <TableCell onClick={()=> handleDeleteMember(row.original._id)} >
+                                        <Trash />
+                                    </TableCell >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
