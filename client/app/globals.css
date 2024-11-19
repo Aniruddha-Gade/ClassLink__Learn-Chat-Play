@@ -145,3 +145,80 @@ body {
 
 
 
+.cloud-loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(211, 211, 211, 0.5); /* Light grey with low opacity */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensures it's above all other elements */
+}
+
+/* Cloud loader container to make it opaque */
+.cloud-loader-container {
+  background: none; /* No transparency here */
+  position: relative;
+  z-index: 2; /* Ensure it stays above the overlay */
+}
+
+/* Cloud loader styles */
+.cloud-loader {
+  width: 350px;
+  height: 160px;
+  background-image: radial-gradient(circle 50px at 50px 50px, #FFF 100%, transparent 0),
+    radial-gradient(circle 100px at 100px 100px, #FFF 100%, transparent 0),
+    radial-gradient(circle 50px at 50px 50px, #FFF 100%, transparent 0),
+    linear-gradient(#FFF 100px, transparent 0);
+  background-size: 100px 100px, 200px 152px, 100px 100px, 240px 80px;
+  background-position: 0px 60px, 74px 0px, 244px 60px, 50px 80px;
+  background-repeat: no-repeat;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.cloud-loader::before {
+  content: '';
+  position: absolute;
+  left: 120px;
+  bottom: 36px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: #FF3D00;
+  background-image: radial-gradient(circle 16px at 36px 36px, #FFF 100%, transparent 0),
+    radial-gradient(circle 8px at 36px 0px, #FFF 100%, transparent 0),
+    radial-gradient(circle 8px at 0px 36px, #FFF 100%, transparent 0),
+    radial-gradient(circle 8px at 72px 36px, #FFF 100%, transparent 0),
+    radial-gradient(circle 8px at 36px 72px, #FFF 100%, transparent 0);
+  background-repeat: no-repeat;
+  animation: rotationBack 3s linear infinite;
+}
+
+.cloud-loader::after {
+  content: '';
+  position: absolute;
+  left: 188px;
+  bottom: 30px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #FF3D00;
+  background-image: radial-gradient(circle 10px at 24px 24px, #FFF 100%, transparent 0),
+    radial-gradient(circle 5px at 24px 0px, #FFF 100%, transparent 0);
+  background-repeat: no-repeat;
+  animation: rotationBack 4s linear infinite reverse;
+}
+
+/* Keyframes for rotation */
+@keyframes rotationBack {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
