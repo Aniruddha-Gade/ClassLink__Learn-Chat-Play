@@ -16,12 +16,12 @@ const page = (props: Props) => {
                 keywords="Programming,MERN,Redux,Machine Learning"
             />
 
-            <div className="flex h-screen">
+            <div className="flex h-full ">
                 <div className="1500px:w-[16%] w-1/5">
                     <InstructorSidebar />
                 </div>
                 
-                <div className="w-[85%]">
+                <div className="w-[85%] h-full">
                     <InstructorDashboardHeader />
 
                     <div className='font-Boogaloo text-green-600 text-4xl font-bold ml-10 mt-10'>ALL COURSES</div>

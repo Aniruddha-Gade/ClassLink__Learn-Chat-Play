@@ -272,7 +272,7 @@ await deleteMember({id})
         toast.error(errorData.data.message)
       }
     }
-  }, [isSuccess, error, refetch,deleteMemberError, deleteMemberIsSuccess ])
+  }, [isSuccess, error, refetch,deleteMemberError, deleteMemberIsSuccess,newMemberData?.accountType ])
 
 
 

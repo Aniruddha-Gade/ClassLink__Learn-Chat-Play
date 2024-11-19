@@ -82,7 +82,7 @@ export const TableStructure: React.FC<DataTableProps> = ({ data = [], loading = 
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
- <TableHead>Delete</TableHead>
+                            <TableHead>Delete</TableHead>
 
                                 {headerGroup.headers.map((header) => (
                                     <TableHead key={header.id}>
@@ -108,7 +108,7 @@ export const TableStructure: React.FC<DataTableProps> = ({ data = [], loading = 
                                             <div key={index} className="flex w-full items-center space-x-6">
                                                 <Skeleton className="h-11 w-11 rounded-full bg-[#E5E4E2] " />
                                                 <div className="space-y-2 w-full">
-                                                    <Skeleton className="h-4 w-3/4 bg-[#E5E4E2] " />
+                                                    <Skeleton className="h-4 w-4/5 bg-[#E5E4E2] " />
                                                     <Skeleton className="h-4 w-1/2 bg-[#E5E4E2] " />
                                                 </div>
                                             </div>
