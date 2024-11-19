@@ -18,7 +18,7 @@ import { Button } from "../../components/ui/button"
 import { Checkbox } from "../../components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
-import { IUser } from "../../../../types/types"
+import { IUser } from "../../../types/types"
 import { formatDate } from '../../../lib/formatDate'
 
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, } from "../../components/ui/dialog"
@@ -359,11 +359,11 @@ const Page = () => {
 
               {/* <Table for Admins /> */}
               <p className='text-2xl text-black dark:text-white font-bold'>All Admins</p>
-              <TableStructure data={allAdminInstructor?.admins} columns={columns} />
+              <TableStructure data={allAdminInstructor?.admins} columns={columns} loading={isLoadingAllAdminsInstructor} />
 
               {/* <Table for Instructor /> */}
               <p className='text-2xl text-black dark:text-white font-bold mt-14'>All Instructors</p>
-              <TableStructure data={allAdminInstructor?.instructors} columns={columns} />
+              <TableStructure data={allAdminInstructor?.instructors} columns={columns} loading={isLoadingAllAdminsInstructor}/>
             </div>
 
 

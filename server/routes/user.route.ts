@@ -1,11 +1,14 @@
 import { Router } from "express";
-import { activateUser, getAllUsers, getUserInfo, loginUser, logoutUser, registerUser, 
+import {
+    activateUser, getAllUsers, getUserInfo, loginUser, logoutUser, registerUser,
     socialAuth, updateAccessToken, updateAvatar, updatePassword, updateUserInfo, updateUserRole,
-    getAllUsersByInstructorCourses, getAllAdminAndInstructor, addNewMember, 
- } from "../controller/user.controller";
+    getAllUsersByInstructorCourses, getAllAdminAndInstructor, addNewMember, deleteMember
+} from "../controller/user.controller";
 import { isAdmin, isAuthenticated, isInstructor } from "../middleware/auth";
 
 const userRouter = Router()
+
+
 
 userRouter.post('/registration', registerUser)
 userRouter.post('/activate-user', activateUser)
@@ -18,13 +21,16 @@ userRouter.post('/update-userinfo', updateAccessToken, isAuthenticated, updateUs
 userRouter.put('/update-user-password', updateAccessToken, isAuthenticated, updatePassword)
 userRouter.put('/update-user-avatar', updateAccessToken, isAuthenticated, updateAvatar)
 
-// only for Admin
+
+// ======================== only for Admin ======================== 
 userRouter.get('/get-all-users', updateAccessToken, isAuthenticated, isAdmin, getAllUsers)
 userRouter.put('/update-user-role', updateAccessToken, isAuthenticated, isAdmin, updateUserRole)
 userRouter.get('/get-all-admins-instructors', updateAccessToken, isAuthenticated, isAdmin, getAllAdminAndInstructor)
 userRouter.post('/add-new-member', updateAccessToken, isAuthenticated, isAdmin, addNewMember)
+userRouter.delete('/delete-member/:id', updateAccessToken, isAuthenticated, isAdmin, deleteMember)
 
-// only for Instructor
+
+// ======================== only for Instructor ======================== 
 userRouter.post('/get-all-users-by-instructor-courses', updateAccessToken, isAuthenticated, isInstructor, getAllUsersByInstructorCourses)
 
 export default userRouter

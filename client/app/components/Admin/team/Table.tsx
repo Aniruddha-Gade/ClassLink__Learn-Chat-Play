@@ -1,24 +1,16 @@
 "use client";
 
 import * as React from "react";
-import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable
-} from "@tanstack/react-table";
+import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel,  useReactTable} from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Checkbox } from "../../ui/checkbox";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../../ui/dropdown-menu";
 import { Input } from "../../ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table";
+import { Skeleton } from "../../ui/skeleton"
+
+
 
 interface DataTableProps {
     data: any[];
@@ -107,12 +99,18 @@ export const TableStructure: React.FC<DataTableProps> = ({ data = [], loading = 
                     <TableBody>
                         {loading ? (
                             <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 w-full">
-                                    <div className="flex gap-5 w-full">
-                                        <div className="h-8 rounded-full w-full skeleton"></div>
-                                        <div className="h-8 rounded-full w-full skeleton"></div>
-                                        <div className="h-8 rounded-full w-full skeleton"></div>
-                                        <div className="h-8 rounded-full w-full skeleton"></div>
+                                <TableCell colSpan={columns.length} >
+                                    <div className="flex flex-col gap-4  w-full">
+                                       {
+                                            Array.from({length:5}).map((_,index)=>(
+                                            <div className="flex w-full items-center space-x-6">
+                                                <Skeleton className="h-11 w-11 rounded-full bg-[#E5E4E2] " />
+                                                <div className="space-y-2 w-full">
+                                                    <Skeleton className="h-4 w-3/4 bg-[#E5E4E2] " />
+                                                    <Skeleton className="h-4 w-1/2 bg-[#E5E4E2] " />
+                                                </div>
+                                            </div>
+                                        ) )}
                                     </div>
                                 </TableCell>
                             </TableRow>

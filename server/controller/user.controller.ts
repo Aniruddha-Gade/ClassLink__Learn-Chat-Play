@@ -542,6 +542,37 @@ export const addNewMember = catchAsyncError(async (req: Request, res: Response, 
 
 
 
+// =========================== DELETE MEMBER BY ADMIN ONLY ===========================
+export const deleteMember = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params
+
+        // validate data
+        if (!id) {
+            return next(new ErrorHandler('Member ID required', 404, "Error while deleting membr by Admin"));
+        }
+        
+        // delete from DB
+        const deleteMember = await userModel.findByIdAndDelete(id)
+        
+        if(!deleteMember) {
+            return next(new ErrorHandler('Member not found with given ID', 404, "Error while deleting membr by Admin"));
+        }
+
+        // Return the users
+        res.status(200).json({
+            success: true,
+            message: `Member deleted by Admin successfully`
+        });
+
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400, "Error while deleting membr by Admin"));
+    }
+})
+
+
+
+
 // =========================== GET ALL USERS BY INSTRUCTOR COURSES ===========================
 export const getAllUsersByInstructorCourses = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
