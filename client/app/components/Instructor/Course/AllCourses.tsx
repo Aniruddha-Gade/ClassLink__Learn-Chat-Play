@@ -4,10 +4,7 @@
 'use client';
 
 import React from "react";
-import { useTheme } from "next-themes";
 import { useGetAllCoursesQuery } from "../../../../redux/features/course/courseApi";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table";
-import { useReactTable, getCoreRowModel } from "@tanstack/react-table";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import { TableStructure } from '../../Admin/team/Table'
@@ -31,13 +28,25 @@ const AllCourses = () => {
           alt={row.original.name}
           width={64}
           height={64}
-          className="rounded object-cover"
+          className="rounded object-cover !w-60 "
         />
       ),
     },
     {
       accessorKey: "name",
       header: "Name",
+      cell:({row}) =>(
+        <div>
+           <p className='font-medium text-xl '>{row.original.name}</p>
+           <p className="text-sm">
+              {row.original.description
+              .split(" ") 
+              .slice(0, 40) 
+              .join(" ") 
+             + (row.original.description.split(" ").length > 40 ? "..." : "")} 
+           </p>
+        </div>
+      )
     },
     {
       accessorKey: "price",
