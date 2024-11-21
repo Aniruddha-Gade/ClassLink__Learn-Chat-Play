@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
+import Link from 'next/link'
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel,  useReactTable} from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, Trash } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Trash, Pencil } from "lucide-react";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
@@ -82,7 +83,8 @@ export const TableStructure: React.FC<DataTableProps> = ({ data = [], loading = 
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
-                            <TableHead>Delete</TableHead>
+                                <TableHead>Delete</TableHead>
+                                <TableHead>Edit</TableHead>
 
                                 {headerGroup.headers.map((header) => (
                                     <TableHead key={header.id}>
@@ -124,8 +126,14 @@ export const TableStructure: React.FC<DataTableProps> = ({ data = [], loading = 
                                         dialogTriggerItem={<Trash className='cursor-pointer hover:text-red-500'/>}
                                         onConfirm={()=> handleDeleteMember(row.original._id)}
                                       />
-                                  
                                     </TableCell >
+
+                                    <TableCell >
+                                        <Link href={`/instructor/edit-course/${row.original._id}`} className='hover:text-green-500'>
+                                            <Pencil />
+                                        </Link>  
+                                    </TableCell>
+
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}

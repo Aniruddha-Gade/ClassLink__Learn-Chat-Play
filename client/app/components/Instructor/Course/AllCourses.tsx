@@ -28,7 +28,7 @@ const AllCourses = () => {
           alt={row.original.name}
           width={64}
           height={64}
-          className="rounded object-cover !w-60 "
+          className="rounded object-cover w-60 "
         />
       ),
     },
@@ -100,11 +100,11 @@ const AllCourses = () => {
     if (deleteCourseError) {
         if ("data" in deleteCourseError) {
             console.log("DELETE COURSE API ERROR => ", deleteCourseError)
-            const errorData = error as any
+            const errorData = deleteCourseError as any
             toast.error(errorData.data.message)
         }
     }
-}, [isSuccessDeleteCourse, deleteCourseError])
+}, [isSuccessDeleteCourse, deleteCourseError, refetch])
 
 
 
