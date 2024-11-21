@@ -589,16 +589,16 @@ export const getAllCourses = catchAsyncError(async (req: Request, res: Response,
 // =========================== DELETE COURSE ONLY FOR INSTRUCTORS ===========================
 export const deleteCourse = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { courseId } = req.body
+        const { id } = req.params
         const instructorId = req.user._id
 
         // validate data
-        if (!courseId) {
+        if (!id) {
             return next(new ErrorHandler('Course id required', 400, "Error while deleting course"));
         }
 
         // find course
-        const course = await CourseModel.findById(courseId)
+        const course = await CourseModel.findById(id)
         if (!course) {
             return next(new ErrorHandler('Course not found', 400, "Error while deleting course"));
         }

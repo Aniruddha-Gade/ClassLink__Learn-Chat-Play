@@ -15,7 +15,7 @@ courseRouter.post("/create-course", updateAccessToken, isAuthenticated, isInstru
 courseRouter.put("/edit-course/:id", updateAccessToken, isAuthenticated, isInstructor, editCourse)
 courseRouter.put("/add-reply-to-review", updateAccessToken, isAuthenticated, isInstructor, addReplyToReview)
 courseRouter.get("/get-courses", updateAccessToken, isAuthenticated, isInstructor, getAllCourses)
-courseRouter.delete('/delete-course', updateAccessToken, isAuthenticated, isInstructor, deleteCourse)
+courseRouter.delete('/delete-course/:id', updateAccessToken, isAuthenticated, isInstructor, deleteCourse)
 courseRouter.get('/get-archived-courses', updateAccessToken, isAuthenticated, isInstructor, getArchivedCourses)
 courseRouter.put('/unarchive-course/:id', updateAccessToken, isAuthenticated, isInstructor, unarchiveCourse)
 
