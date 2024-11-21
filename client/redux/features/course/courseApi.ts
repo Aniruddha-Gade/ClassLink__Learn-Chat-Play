@@ -30,11 +30,30 @@ export const courseApi = apiSlice.injectEndpoints({
                 }
             }
         }),
-       
+       // Delete Course
+       deleteCourse: builder.mutation({
+        query: ({id}) => ({
+            url: `/course/delete-course/${id}`,
+            method: "DELETE",
+            credentials: "include" as const,
+        }),
+        async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+            try {
+                const result = await queryFulfilled;
+                console.log("DELETE COURSE API RESULT => ", result)
+               
+            } catch (error: any) {
+                console.log("DELETE COURSE API ERROR => ", error)
+            }
+        }
+    }),
        
 
     })
 })
 
 
-export const { useCreateCourseMutation , useGetAllCoursesQuery } = courseApi
+export const { useCreateCourseMutation , useGetAllCoursesQuery,
+    useDeleteCourseMutation, 
+
+ } = courseApi
