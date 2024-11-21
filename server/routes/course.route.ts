@@ -3,7 +3,7 @@ import { isAuthenticated, isInstructor, isStudent } from "../middleware/auth"
 import {
     addAnswerToQuestionInCourse, addQuestionInCourse, addReplyToReview, addReviewInCourse,
     deleteCourse, editCourse, getAllCourse, getAllCourses, getArchivedCourses, getCourseContentByUser,
-    getSingleCourse, unarchiveCourse, uploadCourse, getVideoCipherOTP
+    getSingleCourse, unarchiveCourse, uploadCourse, getVideoCipherOTP, getSingleCourseByInstructor
 } from "../controller/course.controller"
 import { updateAccessToken } from "../controller/user.controller"
 
@@ -18,6 +18,7 @@ courseRouter.get("/get-courses", updateAccessToken, isAuthenticated, isInstructo
 courseRouter.delete('/delete-course/:id', updateAccessToken, isAuthenticated, isInstructor, deleteCourse)
 courseRouter.get('/get-archived-courses', updateAccessToken, isAuthenticated, isInstructor, getArchivedCourses)
 courseRouter.put('/unarchive-course/:id', updateAccessToken, isAuthenticated, isInstructor, unarchiveCourse)
+courseRouter.get("/get-course-by-instructor/:id", updateAccessToken, isAuthenticated, isInstructor, getSingleCourseByInstructor)
 
 
 

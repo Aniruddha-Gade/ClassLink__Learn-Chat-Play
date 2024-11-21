@@ -214,7 +214,7 @@ export const getCourseContentByUser = catchAsyncError(async (req: Request, res: 
         // find user
         const user = await userModel.findById(userId)
         if (!user) {
-            return next(new ErrorHandler("User not found", 404, "Error while adding question in course`"));
+            return next(new ErrorHandler("User not found", 404, "Error while fetching course content by user`"));
         }
 
 
@@ -223,7 +223,7 @@ export const getCourseContentByUser = catchAsyncError(async (req: Request, res: 
         // console.log("hasStudentPurchasedCourse =", hasStudentPurchasedCourse);
 
         if (!hasStudentPurchasedCourse) {
-            return next(new ErrorHandler("You have not purchased this course, you are not eligible access this course", 400, "Error while adding question in course`"));
+            return next(new ErrorHandler("You have not purchased this course, you are not eligible access this course", 400, "Error while fetching course content by user"));
         }
 
 
@@ -235,6 +235,49 @@ export const getCourseContentByUser = catchAsyncError(async (req: Request, res: 
             success: true,
             content,
             message: "Content of Course found successfully"
+        })
+
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400, "Error while fetching course content"));
+    }
+})
+
+
+
+
+
+// =========================== GET COURSE BY USER ( ONLY FOR VALID USER  ) ===========================
+export const getSingleCourseByInstructor = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        const instructorId = req.user?._id
+        const courseId = req.params.id
+
+        // find instructor
+        const instructor = await userModel.findById(instructorId).lean();
+        if (!instructor) {
+            return next(new ErrorHandler("Instructor not found", 404, "Error while adding question in course`"));
+        }
+
+        // Fetch course and validate its existence
+        const course = await CourseModel.findById(courseId).lean();
+        if (!course) {
+            return next(new ErrorHandler("Instructor not found", 404, "Error while fetching course data by instructor"));
+        }
+
+
+        // Validate if the instructor has created the course
+        const isInstructorHasCreatedCourse = String(course.createdBy) === String(instructorId);
+        if (!isInstructorHasCreatedCourse) {
+            return next(new ErrorHandler("You are not eligible access this course", 400, "Error while fetching course data by instructor"));
+        }
+
+
+        // return response
+        res.status(201).json({
+            success: true,
+            course,
+            message: "Course fetched successfully"
         })
 
     } catch (error: any) {
