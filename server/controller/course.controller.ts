@@ -246,7 +246,7 @@ export const getCourseContentByUser = catchAsyncError(async (req: Request, res: 
 
 
 
-// =========================== GET COURSE BY USER ( ONLY FOR VALID USER  ) ===========================
+// =========================== GET COURSE BY INSTRUCTOR ===========================
 export const getSingleCourseByInstructor = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
 
