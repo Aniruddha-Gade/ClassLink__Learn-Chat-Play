@@ -29,7 +29,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "
 import { toast } from 'sonner'
 
 
-export const columns: ColumnDef<IUser>[] = [
+const columns: ColumnDef<IUser>[] = [
   {
     id: "select",
     header: ({ table }) => (
