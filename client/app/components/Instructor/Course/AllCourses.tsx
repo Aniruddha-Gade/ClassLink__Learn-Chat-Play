@@ -4,16 +4,17 @@
 'use client';
 
 import React from "react";
-import { useGetAllCoursesQuery } from "../../../../redux/features/course/courseApi";
+import { useGetAllCoursesQuery, useDeleteCourseMutation } from "../../../../redux/features/course/courseApi";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
-import { TableStructure } from '../../Admin/team/Table'
+import { TableStructure } from '../../resuable/Table'
 
 
 
 const AllCourses = () => {
 
   const { data, isLoading, error } = useGetAllCoursesQuery({});
+  const [deleteCourse, { isLoading:isDeleteCourseLoading, error:deleteCourseError } ]= useDeleteCourseMutation();
 
 
 
@@ -82,8 +83,9 @@ const AllCourses = () => {
   ];
 
 
-  const handleDeleteMember = (id:string)=>{
+  const handleDeleteMember =async (id:string)=>{
 
+    // await deleteCourse({id})
   }
 
 

@@ -7,7 +7,7 @@ import Heading from '../../utils/Heading';
 import AdminProtected from '../../hooks/adminProtected';
 import DashboardHero from "../../components/Admin/DashboardHero"
 import { AdminSidebar } from './../../components/Admin/sidebar/AdminSidebar';
-import { TableStructure } from '../../components/Admin/team/Table'
+import { TableStructure } from '../../components/resuable/Table'
 import { useGetAllAdminsAndInstructorsQuery, useAddNewMemberMutation, useDeleteMemberMutation } from "../../../redux/features/user/userApi"
 
 import LoadingCloud from '../../components/Loader/LoadingCloud'
