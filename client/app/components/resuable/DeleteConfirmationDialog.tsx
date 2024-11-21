@@ -1,21 +1,23 @@
-import React from "react";
-import {Dialog,DialogContent,DialogDescription, DialogHeader, DialogTitle, DialogTrigger,} from "../ui/dialog";
-import { Button } from "../ui/button"; 
-import {TriangleAlert} from 'lucide-react'
+import React, { useState } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "../ui/dialog";
+import { Button } from "../ui/button";
+import { TriangleAlert } from 'lucide-react'
 
 type DeleteConfirmationDialogProps = {
-    dialogTriggerItem:any;
-    onConfirm: () => void; 
-    // onCancel?: () => void; 
+  dialogTriggerItem: any;
+  onConfirm: () => void;
 };
 
 
 
 const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
-  onConfirm,dialogTriggerItem
+  onConfirm, dialogTriggerItem
 }) => {
+
+  const [isOenDialog, setIsOenDialog] = useState(false)
+
   return (
-    <Dialog>
+    <Dialog open={isOenDialog} onOpenChange={setIsOenDialog}>
       {/* Trigger Button */}
       <DialogTrigger asChild>
         {dialogTriggerItem}
@@ -24,14 +26,14 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
       {/* Dialog Content */}
       <DialogContent className="max-w-md  shadow-lg rounded-lg">
         <DialogHeader>
-         
-            <DialogTitle className="flex items-center gap-3 text-2xl font-bold text-red-600">
-              <TriangleAlert />
-              Confirm Deletion
-             </DialogTitle>
-        
+
+          <DialogTitle className="flex items-center gap-3 text-2xl font-bold text-red-600">
+            <TriangleAlert />
+            Confirm Deletion
+          </DialogTitle>
+
           <DialogDescription className="mt-2 text-gray-600 dark:text-gray-300">
-            Are you sure you want to delete this item?<br/> This action cannot be
+            Are you sure you want to delete this item?<br /> This action cannot be
             undone, and all associated data will be permanently removed from our
             servers.
           </DialogDescription>
@@ -42,14 +44,17 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
           {/* Cancel Button */}
           <Button
             variant="secondary"
-            // onClick={onCancel}
+            onClick={() => setIsOenDialog(false)}
           >
             Cancel
           </Button>
 
           {/* Confirm Button */}
           <Button
-            onClick={onConfirm}
+            onClick={() => {
+              onConfirm()
+              setIsOenDialog(false)
+            }}
             className="bg-red-500 dark:bg-red-500 text-white dark:text-white hover:bg-red-600 dark:hover:bg-red-600 "
           >
             Delete
