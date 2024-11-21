@@ -1,20 +1,19 @@
 
-
-
 'use client';
 
-import React from "react";
+import React, {useEffect} from "react";
 import { useGetAllCoursesQuery, useDeleteCourseMutation } from "../../../../redux/features/course/courseApi";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import { TableStructure } from '../../resuable/Table'
-
+import {toast} from "sonner"
+import LoadingCloud from '../../Loader/LoadingCloud'
 
 
 const AllCourses = () => {
 
-  const { data, isLoading, error } = useGetAllCoursesQuery({});
-  const [deleteCourse, { isLoading:isDeleteCourseLoading, error:deleteCourseError } ]= useDeleteCourseMutation();
+  const { data, isLoading, refetch } = useGetAllCoursesQuery({}, { refetchOnMountOrArgChange: true });
+  const [deleteCourse, { isLoading:isDeleteCourseLoading, error:deleteCourseError, isSuccess:isSuccessDeleteCourse } ]= useDeleteCourseMutation();
 
 
 
@@ -83,10 +82,30 @@ const AllCourses = () => {
   ];
 
 
-  const handleDeleteMember =async (id:string)=>{
-
-    // await deleteCourse({id})
+  // handle Delete Course
+  const handleDeleteCourse =async (id:string)=>{
+    if(!id) {
+      toast.error("Course ID is required to delete course")
+      return;
+    }
+ 
+    await deleteCourse({id})
   }
+
+  useEffect(() => {
+    if (isSuccessDeleteCourse) {
+        refetch()
+        toast.success("Course deleted successfully")
+    }
+    if (deleteCourseError) {
+        if ("data" in deleteCourseError) {
+            console.log("DELETE COURSE API ERROR => ", deleteCourseError)
+            const errorData = error as any
+            toast.error(errorData.data.message)
+        }
+    }
+}, [isSuccessDeleteCourse, deleteCourseError])
+
 
 
   return (
@@ -94,9 +113,13 @@ const AllCourses = () => {
       
         <TableStructure 
           data={data?.allCourses} columns={columns} 
-          handleDeleteMember={handleDeleteMember} loading={isLoading}
+          handleDeleteMember={handleDeleteCourse} loading={isLoading || isDeleteCourseLoading}
         />
   
+
+        { 
+          isDeleteCourseLoading && <LoadingCloud />
+        }
     </div>
   );
 };
