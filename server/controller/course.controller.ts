@@ -59,27 +59,27 @@ export const editCourse = catchAsyncError(async (req: Request, res: Response, ne
         // extract data 
         const data = req.body;
         const thumbnail = data.thumbnail
-
         // user ID
         const createdBy = req.user._id
         // get course ID
         const courseId = req.params.id
 
-
+        
         // delete previous thumbnail and upload new one
         if (thumbnail) {
-            await cloudinary.v2.uploader.destroy(thumbnail.public_id)
-            const uploadedUrl = await cloudinary.v2.uploader.upload(thumbnail, {
-                folder: "ClassLink/courses",
-            })
-
-            // store urls 
-            data.thumbnail = {
-                public_id: uploadedUrl.public_id,
-                url: uploadedUrl.secure_url,
+            // delete thumbnail 
+            // await cloudinary.v2.uploader.destroy(thumbnail.public_id)
+            if (!thumbnail?.public_id) {
+                const uploadedUrl = await cloudinary.v2.uploader.upload(thumbnail, {
+                    folder: "ClassLink/courses",
+                })
+                // store urls 
+                data.thumbnail = {
+                    public_id: uploadedUrl.public_id,
+                    url: uploadedUrl.secure_url,
+                }
             }
         }
-
         // update course in DB
         const updatedCourse = await CourseModel.findOneAndUpdate(
             { _id: courseId, createdBy: createdBy },
