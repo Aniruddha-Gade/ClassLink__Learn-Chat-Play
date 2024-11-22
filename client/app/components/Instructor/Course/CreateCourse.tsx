@@ -1,214 +1,183 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import CourseInformation from './CourseInformation'
-import CourseOptions from './CourseOptions'
-import CourseData from './CourseData'
-import CourseContent from './CourseContent'
-import CoursePreview from './CoursePreview'
-import { useCreateCourseMutation } from "../../../../redux/features/course/courseApi"
-import { redirect } from "next/navigation";
+import React, { useState, useEffect } from 'react';
+import CourseInformation from './CourseInformation';
+import CourseOptions from './CourseOptions';
+import CourseData from './CourseData';
+import CourseContent from './CourseContent';
+import CoursePreview from './CoursePreview';
+import { useCreateCourseMutation , useEditCourseMutation} from '../../../../redux/features/course/courseApi';
+import { redirect } from 'next/navigation';
 import { toast } from 'sonner';
-
+import {ICourse} from "../../../../types/type"
 
 interface Props {
-
+  course?: ICourse; // Optional course prop for editing,
+  isEdit?:boolean;
 }
 
-const CreateCourse: React.FC<Props> = () => {
 
-    const [createCourse, { isLoading: createCourseIsLoading, error: createCourseError, isSuccess: createCourseIsSuccess }] = useCreateCourseMutation()
+const CreateCourse: React.FC<Props> = ({ course, isEdit }) => {
+  const [createCourse, { isLoading: isLoadingCreateCourse, error: errorCreateCourse, isSuccess: isSuccessCreateCourse }] = useCreateCourseMutation();
+    
+  const [editCourse,{isSuccess:isSuccessEditCourse, isLoading:isLoadingEditCourse, error:errorEditCourse}] = useEditCourseMutation() 
+  const [active, setActive] = useState(0);
 
-    const [active, setActive] = useState(0);
-    const [courseInfo, setCourseInfo] = useState({
-        name: "",
-        description: "",
-        price: "",
-        estimatedPrice: "",
-        tags: "",
-        level: "",
-        demoUrl: "",
-        thumbnail: ""
-    });
+  // If course prop is provided (edit mode), populate the state with its data; otherwise, use defaults
+  const [courseInfo, setCourseInfo] = useState({
+    name: course?.name || '',
+    description: course?.description || '',
+    price: course?.price || '',
+    estimatedPrice: course?.estimatedPrice || '',
+    tags: course?.tags || '',
+    level: course?.level || '',
+    demoUrl: course?.demoUrl || '',
+    thumbnail: course?.thumbnail || '',
+  });
 
-    const [benefits, setBenefits] = useState([{ title: "" }]);
-    const [prerequisites, setPrerequisites] = useState([{ title: "" }]);
-    const [courseContentData, setCourseContentData] = useState([
-        {
-            videoUrl: "",
-            title: "",
-            description: "",
-            videoSection: "Untitled Section",
-            links: [
-                {
-                    title: "",
-                    url: ""
-                }
-            ],
-            suggestion: ""
-        }
-    ]);
+  const [benefits, setBenefits] = useState(course?.benefits || [{ title: '' }]);
+  const [prerequisites, setPrerequisites] = useState(course?.prerequisites || [{ title: '' }]);
+  const [courseContentData, setCourseContentData] = useState(
+    course?.courseData || [
+      {
+        videoUrl: '',
+        title: '',
+        description: '',
+        videoSection: 'Untitled Section',
+        links: [{ title: '', url: '' }],
+        suggestion: '',
+      },
+    ]
+  );
 
-    // main data will store here
-    const [courseData, setCourseData] = useState({})
-    // const [courseData, setCourseData] = useState({
-    //     "name": "Mern Stack Bootcamp",
-    //     "description": "This is bootcamp of MERN Satck",
-    //     "price": "499",
-    //     "estimatedPrice": "899",
-    //     "tags": "4",
-    //     "level": "4",
-    //     "demoUrl": "eda19a4be4cfe2cf85330bffbe203132",
-    //     "thumbnail": "data:image/png;base64",
-    //     "totalVideos": 1,
-    //     "benefits": [
-    //         {
-    //             "title": "k"
-    //         }
-    //     ],
-    //     "prerequisites": [
-    //         {
-    //             "title": "k"
-    //         }
-    //     ],
-    //     "courseContent": [
-    //         {
-    //             "videoUrl": "k",
-    //             "title": "k",
-    //             "description": "k",
-    //             "videoSection": "Untitled Section",
-    //             "links": [
-    //                 {
-    //                     "title": "k",
-    //                     "url": "k"
-    //                 }
-    //             ],
-    //             "suggestion": ""
-    //         }
-    //     ]
-    // })
+  const [courseData, setCourseData] = useState({});
 
+  // Handle Submit course data
+  const handleSubmit = async () => {
+    const formatedBenefits = benefits.map((benefit:any) => ({ title: benefit.title }));
+    const formatedPrerequisites = prerequisites.map((prerequisite:any) => ({ title: prerequisite.title }));
+    const formatedCourseContentData = courseContentData.map((courseContent:any) => ({
+      videoUrl: courseContent.videoUrl,
+      title: courseContent.title,
+      description: courseContent.description,
+      videoSection: courseContent.videoSection,
+      links: courseContent.links.map((link:any) => ({
+        title: link.title,
+        url: link.url,
+      })),
+      suggestion: courseContent.suggestion,
+    }));
 
-    // handle Submit course
-    const handleSubmit = async () => {
-        // format benefits
-        const formatedBenefits = benefits.map((benefit) => ({ title: benefit.title }))
-        // format prerequisites
-        const formatedPrerequisites = prerequisites.map((prerequisite) => ({ title: prerequisite.title }))
+    console.log('courseContentData = ', courseContentData)
+    console.log('formatedCourseContentData = ', formatedCourseContentData)
 
-        // format course content array
-        const formatedCourseContentData = courseContentData.map((courseContent) => (
-            {
-                videoUrl: courseContent.videoUrl,
-                title: courseContent.title,
-                description: courseContent.description,
-                videoSection: courseContent.videoSection,
-                links: courseContent.links.map((link) => (
-                    {
-                        title: link.title,
-                        url: link.url,
-                    }
-                )),
-                suggestion: courseContent.suggestion,
+    const data = {
+      name: courseInfo.name,
+      description: courseInfo.description,
+      price: courseInfo.price,
+      estimatedPrice: courseInfo.estimatedPrice,
+      tags: courseInfo.tags,
+      level: courseInfo.level,
+      demoUrl: courseInfo.demoUrl,
+      thumbnail: courseInfo.thumbnail,
+      totalVideos: courseContentData.length,
+      benefits: formatedBenefits,
+      prerequisites: formatedPrerequisites,
+      courseData: formatedCourseContentData,
+    };
 
-            }
-        ))
+    setCourseData(data);
+  };
 
-        // prepare course data to send server
-        const data = {
-            name: courseInfo.name,
-            description: courseInfo.description,
-            price: courseInfo.price,
-            estimatedPrice: courseInfo.estimatedPrice,
-            tags: courseInfo.tags,
-            level: courseInfo.level,
-            demoUrl: courseInfo.demoUrl,
-            thumbnail: courseInfo.thumbnail,
-            totalVideos: courseContentData.length,
-            benefits: formatedBenefits,
-            prerequisites: formatedPrerequisites,
-            courseContent: formatedCourseContentData
-        }
-
-        setCourseData(data)
-    }
-
-    console.log("Final courseData = ", courseData)
-
-    // handle Create Course
-    const handleCreateCourse = async () => {
-        const data = courseData
-        if (!createCourseIsLoading) {
-            await createCourse({ data })
+  const handleCreateCourse = async () => {
+    const data = courseData;
+    const id = course?._id
+    if(isEdit) {
+        if(!isLoadingEditCourse){
+            await editCourse({id, data})
+            return
         }
     }
+    if (!isLoadingCreateCourse) {
+      await createCourse({ data });
+    }
+  };
 
+  useEffect(() => {
+    if (isSuccessCreateCourse) {
+      toast.success('Course Created successfully');
+      setTimeout(() => {
+        console.log('Redirecting to all-courses page...');
+        redirect('/instructor/courses');
+      }, 3000);
+    }
+    if (isSuccessEditCourse) {
+      toast.success('Course Edited successfully');
+    }
+    if (errorCreateCourse) {
+      if ('data' in errorCreateCourse) {
+        console.log('CREATE COURSE API ERROR => ', errorCreateCourse);
+        const errorData = errorCreateCourse as any;
+        toast.error(errorData.data.message);
+      }
+    }
+    if (errorEditCourse) {
+      if ('data' in errorEditCourse) {
+        console.log('EDIT COURSE API ERROR => ', errorEditCourse);
+        const errorData = errorEditCourse as any;
+        toast.error(errorData.data.message);
+      }
+    }
+  }, [isSuccessCreateCourse, errorCreateCourse, errorEditCourse, isSuccessEditCourse]);
 
+  return (
+    <div className="w-full flex min-h-screen pb-20">
+      <div className="w-[80%] ">
+        {active === 0 && (
+          <CourseInformation
+            courseInfo={courseInfo}
+            setCourseInfo={setCourseInfo}
+            active={active}
+            setActive={setActive}
+          />
+        )}
+        {active === 1 && (
+          <CourseData
+            benefits={benefits}
+            setBenefits={setBenefits}
+            prerequisites={prerequisites}
+            setPrerequisites={setPrerequisites}
+            active={active}
+            setActive={setActive}
+          />
+        )}
+        {active === 2 && (
+          <CourseContent
+            courseContentData={courseContentData}
+            setCourseContentData={setCourseContentData}
+            active={active}
+            setActive={setActive}
+            handleSubmit={handleSubmit}
+          />
+        )}
+        {active === 3 && (
+          <CoursePreview
+            isEdit={isEdit}
+            courseData={courseData}
+            active={active}
+            setActive={setActive}
+            isLoadingCreateCourse={isLoadingCreateCourse || isLoadingEditCourse}
+            isSuccessCreateCourse={isSuccessCreateCourse}
+            handleCreateCourse={handleCreateCourse}
+          />
+        )}
+      </div>
 
-    useEffect(() => {
-        if (createCourseIsSuccess) {
-            toast.success("Course created successfully")
-            setTimeout(()=>{
-                console.log("redirecting to all-courses page.....")
-                redirect("/instructor/courses");
-            }, 3000)
-        }
-        if (createCourseError) {
-            if ("data" in createCourseError) {
-                console.log("CREATE COURSE API ERROR => ", createCourseError)
-                const errorData = createCourseError as any
-                toast.error(errorData.data.message)
-            }
-        }
-    }, [createCourseIsSuccess, createCourseError])
+      <div className="w-[20%] mt-[100px] h-screen fixed z-[-1] top-18 right-0 ">
+        <CourseOptions active={active} setActive={setActive} />
+      </div>
+    </div>
+  );
+};
 
-    return (
-        <div className='w-full flex min-h-screen pb-20'>
-            <div className='w-[80%] '>
-                {
-                    active === 0 && <CourseInformation
-                        courseInfo={courseInfo}
-                        setCourseInfo={setCourseInfo}
-                        active={active}
-                        setActive={setActive}
-                    />
-                }
-                {
-                    active === 1 && <CourseData
-                        benefits={benefits}
-                        setBenefits={setBenefits}
-                        prerequisites={prerequisites}
-                        setPrerequisites={setPrerequisites}
-                        active={active}
-                        setActive={setActive}
-                    />
-                }
-                {
-                    active === 2 && <CourseContent
-                        courseContentData={courseContentData}
-                        setCourseContentData={setCourseContentData}
-                        active={active}
-                        setActive={setActive}
-                        handleSubmit={handleSubmit}
-                    />
-                }
-                {
-                    active === 3 && <CoursePreview
-                        courseData={courseData}
-                        active={active}
-                        setActive={setActive}
-                        createCourseIsLoading={createCourseIsLoading}
-                        createCourseIsSuccess={createCourseIsSuccess}
-                        handleCreateCourse={handleCreateCourse}
-                    />
-                }
-            </div>
-
-            <div className='w-[20%] mt-[100px] h-screen fixed z-[-1] top-18 right-0 '>
-                <CourseOptions active={active} setActive={setActive} />
-            </div>
-        </div>
-    )
-}
-
-export default CreateCourse
+export default CreateCourse;

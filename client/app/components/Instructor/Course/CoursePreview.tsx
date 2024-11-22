@@ -8,6 +8,7 @@ import FlowersRain from "../../../utils/FlowersRain"
 
 
 interface Props {
+    isEdit?:boolean;
     courseData: any,
     active: number,
     setActive: (active: number) => void,
@@ -17,7 +18,7 @@ interface Props {
 }
 
 
-const CoursePreview: React.FC<Props> = ({ courseData, active, setActive, handleCreateCourse, createCourseIsLoading , createCourseIsSuccess}) => {
+const CoursePreview: React.FC<Props> = ({ isEdit, courseData, active, setActive, handleCreateCourse, createCourseIsLoading , createCourseIsSuccess}) => {
 
     const discountPercentage = ((courseData?.estimatedPrice - courseData?.price) / courseData?.estimatedPrice) * 100;
 
@@ -162,7 +163,7 @@ const CoursePreview: React.FC<Props> = ({ courseData, active, setActive, handleC
                     disabled={createCourseIsLoading}
                     className="w-full 800px:w-[180px] h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
                 >
-                    {createCourseIsLoading ? 'Creating...!': 'Create'}
+                    {createCourseIsLoading ? 'Loading...!': isEdit ? "Save Edited":  'Create'}
                 </Button>
             </div>
 

@@ -19,11 +19,18 @@ interface Props {
 const CourseData: React.FC<Props> = ({ benefits, setBenefits, prerequisites, setPrerequisites, active, setActive }) => {
 
     // handle Benefit Change
-    const handleBenefitChange = (index: number, value: any) => {
-        const updatedBenefits = [...benefits];
-        updatedBenefits[index].title = value;
-        setBenefits(updatedBenefits);
-    }
+    // const handleBenefitChange = (index: number, value: any) => {
+    //     const updatedBenefits = [...benefits];
+    //     updatedBenefits[index].title = value;
+    //     setBenefits(updatedBenefits);
+    // }
+
+    const handleBenefitChange = (index: number, value: string) => {
+        const updatedBenefits = benefits.map((benefit, i) =>
+          i === index ? { ...benefit, title: value } : benefit // Create a new object for the specific index
+        );
+        setBenefits(updatedBenefits); // Update the state with the new array
+      };
 
     // handle Add Benefit
     const handleAddBenefit = () => {
@@ -32,11 +39,12 @@ const CourseData: React.FC<Props> = ({ benefits, setBenefits, prerequisites, set
 
 
     // handle prerequisites Change
-    const handlePrerequisitesChange = (index: number, value: any) => {
-        const updatedPrerequisites = [...prerequisites];
-        updatedPrerequisites[index].title = value;
-        setPrerequisites(updatedPrerequisites);
-    }
+    const handlePrerequisitesChange = (index: number, value: string) => {
+        const updatedPrerequisites = prerequisites.map((prerequisite, i) =>
+          i === index ? { ...prerequisite, title: value } : prerequisite // Create a new object for the specific index
+        );
+        setPrerequisites(updatedPrerequisites); // Update the state with the new array
+      };
 
     // handle Add prerequisites
     const handleAddPrerequisites = () => {

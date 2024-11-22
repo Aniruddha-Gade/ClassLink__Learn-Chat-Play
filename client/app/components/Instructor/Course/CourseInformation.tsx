@@ -223,7 +223,7 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
                         >
                             {courseInfo.thumbnail ? (
                                 <Image
-                                    src={courseInfo.thumbnail}
+                                    src={courseInfo.thumbnail?.url ||courseInfo.thumbnail}
                                     width={100}
                                     height={100}
                                     className="max-h-full w-full object-cover"
@@ -233,7 +233,7 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
                                 <div className="">
                                     <p className='text-black dark:text-white text-center mb-4'>Drag and drop your thumbnail here or click to browse</p>
                                     <Image
-                                         src='/assets/images/drag-and-drop.jpg'
+                                        src='/assets/images/drag-and-drop.jpg'
                                         width={900}
                                         height={900}
                                         className="max-h-full w-full object-cover"
