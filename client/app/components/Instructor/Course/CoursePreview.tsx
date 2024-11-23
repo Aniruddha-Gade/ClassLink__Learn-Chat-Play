@@ -8,17 +8,17 @@ import FlowersRain from "../../../utils/FlowersRain"
 
 
 interface Props {
-    isEdit?:boolean;
+    isEdit?: boolean;
     courseData: any,
     active: number,
     setActive: (active: number) => void,
-    createCourseIsLoading: boolean,
-    createCourseIsSuccess: boolean,
+    isLoadingCreateCourse: boolean,
+    isSuccessCreateCourse: boolean,
     handleCreateCourse: any
 }
 
 
-const CoursePreview: React.FC<Props> = ({ isEdit, courseData, active, setActive, handleCreateCourse, createCourseIsLoading , createCourseIsSuccess}) => {
+const CoursePreview: React.FC<Props> = ({ isEdit, courseData, active, setActive, handleCreateCourse, isLoadingCreateCourse, isSuccessCreateCourse }) => {
 
     const discountPercentage = ((courseData?.estimatedPrice - courseData?.price) / courseData?.estimatedPrice) * 100;
 
@@ -37,8 +37,8 @@ const CoursePreview: React.FC<Props> = ({ isEdit, courseData, active, setActive,
 
     return (
         <div className='w-[90%] m-autp py-5 pl-10 mb-5 text-black dark:text-white'>
-        
-            { createCourseIsSuccess && <FlowersRain/> }
+
+            {isSuccessCreateCourse && <FlowersRain />}
 
 
             <div className='w-full relative'>
@@ -101,7 +101,7 @@ const CoursePreview: React.FC<Props> = ({ isEdit, courseData, active, setActive,
                         </div>
                         <h5>0 Students</h5>
                     </div>
-             
+
 
                     <h1 className='mt-5 text-[25px] font-[600] font-Poppins '>
                         What you will learn from this course...?
@@ -131,7 +131,7 @@ const CoursePreview: React.FC<Props> = ({ isEdit, courseData, active, setActive,
                         <p className="pl-2">{item.title}</p>
                     </div>
                 ))}
-               
+
 
                 {/* course description */}
                 <div className="mt-9 w-full">
@@ -151,7 +151,7 @@ const CoursePreview: React.FC<Props> = ({ isEdit, courseData, active, setActive,
                 <Button
                     onClick={() => prevButton()}
                     value="previous"
-                    disabled={createCourseIsLoading}
+                    disabled={isLoadingCreateCourse}
                     className="w-full 800px:w-[180px] h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
                 >
                     Previous
@@ -160,10 +160,10 @@ const CoursePreview: React.FC<Props> = ({ isEdit, courseData, active, setActive,
                 <Button
                     onClick={() => createCourse()}
                     value="Create"
-                    disabled={createCourseIsLoading}
+                    disabled={isLoadingCreateCourse}
                     className="w-full 800px:w-[180px] h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
                 >
-                    {createCourseIsLoading ? 'Loading...!': isEdit ? "Save Edited":  'Create'}
+                    {isLoadingCreateCourse ? 'Loading...!' : isEdit ? "Update" : 'Create'}
                 </Button>
             </div>
 

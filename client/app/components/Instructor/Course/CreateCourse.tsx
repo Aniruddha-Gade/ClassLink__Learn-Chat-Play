@@ -68,8 +68,7 @@ const CreateCourse: React.FC<Props> = ({ course, isEdit }) => {
       suggestion: courseContent.suggestion,
     }));
 
-    console.log('courseContentData = ', courseContentData)
-    console.log('formatedCourseContentData = ', formatedCourseContentData)
+    
 
     const data = {
       name: courseInfo.name,
@@ -129,6 +128,7 @@ const CreateCourse: React.FC<Props> = ({ course, isEdit }) => {
       }
     }
   }, [isSuccessCreateCourse, errorCreateCourse, errorEditCourse, isSuccessEditCourse]);
+
 
   return (
     <div className="w-full flex min-h-screen pb-20">
