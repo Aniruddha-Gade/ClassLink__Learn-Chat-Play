@@ -88,17 +88,15 @@ const Page = ({ params }: any) => {
 
                     {isLoading ? (
                         // Render Skeleton Loader
-                        <CourseFormSkeleton />)
-                         :
-                        !isSuccess ?
-                            (<div className='text-2xl text-bold text-center'>
-                                {error?.data?.message}
-                            </div>)
-                            :
-                            (
-                                // Render component once the data is fetched
-                                <CreateCourse isEdit={true} course={data?.course} />
-                            )}
+                        <CourseFormSkeleton />
+                    ) : !isSuccess ? (
+                        <div className="text-2xl h-screen flex-center font-bold">
+                            Something Happened Wrong...! Refresh the page
+                        </div>
+                    ) : (
+                        // Render component once the data is fetched
+                        <CreateCourse isEdit={true} course={data?.course} />
+                    )}
                 </div>
             </div>
         </div>
