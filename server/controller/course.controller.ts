@@ -67,19 +67,25 @@ export const editCourse = catchAsyncError(async (req: Request, res: Response, ne
         
         // delete previous thumbnail and upload new one
         if (thumbnail) {
-            // delete thumbnail 
-            // await cloudinary.v2.uploader.destroy(thumbnail.public_id)
-            if (!thumbnail?.public_id) {
-                const uploadedUrl = await cloudinary.v2.uploader.upload(thumbnail, {
+            // If thumbnail has no `url` property, it means we need to update it
+            if (!thumbnail.url) {
+                const courseData = await CourseModel.findById(courseId) as any;
+
+                await cloudinary.v2.uploader.destroy(courseData.thumbnail.public_id); // Delete the previous thumbnail
+        
+                // Upload the new thumbnail
+                const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
                     folder: "ClassLink/courses",
-                })
-                // store urls 
+                });
+        
+                // Update the thumbnail data
                 data.thumbnail = {
-                    public_id: uploadedUrl.public_id,
-                    url: uploadedUrl.secure_url,
-                }
+                    public_id: myCloud.public_id,
+                    url: myCloud.secure_url,
+                };
             }
-        }
+        } 
+        
         // update course in DB
         const updatedCourse = await CourseModel.findOneAndUpdate(
             { _id: courseId, createdBy: createdBy },
