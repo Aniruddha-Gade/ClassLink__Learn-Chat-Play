@@ -3,6 +3,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link'
 import Heading from '../../utils/Heading';
 import AdminProtected from '../../hooks/adminProtected';
 import DashboardHero from "../../components/Admin/DashboardHero"
@@ -299,9 +300,9 @@ await deleteMember({id})
                 <Breadcrumb>
                   <BreadcrumbList>
                     <BreadcrumbItem className="hidden md:block">
-                      <BreadcrumbLink href="/admin">
+                    <Link href='/admin'>
                         Admin Dashboard
-                      </BreadcrumbLink>
+                    </Link>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator className="hidden md:block" />
                     <BreadcrumbItem>

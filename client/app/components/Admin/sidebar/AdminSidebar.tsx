@@ -110,7 +110,7 @@ export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>)
           },
           {
             title: "FAQ",
-            url: "#",
+            url: "/admin/faq",
           },
           {
             title: "Course Categories",

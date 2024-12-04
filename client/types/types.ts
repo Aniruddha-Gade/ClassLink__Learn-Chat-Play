@@ -12,6 +12,7 @@ export interface IUser {
     accountType: 'Admin' | 'Instructor' | 'Student';
     isVerified: boolean;
     // courses: mongoose.Types.ObjectId[];
+    courses: any;
 }
 
 
