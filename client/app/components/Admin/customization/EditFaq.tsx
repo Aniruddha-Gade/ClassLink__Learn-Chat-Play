@@ -7,7 +7,7 @@ import { Button } from "../../ui/button"
 import { Input } from "../../ui/input"
 import { toast } from 'sonner'
 import { Trash2 } from 'lucide-react';
-
+import CircleLoader from "../../Loader/CircleLoader"
 
 
 interface Props {
@@ -125,11 +125,11 @@ const EditFaq: React.FC<Props> = ({ allFAQs }) => {
 
             <div className="mt-8">
                 <Button
-                    className={` ${isLoading && 'opacity-50 cursor-not-allowed'}`}
+                    className={` ${isLoading && 'px-12 opacity-50 cursor-not-allowed'}`}
                     onClick={handleSave}
                     disabled={isLoading}
                 >
-                    {isLoading ? 'Saving...' : 'Save Changes'}
+                    {isLoading ? <CircleLoader/> : 'Save Changes'}
                 </Button>
             </div>
 

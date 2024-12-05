@@ -33,7 +33,7 @@ async function fetchFAQs() {
         },
       });
       return response.data.layout.faq;
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error fetching FAQs:", error);
       return [];
     }
