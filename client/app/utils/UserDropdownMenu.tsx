@@ -14,7 +14,6 @@ import {
 } from "../components/ui/dropdown-menu"
 import { useLogoutQuery } from '../../redux/features/auth/authApi'
 import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
 import { signOut } from "next-auth/react"
 import { ACCOUNT_TYPE } from '../constants/account-types'
 
@@ -28,7 +27,7 @@ const UserDropdownMenu = () => {
   const { } = useLogoutQuery(undefined, {
     skip: !logout ? true : false
   })
-  const router = useRouter()
+
 
 
   const logoutHandler = async () => {

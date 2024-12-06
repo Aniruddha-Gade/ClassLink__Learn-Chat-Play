@@ -5,20 +5,42 @@ import { styles } from '../../../styles/style';
 import AsteriskSymbol from '../../../utils/AsteriskSymbol';
 import { Button } from "../../ui/button"
 import Image from 'next/image'
+import { Check, ChevronsUpDown } from "lucide-react";
 
+
+import { cn } from "../../../../lib/utils";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "../../ui/command";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "../../ui/popover";
 
 interface Props {
     courseInfo: any;
     setCourseInfo: (courseInfo: any) => void;
     active: number;
     setActive: (active: number) => void;
+    categories: {
+        title: string,
+        _id: string
+    }[]
 }
 
 
 
-const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active, setActive }) => {
-
+const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active, setActive, categories }) => {
+    console.log('courseInfo = ', courseInfo)
     const [dragging, setDragging] = useState<boolean>(false)
+    const [open, setOpen] = React.useState(false);
+    const [value, setValue] = React.useState("");
 
     // handle Submit
     const handleSubmit = (e: any) => {
@@ -69,15 +91,18 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
     };
 
 
+
     return (
         <div className="w-[80%] m-auto mt-24">
             <form onSubmit={handleSubmit} className={`${styles.label}`}>
+
+
                 {/* Course Name */}
                 <div>
-                    <label htmlFor="">Course Name <AsteriskSymbol /></label>
+                    <label htmlFor="name">Course Name <AsteriskSymbol /></label>
                     <input
                         type="name"
-                        name=""
+                        name="name"
                         required
                         value={courseInfo.name}
                         onChange={(e: any) =>
@@ -88,16 +113,14 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
                         className={`${styles.input}`}
                     />
                 </div>
-                <br />
-                <br />
 
 
                 {/* Course Description */}
-                <div className="mb-5">
-                    <label className={`${styles.label}`}>Course Description <AsteriskSymbol /></label>
+                <div className="my-9">
+                    <label htmlFor="description" className={`${styles.label}`}>Course Description <AsteriskSymbol /></label>
                     <textarea
                         name=""
-                        id=""
+                        id="description"
                         cols={30}
                         rows={8}
                         placeholder="Write something amazing..."
@@ -114,7 +137,7 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
                 {/* Course Price */}
                 <div className="w-full flex justify-between">
                     <div className="w-[45%]">
-                        <label className={`${styles.label}`}>Course Price <AsteriskSymbol /></label>
+                        <label htmlFor="price" className={`${styles.label}`}>Course Price <AsteriskSymbol /></label>
                         <input
                             type="number"
                             name=""
@@ -131,7 +154,7 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
 
                     {/* Estimated Price */}
                     <div className="w-[45%]">
-                        <label className={`${styles.label}`}>Estimated Price(optional) </label>
+                        <label htmlFor="price" className={`${styles.label}`}>Estimated Price(optional) </label>
                         <input
                             type="number"
                             name=""
@@ -146,11 +169,71 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
                         />
                     </div>
                 </div>
-                <br />
+
+
+                {/* Category Selection */}
+                <div className='flex gap-5 items-center my-9'>
+                    <label htmlFor="category">Course Category <AsteriskSymbol /></label>
+                    <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant="outline"
+                                role="combobox"
+                                aria-expanded={false}
+                                className="w-[250px] justify-between"
+                            >
+                                {courseInfo.category
+                                    ? categories?.find(
+                                        (category) => category.title === courseInfo.category
+                                    )?.title
+                                    : "Select category..."}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[250px] p-0">
+                            <Command>
+                                <CommandInput placeholder="Search Course Category" />
+                                <CommandList>
+                                    <CommandEmpty>No category found.</CommandEmpty>
+                                    <CommandGroup>
+                                        {categories?.map((category) => (
+                                            <CommandItem
+                                                key={category._id}
+                                                value={category._id}
+                                                onSelect={() => {
+                                                    setOpen(false);
+                                                    setCourseInfo({
+                                                        ...courseInfo,
+                                                        category:
+                                                            courseInfo.category === category._id
+                                                                ? ""
+                                                                : category.title,
+                                                    })
+                                                }
+                                                }
+                                            >
+                                                <Check
+                                                    className={cn(
+                                                        "mr-2 h-4 w-4",
+                                                        courseInfo.category === category.title
+                                                            ? "opacity-100"
+                                                            : "opacity-0"
+                                                    )}
+                                                />
+                                                {category.title}
+                                            </CommandItem>
+                                        ))}
+                                    </CommandGroup>
+                                </CommandList>
+                            </Command>
+                        </PopoverContent>
+                    </Popover>
+                </div>
+
 
                 {/* Course Tags */}
                 <div>
-                    <label className={`${styles.label}`} htmlFor="email">Course Tags <AsteriskSymbol /></label>
+                    <label htmlFor="tags" className={`${styles.label}`} htmlFor="email">Course Tags <AsteriskSymbol /></label>
                     <input
                         type="text"
                         required
@@ -170,7 +253,7 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
                 {/* Course Level */}
                 <div className="w-full flex justify-between">
                     <div className="w-[30%]">
-                        <label className={`${styles.label}`}>Course Level <AsteriskSymbol /></label>
+                        <label htmlFor="level" className={`${styles.label}`}>Course Level <AsteriskSymbol /></label>
                         <input
                             type="text"
                             name=""
@@ -187,7 +270,7 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
 
                     {/* Demo Url */}
                     <div className="w-[60%]">
-                        <label className={`${styles.label} w-[50%]`}>Demo Url <AsteriskSymbol /></label>
+                        <label htmlFor="demoUrl" className={`${styles.label} w-[50%]`}>Demo Url <AsteriskSymbol /></label>
                         <input
                             type="text"
                             name=""
@@ -223,7 +306,7 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
                         >
                             {courseInfo.thumbnail ? (
                                 <Image
-                                    src={courseInfo.thumbnail?.url ||courseInfo.thumbnail}
+                                    src={courseInfo.thumbnail?.url || courseInfo.thumbnail}
                                     width={100}
                                     height={100}
                                     className="max-h-full w-full object-cover"

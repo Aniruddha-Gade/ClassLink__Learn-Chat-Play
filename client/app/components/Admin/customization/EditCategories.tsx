@@ -45,7 +45,7 @@ const EditCategories: React.FC<Props> = ({ allCategories }) => {
   };
 
   // are Categories Unchanged
-  const areCategoriesUnchanged = (originalCategories: any[], newCategories: any[]) => {
+  const areCategoriesUnchanged = (originalCategories: any[], newCategories: any[]):boolean => {
     return JSON.stringify(originalCategories) === JSON.stringify(newCategories);
   };
 
@@ -58,7 +58,6 @@ const EditCategories: React.FC<Props> = ({ allCategories }) => {
   const editCategoriesHandler = async () => {
     try {
       const updatedCategories = categories.map(({ _id, ...rest }: any) => rest)
-      console.log('updatedCategories after remive id = ', updatedCategories)
       await updateHeroData({ type: 'Categories', categories: updatedCategories });
     } catch (error) {
       toast.error('Failed to update categories. Please try again.');

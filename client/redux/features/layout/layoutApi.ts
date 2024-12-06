@@ -9,16 +9,14 @@ export const layoutApi = apiSlice.injectEndpoints({
                 method: "PUT",
                 body:data,
                 credentials: "include" as const,
-            }),
-            async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-                try {
-                    const result = await queryFulfilled;
-                    console.log("update hero data API RESULT => ", result)
-
-                } catch (error: any) {
-                    console.log("update hero data API ERROR => ", error)
-                }
-            }
+            })
+        }),
+        getHeroData: builder.query({
+            query: (type) => ({
+                url: `/layout/get-layout/${type}`,
+                method: "GET",
+                credentials: "include" as const,
+            })
         }),
         
 
@@ -27,4 +25,4 @@ export const layoutApi = apiSlice.injectEndpoints({
 })
 
 
-export const { useUpdateHeroDataMutation,} = layoutApi
+export const { useUpdateHeroDataMutation, useGetHeroDataQuery} = layoutApi

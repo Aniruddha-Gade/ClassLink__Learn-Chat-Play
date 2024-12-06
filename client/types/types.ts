@@ -21,6 +21,7 @@ export interface ICourse {
     _id:string;
   name: string;
   description: string;
+  category: string;
   price: string;
   estimatedPrice: string;
   tags: string;

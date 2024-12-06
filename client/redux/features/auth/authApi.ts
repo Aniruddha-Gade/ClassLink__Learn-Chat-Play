@@ -18,15 +18,15 @@ export const authApi = apiSlice.injectEndpoints({
                 body: data,
                 credentials: "include" as const,
             }),
-            async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-                try {
-                    const result = await queryFulfilled;
-                    console.log("REGISTRATION API RESULT => ", result)
-                    dispatch(userRegistration({ token: result.data.activationToken }));
-                } catch (error: any) {
-                    console.log("REGISTRATION API ERROR => ", error)
-                }
-            },
+            // async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+            //     try {
+            //         const result = await queryFulfilled;
+            //         console.log("REGISTRATION API RESULT => ", result)
+            //         dispatch(userRegistration({ token: result.data.activationToken }));
+            //     } catch (error: any) {
+            //         console.log("REGISTRATION API ERROR => ", error)
+            //     }
+            // },
         }),
 
         // activate account with OTP and Token
@@ -36,15 +36,7 @@ export const authApi = apiSlice.injectEndpoints({
                 method: "POST",
                 body: data,
                 credentials: "include" as const,
-            }),
-            async onQueryStarted(arg, { queryFulfilled }) {
-                try {
-                    const result = await queryFulfilled;
-                    console.log("ACTIVATION USER ACCOUNT API RESULT => ", result)
-                } catch (error: any) {
-                    console.log("ACTIVATION USER ACCOUNT API ERROR => ", error)
-                }
-            },
+            })
         }),
 
         // login
@@ -79,13 +71,13 @@ export const authApi = apiSlice.injectEndpoints({
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
                     const result = await queryFulfilled;
-                    console.log("LOGOUT USER API RESULT => ", result)
-                    dispatch(
-                        userLoggedOut()
-                    )
+                    console.log("LOGOUT USER API RESULT 🟢🟢 => ", result)
                 } catch (error: any) {
-                    console.log("LOGOUT USER API ERROR => ", error)
+                    console.log("LOGOUT USER API ERROR 🔴🔴 => ", error)
                 }
+                dispatch(
+                    userLoggedOut()
+                )
             }
         }),
 
