@@ -246,6 +246,23 @@ const CourseData: React.FC<Props> = ({ courseContentData, setCourseContentData, 
                                             />
                                         </div>
                                         <div className="mb-3">
+                                            <label className={styles.label}>Video Length (in minutes)</label>
+                                            <input
+                                                type="number"
+                                                placeholder="12"
+                                                className={styles.input}
+                                                value={item?.videoLength}
+                                                onChange={(e:any) => {
+                                                    // Create a new array with the updated value
+                                                    const updatedData = courseContentData.map((content:any, i:number) =>
+                                                      i === index ? { ...content, videoLength: e.target.value } : content
+                                                    );
+                                                
+                                                    setCourseContentData(updatedData);
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="mb-3">
                                             <label className={styles.label}>Video Description</label>
                                             <textarea
                                                 rows={8}
