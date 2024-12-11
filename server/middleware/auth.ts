@@ -10,7 +10,23 @@ require('dotenv').config()
 // =========================== IS AUTHENTICATED ===========================
 export const isAuthenticated = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const access_token = (req.cookies.access_token as string) ||  (req.body.access_token as string)
+        const accessTokenHeader = req.headers["authorization-access"] as string | string[] | undefined; // Explicit typing
+        let accessToken = "";
+
+        if (typeof accessTokenHeader === "string") {
+            accessToken = accessTokenHeader.split(" ")[1]; // Safely split string
+        } else if (Array.isArray(accessTokenHeader) && accessTokenHeader.length > 0) {
+            accessToken = accessTokenHeader[0].split(" ")[1]; // Handle array case
+        }
+
+        const access_token =
+            accessToken || // Token from Authorization-Refresh header
+            (req.cookies.access_token as string) || // Token from cookies
+            (req.body.access_token as string); // Token from body
+
+
+        // console.log('access_token  = ', access_token)
+
 
         if (!access_token) {
             return next(new ErrorHandler('Please login to access this resource', 400, "Error while authenticating"));
@@ -19,6 +35,7 @@ export const isAuthenticated = catchAsyncError(async (req: Request, res: Respons
         // decode token
         const decodeToken = jwt.verify(access_token, process.env.ACCESS_TOKEN_SECRET as string) as JwtPayload
         if (!decodeToken) {
+            console.log("Access token is invalid === ", decodeToken)
             return next(new ErrorHandler('Access token is invalid', 400, "Error while authenticating"));
         }
         console.log({ decodeToken })

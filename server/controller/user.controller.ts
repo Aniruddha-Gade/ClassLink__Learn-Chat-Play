@@ -223,10 +223,24 @@ export const logoutUser = catchAsyncError(async (req: Request, res: Response, ne
 
 
 
-// =========================== LOGOUT USER ===========================
+// =========================== UPDATE ACCESS TOKEN ===========================
 export const updateAccessToken = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const refresh_token = (req.cookies.refresh_token as string) ||  (req.body.refresh_token as string)
+        let refreshTokenHeader = req.headers["authorization-refresh"] as string | string[] | undefined; // Explicit typing;
+        let refreshtoken = "";
+
+        if (typeof refreshTokenHeader === "string") {
+            refreshtoken = refreshTokenHeader.split(" ")[1]; // Safely use split on string
+        } else if (Array.isArray(refreshTokenHeader)) {
+            refreshtoken = refreshTokenHeader[0]?.split(" ")[1]; // Handle array case
+        }
+
+        const refresh_token =
+            refreshtoken || // Token from custom refresh header
+            (req.cookies.refresh_token as string) || // Token from cookies
+            (req.body.refresh_token as string); // Token from body
+
+        // console.log('refresh_token = ', refresh_token)
 
         const decodedToken = jwt.verify(
             refresh_token,
