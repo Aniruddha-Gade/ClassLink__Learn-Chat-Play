@@ -1,69 +1,50 @@
-'use client'
 
-import React, { useEffect } from 'react';
+
+import React from 'react';
 import AdminSidebar from "../../../components/Instructor/sidebar/InstructorSidebar";
 import Heading from "../../../utils/Heading";
 import CreateCourse from "../../../components/Instructor/Course/CreateCourse";
 import InstructorDashboardHeader from "../../../components/Instructor/InstructorDashboardHeader";
-import { useGetSingleCourseByInstructorQuery } from "../../../../redux/features/course/courseApi"
 import { Skeleton } from "../../../components/ui/skeleton";
+import { cookies } from "next/headers";
+import axios from "axios";
 
 type Props = {}
 
 
-// Course Form Skeleton
-const CourseFormSkeleton = () => {
-    return (
-        <div className="space-y-6 px-14 mt-10 pb-10">
-            {/* Course Name */}
-            <div>
-                <Skeleton className="h-6 w-32 mb-2" />
-                <Skeleton className="h-12 w-[70%]" />
-            </div>
+// SSR function
+async function fetchCourseData(id: string) {
+    const cookieStore = await cookies(); // Access cookies
+    const refreshToken = cookieStore.get("refresh_token")?.value; // Retrieve refresh token
+    const accessToken = cookieStore.get("access_token")?.value; // Retrieve Access token
 
-            {/* Course Description */}
-            <div>
-                <Skeleton className="h-6 w-40 mb-2" />
-                <Skeleton className="h-20 w-[85%]" />
-            </div>
+    if (!refreshToken || !accessToken) {
+        throw new Error("Unauthorized: Refresh/Access Token is missing");
+    }
 
-            {/* Price and Estimated Price */}
-            <div className="flex flex-col sm:flex-row gap-6">
-                <div className="flex-1">
-                    <Skeleton className="h-6 w-32 mb-2" />
-                    <Skeleton className="h-12 w-full" />
-                </div>
-                <div className="flex-1">
-                    <Skeleton className="h-6 w-48 mb-2" />
-                    <Skeleton className="h-12 w-full" />
-                </div>
-            </div>
-
-            {/* Tags */}
-            <div>
-                <Skeleton className="h-6 w-32 mb-2" />
-                <Skeleton className="h-12 w-[70%]" />
-            </div>
-
-            {/* Drag-and-Drop */}
-            <div>
-                <Skeleton className="h-6 w-60 mb-4" />
-                <Skeleton className="h-64 w-full rounded-md" />
-            </div>
-
-            {/* Next Button */}
-            <div className="flex justify-end">
-                <Skeleton className="h-12 w-32 rounded-md" />
-            </div>
-        </div>
-    )
-} 
+    try {
+        const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/course/get-course-by-instructor/${id}`,
+            {
+                headers: {
+                    "Authorization-Access": `Bearer ${accessToken}`, // Custom header for access token
+                    "Authorization-Refresh": `Bearer ${refreshToken}`, // Custom header for refresh token
+                },
+            }
+        );
+        return response?.data?.course
+    } catch (error: any) {
+        console.log('Error while fecthing course data 🔴🔴 = ', error)
+        return []
+    }
+}
 
 
-const Page = ({ params }: any) => {
+
+const Page = async ({ params }: any) => {
 
     const id = params.id
-    const { data, isSuccess, isLoading, error } = useGetSingleCourseByInstructorQuery({ id })
+    const course = await fetchCourseData(id)
 
 
     return (
@@ -86,17 +67,7 @@ const Page = ({ params }: any) => {
                         EDIT COURSE
                     </div>
 
-                    {isLoading ? (
-                        // Render Skeleton Loader
-                        <CourseFormSkeleton />
-                    ) : !isSuccess ? (
-                        <div className="text-2xl h-screen flex-center font-bold">
-                            Something Happened Wrong...! Refresh the page
-                        </div>
-                    ) : (
-                        // Render component once the data is fetched
-                        <CreateCourse isEdit={true} course={data?.course} />
-                    )}
+                    <CreateCourse isEdit={true} course={course} />
                 </div>
             </div>
         </div>

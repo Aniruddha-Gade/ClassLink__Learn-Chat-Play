@@ -20,18 +20,24 @@ interface Props {
 // SSR function
 async function fetchFAQs() {
     const cookieStore = await cookies(); // Access cookies
-    const refreshToken = cookieStore.get("refresh_token")?.value; // Retrieve token
+    const refreshToken = cookieStore.get("refresh_token")?.value; // Retrieve refresh token
+    const accessToken = cookieStore.get("access_token")?.value; // Retrieve Access token
 
-    if (!refreshToken) {
-      throw new Error("Unauthorized: Token is missing");
+    if (!refreshToken || !accessToken) {
+      throw new Error("Unauthorized: Refresh/Access Token is missing");
     }
   
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/layout/get-layout/FAQ`, {
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      });
+        const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/layout/get-layout/FAQ`,
+            {
+              headers: {
+                "Authorization-Access": `Bearer ${accessToken}`, // Custom header for access token
+                "Authorization-Refresh": `Bearer ${refreshToken}`, // Custom header for refresh token
+              },
+            }
+          );
+
       return response.data.layout.faq;
     } catch (error:any) {
       console.error("Error fetching FAQs:", error);

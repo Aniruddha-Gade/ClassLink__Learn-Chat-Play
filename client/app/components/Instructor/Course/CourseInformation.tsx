@@ -209,8 +209,7 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
                                                                 ? ""
                                                                 : category.title,
                                                     })
-                                                }
-                                                }
+                                                }}
                                             >
                                                 <Check
                                                     className={cn(
@@ -233,7 +232,7 @@ const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active,
 
                 {/* Course Tags */}
                 <div>
-                    <label htmlFor="tags" className={`${styles.label}`} htmlFor="email">Course Tags <AsteriskSymbol /></label>
+                    <label htmlFor="tags" className={`${styles.label}`}>Course Tags <AsteriskSymbol /></label>
                     <input
                         type="text"
                         required
