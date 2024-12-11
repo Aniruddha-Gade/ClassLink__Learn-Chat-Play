@@ -37,7 +37,7 @@ interface Props {
 
 
 const CourseInformation: React.FC<Props> = ({ courseInfo, setCourseInfo, active, setActive, categories }) => {
-    console.log('courseInfo = ', courseInfo)
+
     const [dragging, setDragging] = useState<boolean>(false)
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState("");

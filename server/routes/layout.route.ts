@@ -8,7 +8,7 @@ const layoutRouter = Router()
 
 layoutRouter.post('/create-layout', updateAccessToken, isAuthenticated, isAdmin, createLayout)
 layoutRouter.put('/update-layout', updateAccessToken, isAuthenticated, isAdmin, updateLayout)
-layoutRouter.get('/get-layout/:type', updateAccessToken, isAuthenticated, isAdmin, getLayoutByType)
+layoutRouter.get('/get-layout/:type', updateAccessToken, isAuthenticated, getLayoutByType)
 
 
 export default layoutRouter

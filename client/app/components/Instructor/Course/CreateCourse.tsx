@@ -20,7 +20,7 @@ interface Props {
 
 const CreateCourse: React.FC<Props> = ({ course, isEdit }) => {
 
-  const {data:allCategories,  } = useGetHeroDataQuery("Categories")
+  const {data:allCategories, error } = useGetHeroDataQuery("Categories")
 
   const [createCourse, { isLoading: isLoadingCreateCourse, error: errorCreateCourse, isSuccess: isSuccessCreateCourse }] = useCreateCourseMutation();
 
@@ -113,10 +113,6 @@ const CreateCourse: React.FC<Props> = ({ course, isEdit }) => {
   useEffect(() => {
     if (isSuccessCreateCourse) {
       toast.success('Course Created successfully');
-      setTimeout(() => {
-        console.log('Redirecting to all-courses page...');
-        redirect('/instructor/courses');
-      }, 3000);
     }
     if (isSuccessEditCourse) {
       toast.success('Course Edited successfully');
