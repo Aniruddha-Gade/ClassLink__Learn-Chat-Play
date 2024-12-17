@@ -112,7 +112,7 @@ const InstructorSidebar = () => {
                                         ClassLink
                                     </h3>
                                 </Link>
-                                <IconButton onClick={() => setIsCollapsed(!isCollapsed)} className="inline-block">
+                                <IconButton onClick={() => setIsCollapsed(!isCollapsed)} className="inline-bloc">
                                     <ArrowBackIosIcon className="text-black dark:text-[#ffffffc1]" />
                                 </IconButton>
                             </Box>

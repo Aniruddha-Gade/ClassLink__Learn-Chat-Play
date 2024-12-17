@@ -17,12 +17,12 @@ const page = (props: Props) => {
                 keywords="Programming,MERN,Redux,Machine Learning"
             />
 
-            <div className="flex">
+            <div className="flex  min-h-screen ">
                 <div className="1500px:w-[16%] w-1/5">
                     <AdminSidebar />
                 </div>
                 
-                <div className="w-[85%]">
+                <div className="w-[85%] h-full">
                     <InstructorDashboardHeader />
 
                     <div className='font-Boogaloo text-green-600 text-4xl font-bold ml-20 mt-10'>
