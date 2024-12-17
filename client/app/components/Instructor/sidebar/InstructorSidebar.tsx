@@ -234,16 +234,16 @@ const InstructorSidebar = () => {
                             setSelected={setSelected}
                         />
                         <Item
+                             title="Users Analytics"
+                             to="/instructor/users-analytics"
+                             icon={<ManageHistoryIcon />}
+                             selected={selected}
+                             setSelected={setSelected}
+                         />
+                        <Item
                             title="Orders Analytics"
                             to="/instructor/orders-analytics"
                             icon={<MapOutlinedIcon />}
-                            selected={selected}
-                            setSelected={setSelected}
-                        />
-                        <Item
-                            title="Users Analytics"
-                            to="/instructor/users-analytics"
-                            icon={<ManageHistoryIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />

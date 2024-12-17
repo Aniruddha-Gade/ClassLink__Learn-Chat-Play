@@ -42,7 +42,7 @@ async function fetchCoursesAnalytics() {
 
 
 
-const page =async (props: Props) => {
+const page = async (props: Props) => {
 
     // const usersAnalytics = await fetchCoursesAnalytics()
 
@@ -60,7 +60,7 @@ const page =async (props: Props) => {
         { month: "October 2023", count: 6526 },
         { month: "November 2023", count: 5480 },
         { month: "December 2023", count: 485 },
-      ];
+    ];
 
     return (
         <div>
@@ -80,7 +80,7 @@ const page =async (props: Props) => {
 
                     <div className='font-Boogaloo text-green-600 text-4xl font-bold ml-10 mt-10'>USERS ANALYTICS</div>
 
-                    <UserAnalytics usersAnalyticsData={analyticsData}  />
+                    <UserAnalytics usersAnalyticsData={analyticsData} />
                 </div>
             </div>
         </div>
