@@ -6,9 +6,9 @@ import { updateAccessToken } from "../controller/user.controller"
 const analyticsRouter = Router()
 
 
-analyticsRouter.get('/get-users-analytics', updateAccessToken, isAuthenticated, isAdmin, getUserAnalytics)
-analyticsRouter.get('/get-courses-analytics', updateAccessToken, isAuthenticated, isAdmin, getCourseAnalytics)
-analyticsRouter.get('/get-orders-analytics', updateAccessToken, isAuthenticated, isAdmin, getOrdersAnalytics)
+analyticsRouter.get('/get-users-analytics', updateAccessToken, isAuthenticated, getUserAnalytics)
+analyticsRouter.get('/get-courses-analytics', updateAccessToken, isAuthenticated, getCourseAnalytics)
+analyticsRouter.get('/get-orders-analytics', updateAccessToken, isAuthenticated, getOrdersAnalytics)
 
 
 
