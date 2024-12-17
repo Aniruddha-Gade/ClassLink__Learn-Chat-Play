@@ -41,14 +41,24 @@ async function fetchCoursesAnalytics() {
 
 
 
+const page = async (props: Props) => {
 
-const page =async (props: Props) => {
+    // const courseAnalytics = await fetchCoursesAnalytics()
 
-    const courseAnalytics = await fetchCoursesAnalytics()
-    const courseAnalyticsData = courseAnalytics.map((item: any) => ({
-        name: item.month,
-        uv: item.count,
-    }));
+    const analyticsData = [
+        { month: "January 2023", count: 440 },
+        { month: "February 2023", count: 8200 },
+        { month: "March 2023", count: 4033 },
+        { month: "April 2023", count: 4502 },
+        { month: "May 2023", count: 2042 },
+        { month: "June 2023", count: 3454 },
+        { month: "July 2023", count: 356 },
+        { month: "August 2023", count: 5667 },
+        { month: "September 2023", count: 1320 },
+        { month: "October 2023", count: 6526 },
+        { month: "November 2023", count: 5480 },
+        { month: "December 2023", count: 485 },
+    ];
 
     return (
         <div>
@@ -68,7 +78,7 @@ const page =async (props: Props) => {
 
                     <div className='font-Boogaloo text-green-600 text-4xl font-bold ml-10 mt-10'>COURSES ANALYTICS</div>
 
-                    <CourseAnalytics courseAnalyticsData={courseAnalyticsData} />
+                    <CourseAnalytics courseAnalyticsData={analyticsData} />
                 </div>
             </div>
         </div>
