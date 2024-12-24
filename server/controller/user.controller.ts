@@ -496,11 +496,31 @@ export const updateAvatar = catchAsyncError(async (req: Request, res: Response, 
 
 
 
-// =========================== UPDATE USER AVATAR ===========================
+// =========================== GET ALL USER ===========================
 export const getAllUsers = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
 
         getAllUsersService(res)
+
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400, "Error while fetching all users"));
+    }
+})
+
+
+
+
+// =========================== GET ALL STUDENTS ===========================
+export const getAllStudents = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        const allStudents = await userModel.find({accountType:'Student'}).sort({createdAt:-1})
+
+        res.status(201).json({
+            success:true,
+            allStudents,
+            message:'All Students fetch successfully'
+        })
 
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400, "Error while fetching all users"));

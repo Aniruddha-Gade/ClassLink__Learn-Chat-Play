@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    activateUser, getAllUsers, getUserInfo, loginUser, logoutUser, registerUser,
+    activateUser, getAllUsers,getAllStudents, getUserInfo, loginUser, logoutUser, registerUser,
     socialAuth, updateAccessToken, updateAvatar, updatePassword, updateUserInfo, updateUserRole,
     getAllUsersByInstructorCourses, getAllAdminAndInstructor, addNewMember, deleteMember
 } from "../controller/user.controller";
@@ -24,6 +24,7 @@ userRouter.put('/update-user-avatar', updateAccessToken, isAuthenticated, update
 
 // ======================== only for Admin ======================== 
 userRouter.get('/get-all-users', updateAccessToken, isAuthenticated, isAdmin, getAllUsers)
+userRouter.get('/get-all-students', updateAccessToken, isAuthenticated, isAdmin, getAllStudents)
 userRouter.put('/update-user-role', updateAccessToken, isAuthenticated, isAdmin, updateUserRole)
 userRouter.get('/get-all-admins-instructors', updateAccessToken, isAuthenticated, isAdmin, getAllAdminAndInstructor)
 userRouter.post('/add-new-member', updateAccessToken, isAuthenticated, isAdmin, addNewMember)
