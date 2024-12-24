@@ -27,9 +27,9 @@ export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>)
  
   const data = {
     user: {
-      name: user.name,
-      email: user.email,
-      avatar: user.avatar.url,
+      name: user?.name,
+      email: user?.email,
+      avatar: user?.avatar?.url,
     },
     teams: [
       {
