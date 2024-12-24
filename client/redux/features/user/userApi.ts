@@ -49,6 +49,13 @@ export const userApi = apiSlice.injectEndpoints({
                 credentials: "include" as const,
             })
         }),
+        getAllStudentsForAdmin: builder.query({
+            query: () => ({
+                url: '/auth/get-all-students',
+                method: "GET",
+                credentials: "include" as const,
+            })
+        }),
 
 
     })
@@ -57,5 +64,5 @@ export const userApi = apiSlice.injectEndpoints({
 
 export const { useUpdateAvatarMutation,useUpdateUserInfoMutation,
      useUpdateUserAccountPasswordMutation, useGetAllAdminsAndInstructorsQuery, useAddNewMemberMutation,
-     useDeleteMemberMutation
+     useDeleteMemberMutation, useGetAllStudentsForAdminQuery
      } = userApi
