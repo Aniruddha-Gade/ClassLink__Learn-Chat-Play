@@ -65,7 +65,7 @@ export const getOrdersAnalytics = catchAsyncError(async (req: Request, res: Resp
     return res.status(201).json({
       success: true,
       orders,
-      message: "All Users fetched successfully"
+      message: "All orders fetched successfully"
     })
 
   }
