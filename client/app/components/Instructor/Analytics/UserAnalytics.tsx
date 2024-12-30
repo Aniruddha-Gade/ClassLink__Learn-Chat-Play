@@ -10,18 +10,18 @@ type Props = {
         month: string,
         count: number
     }[],
-    isAdminDashboard?: boolean
+    isDashboard?: boolean
 };
 
 
 
-const UserAnalytics: React.FC<Props> = ({ usersAnalyticsData, isAdminDashboard }) => {
+const UserAnalytics: React.FC<Props> = ({ usersAnalyticsData, isDashboard }) => {
 
 
     return (
-        <div className={`w-full ${isAdminDashboard ? 'h-[30vh]' : 'h-screen'} flex flex-col items-center justify-center`}>
+        <div className={`${isDashboard ? 'h-[40vh]' : 'h-screen'}  flex-col flex-center`}>
 
-            <ResponsiveContainer width={isAdminDashboard ? '100%' : '90%'} height={!isAdminDashboard ? "50%" : '100%'}>
+            <ResponsiveContainer width={isDashboard ? '100%' : '90%'} height={!isDashboard ? "50%" : '100%'}>
                 <AreaChart
                     data={usersAnalyticsData}
                     margin={{
@@ -43,7 +43,7 @@ const UserAnalytics: React.FC<Props> = ({ usersAnalyticsData, isAdminDashboard }
                 </AreaChart>
             </ResponsiveContainer>
 
-            <p className={`${styles.label} px-5 mt-3`}>Last 12 months analytics data</p>
+            <p className={`${styles.label} px-5 mt-3`}>Last 12 months users data</p>
         </div>
     );
 };

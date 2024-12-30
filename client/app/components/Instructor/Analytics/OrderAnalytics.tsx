@@ -9,19 +9,18 @@ type Props = {
     orderAnalyticsData: {
         month:string,
         count:number
-    }[]
+    }[],
+    isDashboard?:true
 };
 
 
 
-const CourseAnalytics:React.FC<Props> =  ({orderAnalyticsData}) => {
+const CourseAnalytics:React.FC<Props> =  ({orderAnalyticsData, isDashboard}) => {
 
-    const minValue = 0
 
     return (
-        <div className="h-screen">
-        <div className="w-full h-[90%] flex flex-col items-center justify-center">
-          <ResponsiveContainer width="90%" height="50%">
+        <div className={`${isDashboard ? 'h-[30vh]' : 'h-screen'} flex-center flex-col `}>
+          <ResponsiveContainer width={isDashboard ? '50%' : '90%'} height={!isDashboard ? "50%" : '100%'} >
             <LineChart
               width={500}
               height={300}
@@ -36,10 +35,9 @@ const CourseAnalytics:React.FC<Props> =  ({orderAnalyticsData}) => {
               <Line type="monotone" dataKey="count" stroke="#82ca9d" />
             </LineChart>
           </ResponsiveContainer>
-          <p className="px-5 mt-3 text-center text-gray-700">
+          <p className="px-5 mt-3 text-center ">
             Last 12 months orders data
           </p>
-        </div>
       </div>
     );
 };

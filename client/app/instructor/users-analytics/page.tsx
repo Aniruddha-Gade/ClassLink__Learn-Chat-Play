@@ -65,7 +65,7 @@ const page = async (props: Props) => {
     return (
         <div>
             <Heading
-                title="ClassLink - Instructor users Analytics"
+                title="ClassLink - Instructor Users Analytics"
                 description="ClassLink is a platform for students to learn and get help from teachers"
                 keywords="Programming,MERN,Redux,Machine Learning"
             />
